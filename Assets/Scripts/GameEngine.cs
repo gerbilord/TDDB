@@ -8,6 +8,9 @@ public class GameEngine : MonoBehaviour
     [SerializeField] public int boardWidth;
     [SerializeField] public int boardHeight;
     
+    public Camera mainCamera;
+    
+    
     private Board _board;
     // Start is called before the first frame update
     void Start()

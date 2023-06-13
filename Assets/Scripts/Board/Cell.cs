@@ -20,6 +20,11 @@ public class Cell : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+    }
+
+    public void UpdateRender()
+    {
         // if isPath is true change the material color to sand
         if (isPath)
         {
@@ -31,4 +36,6 @@ public class Cell : MonoBehaviour
             GetComponent<Renderer>().material.color = new Color(0.1f, 0.5f, 0.1f);
         }
     }
+    
+    
 }

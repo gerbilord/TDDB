@@ -7,17 +7,63 @@ public class Board : MonoBehaviour
     // Field of 2d List of Cells
     private GameObject[,] _cells;
     private GameEngine _gameEngine;
+    private Camera _mainCamera;
 
     private List<GameObject> _path;
-    
+
     void Start()
     {
         // Access the pf_GameEngine on the scene
         _gameEngine = FindObjectOfType<GameEngine>();
+        _mainCamera = _gameEngine.mainCamera;
 
         CreateCellGrid();
         CreatePath();
+
+        // Adjust camera to view the entire board
+        int boardWidth = _gameEngine.boardWidth;
+        int boardHeight = _gameEngine.boardHeight;
+
+        SetupCamera(boardWidth, boardHeight);
+        
+        // Update the render of all cells
+        UpdateCellRender();
+        
     }
+
+    private Vector3 CalculateBoardCenter()
+    {
+        int totalCells = _gameEngine.boardWidth * _gameEngine.boardHeight;
+        Vector3 sumPosition = Vector3.zero;
+
+        for (int x = 0; x < _gameEngine.boardWidth; x++)
+        {
+            for (int y = 0; y < _gameEngine.boardHeight; y++)
+            {
+                // Get the position of the current cell
+                Vector3 cellPosition = _cells[x, y].transform.position;
+                sumPosition += cellPosition;
+            }
+        }
+
+        Vector3 center = sumPosition / totalCells;
+        
+        return center;
+    }
+    
+    private void UpdateCellRender()
+    {
+        // Call update render on each cell
+        foreach (GameObject cellObject in _cells)
+        {
+            // Get the Cell component of the cellObject
+            Cell cell = GetCell(cellObject);
+
+            // Call the UpdateRender method on the cell
+            cell.UpdateRender();
+        }
+    }
+    
 
     private void CreatePath()
     {
@@ -55,8 +101,8 @@ public class Board : MonoBehaviour
                 GameObject cellObject = Instantiate(Resources.Load<GameObject>("pf_Cell"), transform, true);
 
                 // Set the cellObject's position to the current x and y
-                cellObject.transform.position = new Vector3(x, y, 0);
-                
+                cellObject.transform.position = new Vector3(x, 0, y);
+
                 // Get the Cell component of the cellObject
                 Cell cell = cellObject.GetComponent<Cell>();
                 cell.x = x;
@@ -74,14 +120,37 @@ public class Board : MonoBehaviour
     {
         // Get the Cell component of the gameObject
         Cell cell = gameObject.GetComponent<Cell>();
-        
+
         // Return the cell
         return cell;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void SetupCamera(float boardWidth, float boardHeight)
     {
+        // Make the camera isometric
+        _mainCamera.orthographic = true;
+
+        // Rotate the camera to look at the board from an isometric perspective
+        _mainCamera.transform.rotation = Quaternion.Euler(30, 45, 0);
+
+        // Calculate the maximum dimension of the board
+        float maxDimension = Mathf.Max(boardWidth, boardHeight);
+
+        Vector3 boardCenter = CalculateBoardCenter();
         
+        // Calculate the camera's position to center it above and at the center of the board
+        float cameraX = boardCenter.x;
+        float cameraY = 0f;
+        float cameraZ = boardCenter.z;
+        Vector3 cameraPosition = new Vector3(cameraX, cameraY, cameraZ);
+        _mainCamera.transform.position = cameraPosition;
+
+        // Adjust the camera's size to fit the entire board
+        // float cameraSize = maxDimension * 0.5f;
+        float cameraSize = 15f;
+        _mainCamera.orthographicSize = cameraSize;
+        
+        // Set the near clipping plane to a negative value
+        _mainCamera.nearClipPlane = -50.0f; // Adjust the value as needed
     }
 }
