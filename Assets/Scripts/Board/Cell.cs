@@ -28,12 +28,12 @@ public class Cell : MonoBehaviour
         // if isPath is true change the material color to sand
         if (isPath)
         {
-            GetComponent<Renderer>().material.color = Color.yellow;
+            // GetComponent<Renderer>().material.color = Color.yellow;
         }
         else if (isBuildable)
         {
             // dark green color
-            GetComponent<Renderer>().material.color = new Color(0.1f, 0.5f, 0.1f);
+            // GetComponent<Renderer>().material.color = new Color(0.1f, 0.5f, 0.1f);
         }
     }
     

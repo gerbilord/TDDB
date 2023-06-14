@@ -8,6 +8,8 @@ public class GameEngine : MonoBehaviour
     [SerializeField] public int boardWidth;
     [SerializeField] public int boardHeight;
     
+    public GameObject pfCell; // Cell to use on the board // CONSIDER FACTORING OUT TO SOME SETTINGS THING
+    
     public Camera mainCamera;
     
     

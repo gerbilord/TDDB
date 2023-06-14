@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -183,7 +184,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -215,6 +216,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b42d84b30166f0740bd844d80ffb21b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoomSpeed: 300
+  minY: 1
+  maxY: 30
+  panSpeed: 5
+  panBorderThickness: 10
+  allowPanning: 1
 --- !u!1 &1341709779
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,18 +263,18 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.8
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
+    m_Bias: 0
+    m_NormalBias: 2
     m_NearPlane: 0.2
     m_CullingMatrixOverride:
       e00: 1
@@ -365,6 +384,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pf_GameEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 9134716981678926960, guid: 042c52cfa8f2a25449c4cf03f55fbd30, type: 3}
+      propertyPath: pfCell
+      value: 
+      objectReference: {fileID: 9001175345020219634, guid: e5712dedc4afcd4439eeed4d6c7718f9, type: 3}
     - target: {fileID: 9134716981678926960, guid: 042c52cfa8f2a25449c4cf03f55fbd30, type: 3}
       propertyPath: boardWidth
       value: 20

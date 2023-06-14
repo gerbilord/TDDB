@@ -1,9 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+    // Prefab to use as the cells
+    private GameObject _pfCell;
+
     // Field of 2d List of Cells
     private GameObject[,] _cells;
     private GameEngine _gameEngine;
@@ -16,6 +18,9 @@ public class Board : MonoBehaviour
         // Access the pf_GameEngine on the scene
         _gameEngine = FindObjectOfType<GameEngine>();
         _mainCamera = _gameEngine.mainCamera;
+        
+        // Set the _pfCell from _gameEngine
+        _pfCell = _gameEngine.pfCell;
 
         CreateCellGrid();
         CreatePath();
@@ -30,6 +35,28 @@ public class Board : MonoBehaviour
         UpdateCellRender();
         
     }
+
+    private void SetupCamera(int boardWidth, int boardHeight)
+    {
+        // Calculate the center position of the board
+        Vector3 boardCenter = CalculateBoardCenter();
+
+        // Set the camera position to view from the top
+        // _mainCamera.transform.position = new Vector3(boardCenter.x, boardWidth + boardHeight, boardCenter.z);
+        
+        // Calculate the distance from the board to the camera
+        float distance = Mathf.Max(boardWidth, boardHeight) / (2f * Mathf.Tan(_mainCamera.fieldOfView * 0.5f * Mathf.Deg2Rad));
+
+        // Set the camera position to view from the top
+        _mainCamera.transform.position = new Vector3(boardCenter.x - distance/2, distance, boardCenter.z - distance/2);
+
+        // Set the camera rotation to view from the top
+        _mainCamera.transform.rotation = Quaternion.Euler(50f, 40f, 0f);
+
+        // Set the camera perspective
+        _mainCamera.orthographic = false;
+    }
+
 
     private Vector3 CalculateBoardCenter()
     {
@@ -98,7 +125,7 @@ public class Board : MonoBehaviour
             for (int y = 0; y < _gameEngine.boardHeight; y++)
             {
                 // Instantiate the prefab // Set the cellObject's parent to this transform
-                GameObject cellObject = Instantiate(Resources.Load<GameObject>("pf_Cell"), transform, true);
+                GameObject cellObject = Instantiate(_pfCell, transform, true);
 
                 // Set the cellObject's position to the current x and y
                 cellObject.transform.position = new Vector3(x, 0, y);
@@ -123,34 +150,5 @@ public class Board : MonoBehaviour
 
         // Return the cell
         return cell;
-    }
-
-    private void SetupCamera(float boardWidth, float boardHeight)
-    {
-        // Make the camera isometric
-        _mainCamera.orthographic = true;
-
-        // Rotate the camera to look at the board from an isometric perspective
-        _mainCamera.transform.rotation = Quaternion.Euler(30, 45, 0);
-
-        // Calculate the maximum dimension of the board
-        float maxDimension = Mathf.Max(boardWidth, boardHeight);
-
-        Vector3 boardCenter = CalculateBoardCenter();
-        
-        // Calculate the camera's position to center it above and at the center of the board
-        float cameraX = boardCenter.x;
-        float cameraY = 0f;
-        float cameraZ = boardCenter.z;
-        Vector3 cameraPosition = new Vector3(cameraX, cameraY, cameraZ);
-        _mainCamera.transform.position = cameraPosition;
-
-        // Adjust the camera's size to fit the entire board
-        // float cameraSize = maxDimension * 0.5f;
-        float cameraSize = 15f;
-        _mainCamera.orthographicSize = cameraSize;
-        
-        // Set the near clipping plane to a negative value
-        _mainCamera.nearClipPlane = -50.0f; // Adjust the value as needed
     }
 }
