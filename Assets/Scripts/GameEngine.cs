@@ -15,7 +15,6 @@ public class GameEngine : MonoBehaviour
     void Start()
     {
         GlobalVariables.gameEngine = this;
-        GlobalVariables.board = _board;
         GlobalVariables.eventManager = new EventManager();
         GlobalVariables.config = FindObjectOfType<Config>();
         

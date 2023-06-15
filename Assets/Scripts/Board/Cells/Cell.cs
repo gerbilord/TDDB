@@ -8,10 +8,11 @@ public class Cell : MonoBehaviour, ICell
     // Field: List of game objects on cell
     public List<GameObject> occupyingGameObjects { get; set; }
     
+    public float spawnRate { get; set; }
     public int x { get; set; }
     public int y { get; set; }
     public bool isBuildable { get; set; }
-    public bool isPath { get; set; }    
+    public bool isPath { get; set; }  
 
     public virtual void UpdateRender()
     {
@@ -30,14 +31,14 @@ public class Cell : MonoBehaviour, ICell
 
         if (isPath && myType != typeof(DirtCell))
         {
-            changeThisTo(GlobalVariables.config.dirtCellPrefab);
+            changeThisTo(Utils.GetRateRandomItem(GlobalVariables.config.dirtCellPrefabs));
         } else if (!isBuildable && myType != typeof(TreeCell))
         {
-            changeThisTo(GlobalVariables.config.treeCellPrefab);
+            changeThisTo(Utils.GetRateRandomItem(GlobalVariables.config.treeCellPrefabs));
         }
         else if (myType != typeof(GrassCell))
         {
-            changeThisTo(GlobalVariables.config.grassCellPrefab);
+            changeThisTo(Utils.GetRateRandomItem(GlobalVariables.config.grassCellPrefabs));
         }
     }
 

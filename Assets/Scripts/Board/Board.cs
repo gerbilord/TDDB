@@ -127,18 +127,21 @@ public class Board : MonoBehaviour
             for (int y = 0; y < _gameEngine.boardHeight; y++)
             {
                 // Instantiate the prefab // Set the cellObject's parent to this transform
-                GameObject cellObject = Instantiate(GlobalVariables.config.grassCellPrefab, transform, true);
+                GameObject cellObject = Instantiate(Utils.GetRateRandomItem(GlobalVariables.config.grassCellPrefabs), transform, true);
 
                 // Set the cellObject's position to the current x and y
                 cellObject.transform.position = new Vector3(x, 0, y);
+                
+                // Randomly rotate the cellObject by 90 degrees
+                cellObject.transform.Rotate(0, Random.Range(0, 4) * 90, 0);
 
                 // Get the Cell component of the cellObject
                 Cell cell = cellObject.GetComponent<Cell>();
                 cell.x = x;
                 cell.y = y;
                 
-                // Randomly set isBuildable to true or false
-                cell.isBuildable = Random.Range(0, 2) == 0;
+                // Randomly set isBuildable to true or false, make it more likely to be true
+                cell.isBuildable = Random.Range(0, 10) > 2;
 
                 // Set the cell in the _cells array
                 _cells[x, y] = cellObject;
