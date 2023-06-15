@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class GameEngine : MonoBehaviour
 {
@@ -17,16 +14,15 @@ public class GameEngine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GlobalVariables.gameEngine = this;
+        GlobalVariables.board = _board;
+        GlobalVariables.eventManager = new EventManager();
+        GlobalVariables.config = FindObjectOfType<Config>();
+        
         // Create a GameObject and attach the Board script to it
         GameObject boardObject = new GameObject("Board");
         
         // Attach the board script to the boardObject
         _board = boardObject.AddComponent<Board>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -3,61 +3,61 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-    // Prefab to use as the cells
-    private GameObject _pfCell;
-
     // Field of 2d List of Cells
     private GameObject[,] _cells;
     private GameEngine _gameEngine;
-    private Camera _mainCamera;
 
     private List<GameObject> _path;
 
     void Start()
     {
-        // Access the pf_GameEngine on the scene
-        _gameEngine = FindObjectOfType<GameEngine>();
-        _mainCamera = _gameEngine.mainCamera;
-        
-        // Set the _pfCell from _gameEngine
-        _pfCell = _gameEngine.pfCell;
+        _gameEngine = GlobalVariables.gameEngine;
 
+        SubscribeToAllEvents();
         CreateCellGrid();
         CreatePath();
+        SetupCamera();
+        UpdateAllCellRender();
+    }
 
-        // Adjust camera to view the entire board
+    private void OnDestroy()
+    {
+        UnsubscribeToAllEvents();
+    }
+
+    private void SubscribeToAllEvents()
+    {
+        GlobalVariables.eventManager.OnCellChange += OnCellChanged;
+    }
+    
+    private void UnsubscribeToAllEvents()
+    {
+        GlobalVariables.eventManager.OnCellChange -= OnCellChanged;
+    }
+
+    private void SetupCamera()
+    {
         int boardWidth = _gameEngine.boardWidth;
         int boardHeight = _gameEngine.boardHeight;
 
-        SetupCamera(boardWidth, boardHeight);
-        
-        // Update the render of all cells
-        UpdateCellRender();
-        
-    }
-
-    private void SetupCamera(int boardWidth, int boardHeight)
-    {
         // Calculate the center position of the board
         Vector3 boardCenter = CalculateBoardCenter();
 
-        // Set the camera position to view from the top
-        // _mainCamera.transform.position = new Vector3(boardCenter.x, boardWidth + boardHeight, boardCenter.z);
+        Camera mainCamera = _gameEngine.mainCamera;
         
+        // Set the camera perspective
+        mainCamera.orthographic = false;
+
         // Calculate the distance from the board to the camera
-        float distance = Mathf.Max(boardWidth, boardHeight) / (2f * Mathf.Tan(_mainCamera.fieldOfView * 0.5f * Mathf.Deg2Rad));
+        float distance = Mathf.Max(boardWidth, boardHeight) / (2f * Mathf.Tan(mainCamera.fieldOfView * 0.5f * Mathf.Deg2Rad));
 
         // Set the camera position to view from the top
-        _mainCamera.transform.position = new Vector3(boardCenter.x - distance/2, distance, boardCenter.z - distance/2);
+        mainCamera.transform.position = new Vector3(boardCenter.x - distance/2, distance, boardCenter.z - distance/2);
 
         // Set the camera rotation to view from the top
-        _mainCamera.transform.rotation = Quaternion.Euler(50f, 40f, 0f);
-
-        // Set the camera perspective
-        _mainCamera.orthographic = false;
+        mainCamera.transform.rotation = Quaternion.Euler(50f, 40f, 0f);
     }
-
-
+    
     private Vector3 CalculateBoardCenter()
     {
         int totalCells = _gameEngine.boardWidth * _gameEngine.boardHeight;
@@ -78,19 +78,22 @@ public class Board : MonoBehaviour
         return center;
     }
     
-    private void UpdateCellRender()
+    /**
+     * Some cells may need to change how they look based on their data
+     * Maybe the cell should just call it itself in update?
+     */
+    private void UpdateAllCellRender()
     {
         // Call update render on each cell
         foreach (GameObject cellObject in _cells)
         {
             // Get the Cell component of the cellObject
-            Cell cell = GetCell(cellObject);
+            ICell cell = GetCell(cellObject);
 
             // Call the UpdateRender method on the cell
             cell.UpdateRender();
         }
     }
-    
 
     private void CreatePath()
     {
@@ -103,13 +106,12 @@ public class Board : MonoBehaviour
         // Create a simple path from the left side to the right side of the board
         for (int x = 0; x < _gameEngine.boardWidth; x++)
         {
-            // Get the cell at the current x and 0
-            Cell cell = GetCell(_cells[x, y]);
-
-            // Add the cell to the path
-            _path.Add(cell.gameObject);
+            // Get the cell at the current x and y
+            GameObject cellObject = _cells[x, y];
+            _path.Add(cellObject);
 
             // Set the cell's isPath to true
+            ICell cell = GetCell(cellObject);
             cell.isPath = true;
         }
     }
@@ -125,7 +127,7 @@ public class Board : MonoBehaviour
             for (int y = 0; y < _gameEngine.boardHeight; y++)
             {
                 // Instantiate the prefab // Set the cellObject's parent to this transform
-                GameObject cellObject = Instantiate(_pfCell, transform, true);
+                GameObject cellObject = Instantiate(GlobalVariables.config.grassCellPrefab, transform, true);
 
                 // Set the cellObject's position to the current x and y
                 cellObject.transform.position = new Vector3(x, 0, y);
@@ -134,7 +136,9 @@ public class Board : MonoBehaviour
                 Cell cell = cellObject.GetComponent<Cell>();
                 cell.x = x;
                 cell.y = y;
-                cell.isBuildable = true;
+                
+                // Randomly set isBuildable to true or false
+                cell.isBuildable = Random.Range(0, 2) == 0;
 
                 // Set the cell in the _cells array
                 _cells[x, y] = cellObject;
@@ -143,12 +147,19 @@ public class Board : MonoBehaviour
     }
 
     // Given a GameObject, get the cell script at the GameObject's position
-    public Cell GetCell(GameObject gameObject)
+    private ICell GetCell(GameObject gameObject)
     {
         // Get the Cell component of the gameObject
-        Cell cell = gameObject.GetComponent<Cell>();
+        ICell cell = gameObject.GetComponent<ICell>();
 
         // Return the cell
         return cell;
+    }
+    
+    // Create a function to call when a cell is changed
+    private void OnCellChanged(ICell oldCell, ICell newCell)
+    {
+        // Change our reference
+        _cells[oldCell.x, oldCell.y] = newCell.GetGameObject();
     }
 }

@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 39e56f9056d1bd042a9500fa4a3e5f80, type: 3}
       propertyPath: m_Name
-      value: tile_tree Variant
+      value: tile_tree
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -62,14 +62,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 39e56f9056d1bd042a9500fa4a3e5f80, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4196461455976431600}
+      addedObject: {fileID: -5844512125938555613}
   m_SourcePrefab: {fileID: 100100000, guid: 39e56f9056d1bd042a9500fa4a3e5f80, type: 3}
 --- !u!1 &9001175345020219634 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 39e56f9056d1bd042a9500fa4a3e5f80, type: 3}
   m_PrefabInstance: {fileID: 8082818495577984419}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4196461455976431600
+--- !u!114 &-5844512125938555613
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,10 +78,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 9001175345020219634}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbda48e8307d044b90a39f6bf65bb9e, type: 3}
+  m_Script: {fileID: 11500000, guid: dfe31052b25bfb3428a530b065ddb01d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isBuildable: 0
-  isPath: 0
-  x: 0
-  y: 0
