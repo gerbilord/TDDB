@@ -63,4 +63,9 @@ public class Cell : MonoBehaviour, ICell
         transform.position = cell.GetTransform().position;
         transform.rotation = cell.GetTransform().rotation;
     }
+
+    private void OnMouseDown()
+    {
+        GlobalVariables.eventManager.CellClicked(this);
+    }
 }

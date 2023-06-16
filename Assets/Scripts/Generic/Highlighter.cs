@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class HighlightOnHover : MonoBehaviour
+public class Highlighter : MonoBehaviour
 {
 
     private List<Renderer> _renderers;
@@ -31,29 +29,19 @@ public class HighlightOnHover : MonoBehaviour
         }
     }
 
-    private void OnMouseEnter()
+    public void ToggleHighlight(bool turnOn, Color highlightColor, float highlightIntensity)
     {
-        ToggleHighlight(true);
-    }
-    
-    private void OnMouseExit()
-    {
-        ToggleHighlight(false);
-    }
-
-    public void ToggleHighlight(bool val)
-    {
-        if (val)
+        if (turnOn)
         {
             foreach (var material in materials)
             {
                 //We need to enable the EMISSION
                 material.EnableKeyword("_EMISSION");
                 //before we can set the color
-                
+
                 // Adjust the brightness by multiplying the emission color by 0.5
-                Color newColor = color * intensity;
-                
+                Color newColor = highlightColor * highlightIntensity;
+
                 material.SetColor("_EmissionColor", newColor);
             }
         }
@@ -66,5 +54,10 @@ public class HighlightOnHover : MonoBehaviour
                 material.DisableKeyword("_EMISSION");
             }
         }
+    }
+    
+    public void ToggleHighlight(bool val)
+    {
+        ToggleHighlight(val, color, intensity);
     }
 }

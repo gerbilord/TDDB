@@ -5,17 +5,15 @@ public class GameEngine : MonoBehaviour
     [SerializeField] public int boardWidth;
     [SerializeField] public int boardHeight;
     
-    public GameObject pfCell; // Cell to use on the board // CONSIDER FACTORING OUT TO SOME SETTINGS THING
-    
     public Camera mainCamera;
     
-    
     private Board _board;
-    // Start is called before the first frame update
+    
     void Start()
     {
         GlobalVariables.gameEngine = this;
         GlobalVariables.eventManager = new EventManager();
+        GlobalVariables.uiManager = new UIManager();
         GlobalVariables.config = FindObjectOfType<Config>();
         
         // Create a GameObject and attach the Board script to it
