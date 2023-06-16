@@ -14,16 +14,16 @@ public static class Utils
         return list[randomIndex];
     }
     
-    public static GameObject GetRateRandomItem(List<GameObject> list)
+    public static GameObject GetRateRandomItem(List<GameObjectSpawnRate> list)
     {
         // Calculate the cumulative spawn rates
         List<float> cumulativeRates = new List<float>();
         float cumulativeRate = 0f;
-        foreach (var item in list)
+        foreach (var gameObjectSpawnRate in list)
         {
-            // Get component SpawnRate
-            SpawnRate spawnRate = item.GetComponent<SpawnRate>();
-            cumulativeRate += spawnRate.spawnRate;
+            var rate = gameObjectSpawnRate.rate;
+            
+            cumulativeRate += rate;
             cumulativeRates.Add(cumulativeRate);
         }
 
@@ -37,7 +37,7 @@ public static class Utils
         {
             if (randomNumber < cumulativeRates[i])
             {
-                selectedItem = list[i];
+                selectedItem = list[i].prefab;
                 break;
             }
         }

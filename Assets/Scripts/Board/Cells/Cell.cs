@@ -7,8 +7,7 @@ public class Cell : MonoBehaviour, ICell
 {
     // Field: List of game objects on cell
     public List<GameObject> occupyingGameObjects { get; set; }
-    
-    public float spawnRate { get; set; }
+
     public int x { get; set; }
     public int y { get; set; }
     public bool isBuildable { get; set; }

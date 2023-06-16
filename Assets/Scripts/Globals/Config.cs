@@ -5,7 +5,7 @@ using UnityEngine;
 public class Config : MonoBehaviour
 {
     // Get a reference to a prefab
-    public List<GameObject> grassCellPrefabs;
-    public List<GameObject> treeCellPrefabs;
-    public List<GameObject> dirtCellPrefabs;
+    public List<GameObjectSpawnRate> grassCellPrefabs;
+    public List<GameObjectSpawnRate> treeCellPrefabs;
+    public List<GameObjectSpawnRate> dirtCellPrefabs;
 }

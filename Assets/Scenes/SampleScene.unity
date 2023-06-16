@@ -264,14 +264,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grassCellPrefabs:
-  - {fileID: 2289342492612912154, guid: 9ad5fe44fb8ddfe439ffad82b058c07b, type: 3}
+  - {fileID: 11400000, guid: 741ba9ae00794724abf70994d5cacb29, type: 2}
   treeCellPrefabs:
-  - {fileID: 9001175345020219634, guid: e5712dedc4afcd4439eeed4d6c7718f9, type: 3}
-  - {fileID: 6453798312756203355, guid: e86a7b3978cd7604582bcdc72900e8b1, type: 3}
-  - {fileID: 4311821019901492041, guid: 85dc35a1c0611224f804abaebca4a1cd, type: 3}
+  - {fileID: 11400000, guid: 6aa5b22027b7bcd4da63128fb7b86085, type: 2}
+  - {fileID: 11400000, guid: 9b2282deeda306c44ac9f1a6915ba218, type: 2}
+  - {fileID: 11400000, guid: 0e1477e5cfaf6d547abbd18efb6de389, type: 2}
   dirtCellPrefabs:
-  - {fileID: 3258817265275395646, guid: f0df352038cdbe04bb464777ba2bc5de, type: 3}
-  highlightShader: {fileID: 4800000, guid: 472a1a7e7588b4a4ab1ee8b742a284af, type: 3}
+  - {fileID: 11400000, guid: 4b0dd3db86d1ddf489f0a0878976ce28, type: 2}
 --- !u!4 &956709476
 Transform:
   m_ObjectHideFlags: 0
