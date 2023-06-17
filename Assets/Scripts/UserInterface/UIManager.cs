@@ -8,6 +8,7 @@ public class UIManager
     private Canvas _canvas;
     private GameObject _selectedCell;
     private GameObject _selectedCard;
+    private GameObject _phantomTower;
     
     public UIManager()
     {
@@ -16,6 +17,8 @@ public class UIManager
         GlobalVariables.eventManager.cellEventManager.OnCellClick += OnCellClicked;
         GlobalVariables.eventManager.cardEventManager.OnCardAddedToHand += OnCardAddedToHand;
         GlobalVariables.eventManager.cardEventManager.OnCardClick += OnCardClicked;
+        GlobalVariables.eventManager.cellEventManager.OnCellMouseEntered += OnCellEntered;
+        GlobalVariables.eventManager.cellEventManager.OnCellMouseExited += OnCellExited;
     }
 
     ~UIManager()
@@ -23,11 +26,45 @@ public class UIManager
         GlobalVariables.eventManager.cellEventManager.OnCellClick -= OnCellClicked;
         GlobalVariables.eventManager.cardEventManager.OnCardAddedToHand -= OnCardAddedToHand;
         GlobalVariables.eventManager.cardEventManager.OnCardClick -= OnCardClicked;
+        GlobalVariables.eventManager.cellEventManager.OnCellMouseEntered -= OnCellEntered;
+        GlobalVariables.eventManager.cellEventManager.OnCellMouseExited -= OnCellExited;
+    }
+
+    public void OnCellEntered(ICell cell)
+    {
+        if(_phantomTower != null) // Destroy previous phantoms, we only want one at a time
+        {
+            GameObject.Destroy(_phantomTower);
+        }
+
+        if (_selectedCard != null && cell.IsBuildable())
+        {
+            // Make a phantom tower on the cell
+            _phantomTower = GameObject.Instantiate(GlobalVariables.config.towerPrefab, cell.GetTransform().position, Quaternion.identity);
+            
+            // Make the phantom tower transparent
+            _phantomTower.GetComponent<IOpacityChanger>().ToggleOpacity(true);
+
+            // In the viewer name it phantom tower
+            _phantomTower.name = "Phantom Tower";
+        }
+    }
+
+    public void OnCellExited(ICell cell)
+    {
+        if(_phantomTower != null)
+        {
+            GameObject.Destroy(_phantomTower);
+        }
     }
     
-    // OnCellClicked event
     public void OnCellClicked(ICell cell)
     {
+        if(_phantomTower != null)
+        {
+            GameObject.Destroy(_phantomTower);
+        }
+
         GameObject oldCell = _selectedCell;
         _selectedCell = cell.GetGameObject();
         

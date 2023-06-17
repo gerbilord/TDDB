@@ -199,6 +199,9 @@ public class Board : MonoBehaviour
             // Instantiate the tower prefab at the cell's position
             GameObject towerObject = Instantiate(towerPrefab, cellObject.transform.position, Quaternion.identity);
         
+            // Set the tower's parent to the cell
+            towerObject.transform.SetParent(cellObject.transform);
+
             // Add tower to occupying game objects
             cell.occupyingGameObjects.Add(towerObject);
         }

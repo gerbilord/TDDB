@@ -24,7 +24,8 @@ public class Cell : MonoBehaviour, ICell
         // Create lambda function
         Action<GameObject> changeThisTo = prefab =>
         {
-            GameObject newCell = Instantiate(prefab);
+            // Create a new cell, make sure its still under the same parent (board)
+            GameObject newCell = Instantiate(prefab, this.transform.parent, true);
             ICell cellScript = newCell.GetComponent<ICell>();
             cellScript.SetDataFromCell(this);
             
@@ -73,6 +74,16 @@ public class Cell : MonoBehaviour, ICell
     private void OnMouseDown()
     {
         GlobalVariables.eventManager.cellEventManager.CellClicked(this);
+    }
+    
+    private void OnMouseEnter()
+    {
+        GlobalVariables.eventManager.cellEventManager.CellMouseEntered(this);
+    }
+    
+    private void OnMouseExit()
+    {
+        GlobalVariables.eventManager.cellEventManager.CellMouseExited(this);
     }
 }
 
