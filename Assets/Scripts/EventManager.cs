@@ -1,3 +1,5 @@
+using UnityEngine.EventSystems;
+
 public class EventManager
 {
     // Create event for when a cell changes
@@ -19,6 +21,11 @@ public class EventManager
     
     public void CellClicked(ICell cell)
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         if (OnCellClick != null)
         {
             OnCellClick(cell);
