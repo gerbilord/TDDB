@@ -7,7 +7,7 @@ public class GameEngine : MonoBehaviour
     
     public Camera mainCamera;
     
-    private Board _board;
+    public Board board;
     
     void Start()
     {
@@ -20,6 +20,6 @@ public class GameEngine : MonoBehaviour
         GameObject boardObject = new GameObject("Board");
         
         // Attach the board script to the boardObject
-        _board = boardObject.AddComponent<Board>();
+        board = boardObject.AddComponent<Board>();
     }
 }

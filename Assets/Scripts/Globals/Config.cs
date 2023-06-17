@@ -8,4 +8,8 @@ public class Config : MonoBehaviour
     public List<GameObjectSpawnRate> grassCellPrefabs;
     public List<GameObjectSpawnRate> treeCellPrefabs;
     public List<GameObjectSpawnRate> dirtCellPrefabs;
+    
+    public GameObject towerPrefab;
+
+    public float treeSpawnRate;
 }

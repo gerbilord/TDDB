@@ -7,12 +7,12 @@ public interface ICell
     public List<GameObject> occupyingGameObjects { get; set; }
     public int x { get; set; }
     public int y { get; set; }
-    
-    public bool isBuildable { get; set; }
-    
-    public bool isPath { get; set; }
 
-    public void UpdateRender();
+    public CellType type { get; set; }
+
+    public bool IsBuildable();
+
+    public void UpdateCellPrefabToMatchType();
     
     public Transform GetTransform();
     

@@ -4,4 +4,8 @@ using UnityEngine;
 
 public class DirtCell : Cell
 {
+    public override bool IsBuildable()
+    {
+        return false;
+    }
 }

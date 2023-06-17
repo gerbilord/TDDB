@@ -18,16 +18,26 @@ public class UIManager
     // OnCellClicked event
     public void OnCellClicked(ICell cell)
     {
+        GlobalVariables.gameEngine.board.PlaceTowerOn(cell);
+
         GameObject oldCell = _selectedCell;
         _selectedCell = cell.GetGameObject();
         
         if(oldCell != null)
         {
-            oldCell.gameObject.GetComponent<Highlighter>().ToggleHighlight(false);
+            ToggleHighlightCellAndObjects(oldCell.GetComponent<ICell>(), false);
         }
         
-        _selectedCell.gameObject.GetComponent<Highlighter>().ToggleHighlight(true);
+        ToggleHighlightCellAndObjects(cell, true);
     }
-    
+
+    public void ToggleHighlightCellAndObjects(ICell cell, bool toggle)
+    {
+        cell.GetGameObject().GetComponent<Highlighter>().ToggleHighlight(toggle);
+        foreach (GameObject gameObject in cell.occupyingGameObjects)
+        {
+            gameObject.GetComponent<Highlighter>().ToggleHighlight(toggle);
+        }
+    }
 
 }

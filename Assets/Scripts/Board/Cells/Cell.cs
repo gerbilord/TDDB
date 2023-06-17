@@ -9,10 +9,16 @@ public class Cell : MonoBehaviour, ICell
 
     public int x { get; set; }
     public int y { get; set; }
-    public bool isBuildable { get; set; }
-    public bool isPath { get; set; }  
+    public virtual bool IsBuildable() { return true; }
 
-    public virtual void UpdateRender()
+    public CellType type { get; set; }
+
+    // When created set the list of game objects to empty
+    private void Awake()
+    {
+        occupyingGameObjects = new List<GameObject>();
+    }
+    public virtual void UpdateCellPrefabToMatchType()
     {
         // Create lambda function
         Action<GameObject> changeThisTo = prefab =>
@@ -25,16 +31,16 @@ public class Cell : MonoBehaviour, ICell
             Destroy(this.gameObject);
         };
 
-        Type myType = this.GetType();
+        Type classType = this.GetType();
 
-        if (isPath && myType != typeof(DirtCell))
+        if ( type == CellType.Dirt && classType != typeof(DirtCell))
         {
             changeThisTo(Utils.GetRateRandomItem(GlobalVariables.config.dirtCellPrefabs));
-        } else if (!isBuildable && myType != typeof(TreeCell))
+        } else if (type == CellType.Tree && classType != typeof(TreeCell))
         {
             changeThisTo(Utils.GetRateRandomItem(GlobalVariables.config.treeCellPrefabs));
         }
-        else if (myType != typeof(GrassCell))
+        else if (classType != typeof(GrassCell))
         {
             changeThisTo(Utils.GetRateRandomItem(GlobalVariables.config.grassCellPrefabs));
         }
@@ -54,9 +60,8 @@ public class Cell : MonoBehaviour, ICell
     {
         x = cell.x;
         y = cell.y;
-        isBuildable = cell.isBuildable;
-        isPath = cell.isPath;
-        
+        type = cell.type;
+
         occupyingGameObjects = cell.occupyingGameObjects;
         
         // Get passed in cell's transform and set this transform to same position and rotation
@@ -68,4 +73,12 @@ public class Cell : MonoBehaviour, ICell
     {
         GlobalVariables.eventManager.CellClicked(this);
     }
+}
+
+// Create enum CellType
+public enum CellType
+{
+    Grass,
+    Tree,
+    Dirt
 }

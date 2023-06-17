@@ -17,7 +17,7 @@ public class Board : MonoBehaviour
         CreateCellGrid();
         CreatePath();
         SetupCamera();
-        UpdateAllCellRender();
+        UpdateAllCellPrefabsToMatchType();
     }
 
     private void OnDestroy()
@@ -82,7 +82,7 @@ public class Board : MonoBehaviour
      * Some cells may need to change how they look based on their data
      * Maybe the cell should just call it itself in update?
      */
-    private void UpdateAllCellRender()
+    private void UpdateAllCellPrefabsToMatchType()
     {
         // Call update render on each cell
         foreach (GameObject cellObject in _cells)
@@ -91,7 +91,7 @@ public class Board : MonoBehaviour
             ICell cell = GetCell(cellObject);
 
             // Call the UpdateRender method on the cell
-            cell.UpdateRender();
+            cell.UpdateCellPrefabToMatchType();
         }
     }
 
@@ -110,9 +110,9 @@ public class Board : MonoBehaviour
             GameObject cellObject = _cells[x, y];
             _path.Add(cellObject);
 
-            // Set the cell's isPath to true
+            // Set the cell type to dirt (path)
             ICell cell = GetCell(cellObject);
-            cell.isPath = true;
+            cell.type = CellType.Dirt;
         }
     }
 
@@ -140,8 +140,15 @@ public class Board : MonoBehaviour
                 cell.x = x;
                 cell.y = y;
                 
-                // Randomly set isBuildable to true or false, make it more likely to be true
-                cell.isBuildable = Random.Range(0, 10) > 2;
+                // Get a random number between 0 and 1
+                float random = Random.Range(0f, 1f);
+                
+                // If the random number is less than the treeSpawnRate, set the cell type to a tree
+                if (random < GlobalVariables.config.treeSpawnRate)
+                {
+                    cell.type = CellType.Tree;
+                }
+                
 
                 // Set the cell in the _cells array
                 _cells[x, y] = cellObject;
@@ -164,5 +171,23 @@ public class Board : MonoBehaviour
     {
         // Change our reference
         _cells[oldCell.x, oldCell.y] = newCell.GetGameObject();
+    }
+
+    public void PlaceTowerOn(ICell cell)
+    {
+        if (cell.IsBuildable())
+        {
+            // Get the tower prefab
+            GameObject towerPrefab = GlobalVariables.config.towerPrefab;
+        
+            // Get the cell gameObject
+            GameObject cellObject = cell.GetGameObject();
+        
+            // Instantiate the tower prefab at the cell's position
+            GameObject towerObject = Instantiate(towerPrefab, cellObject.transform.position, Quaternion.identity);
+        
+            // Add tower to occupying game objects
+            cell.occupyingGameObjects.Add(towerObject);
+        }
     }
 }
