@@ -44,6 +44,9 @@ public class UIManager
             
             // Make the phantom tower transparent
             _phantomTower.GetComponent<IOpacityChanger>().ToggleOpacity(true);
+            
+            // Set _phantomTower isPlacing animation bool to true
+            _phantomTower.GetComponent<Animator>().SetBool("isPlacing", true);
 
             // In the viewer name it phantom tower
             _phantomTower.name = "Phantom Tower";
