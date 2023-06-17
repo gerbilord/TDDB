@@ -145,15 +145,10 @@ public class UIManager
 
 
         List<ICell> allCells = GlobalVariables.gameEngine.board.GetAllCells();
-        
-        List<ICell> buildableCells = allCells.Where(anICell => anICell.IsBuildable()).ToList();
         List<ICell> notBuildableCells = allCells.Where(anICell => !anICell.IsBuildable()).ToList();
         
-        
-        // Make dark green color
-        Color darkGreen = new Color(0, .5f, 0);
-        
-        buildableCells.ForEach(anICell => ToggleHighlightCellAndObjects(anICell, true, darkGreen, .3f));
-        notBuildableCells.ForEach(anICell => ToggleHighlightCellAndObjects(anICell, true, Color.red, .3f));
+        // Make dark red color
+        Color darkRed = new Color(0.5f, 0, 0, 0.7f);
+        notBuildableCells.ForEach(anICell => ToggleHighlightCellAndObjects(anICell, true, darkRed, .7f));
     }
 }
