@@ -9,6 +9,7 @@ public class GameEngine : MonoBehaviour
     public Camera mainCamera;
     
     public Board board;
+    public CardManager cardManager;
     
     void Start()
     {
@@ -17,10 +18,10 @@ public class GameEngine : MonoBehaviour
         GlobalVariables.uiManager = new UIManager();
         GlobalVariables.config = FindObjectOfType<Config>();
         
+        cardManager = new CardManager();
+        
         // Create a GameObject and attach the Board script to it
         GameObject boardObject = new GameObject("Board");
-        
-        // Attach the board script to the boardObject
         board = boardObject.AddComponent<Board>();
     }
 }

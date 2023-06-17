@@ -95,6 +95,19 @@ public class Board : MonoBehaviour
         }
     }
 
+    public List<ICell> GetAllCells()
+    {
+        // return a list of all cells
+        List<ICell> allCells = new List<ICell>();
+        
+        foreach (GameObject cellObject in _cells)
+        {
+            allCells.Add(GetCell(cellObject));
+        }
+
+        return allCells;
+    }
+
     private void CreatePath()
     {
         // Create a path

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Highlighter : MonoBehaviour
+public class Highlighter3D : MonoBehaviour, IHighlighter
 {
 
     private List<Renderer> _renderers;

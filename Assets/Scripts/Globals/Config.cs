@@ -10,6 +10,8 @@ public class Config : MonoBehaviour
     public List<GameObjectSpawnRate> dirtCellPrefabs;
     
     public GameObject towerPrefab;
+    
+    public GameObject towerCardPrefab;
 
     public float treeSpawnRate;
 }

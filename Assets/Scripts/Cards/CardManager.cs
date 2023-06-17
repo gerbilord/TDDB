@@ -2,17 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardManager : MonoBehaviour
+public class CardManager
 {
-    // Start is called before the first frame update
-    void Start()
+    public List<GameObject> cardsInHand;
+    
+    public CardManager()
     {
-        
+        cardsInHand = new List<GameObject>();
+        AddCardToHand(GlobalVariables.config.towerCardPrefab);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void AddCardToHand(GameObject cardPrefab)
     {
-        
+
+        // Instantiate cardPrefab
+        GameObject card = GameObject.Instantiate(cardPrefab);
+
+        cardsInHand.Add(card);
+        GlobalVariables.eventManager.CardAddedToHand(card.GetComponent<ICard>());
     }
 }
