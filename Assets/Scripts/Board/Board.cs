@@ -27,12 +27,12 @@ public class Board : MonoBehaviour
 
     private void SubscribeToAllEvents()
     {
-        GlobalVariables.eventManager.OnCellChange += OnCellChanged;
+        GlobalVariables.eventManager.cellEventManager.OnCellChange += OnCellChanged;
     }
     
     private void UnsubscribeToAllEvents()
     {
-        GlobalVariables.eventManager.OnCellChange -= OnCellChanged;
+        GlobalVariables.eventManager.cellEventManager.OnCellChange -= OnCellChanged;
     }
 
     private void SetupCamera()

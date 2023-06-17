@@ -13,16 +13,16 @@ public class UIManager
     {
         _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         
-        GlobalVariables.eventManager.OnCellClick += OnCellClicked;
-        GlobalVariables.eventManager.OnCardAddedToHand += OnCardAddedToHand;
-        GlobalVariables.eventManager.OnCardClick += OnCardClicked;
+        GlobalVariables.eventManager.cellEventManager.OnCellClick += OnCellClicked;
+        GlobalVariables.eventManager.cardEventManager.OnCardAddedToHand += OnCardAddedToHand;
+        GlobalVariables.eventManager.cardEventManager.OnCardClick += OnCardClicked;
     }
 
     ~UIManager()
     {
-        GlobalVariables.eventManager.OnCellClick -= OnCellClicked;
-        GlobalVariables.eventManager.OnCardAddedToHand -= OnCardAddedToHand;
-        GlobalVariables.eventManager.OnCardClick -= OnCardClicked;
+        GlobalVariables.eventManager.cellEventManager.OnCellClick -= OnCellClicked;
+        GlobalVariables.eventManager.cardEventManager.OnCardAddedToHand -= OnCardAddedToHand;
+        GlobalVariables.eventManager.cardEventManager.OnCardClick -= OnCardClicked;
     }
     
     // OnCellClicked event

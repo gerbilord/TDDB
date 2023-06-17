@@ -8,7 +8,7 @@ public class Card : MonoBehaviour, IPointerClickHandler, ICard
 {
     public void OnPointerClick(PointerEventData eventData)
     {
-        GlobalVariables.eventManager.CardClicked(this);
+        GlobalVariables.eventManager.cardEventManager.CardClicked(this);
     }
     
     public GameObject GetGameObject()

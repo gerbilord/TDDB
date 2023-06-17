@@ -28,7 +28,7 @@ public class Cell : MonoBehaviour, ICell
             ICell cellScript = newCell.GetComponent<ICell>();
             cellScript.SetDataFromCell(this);
             
-            GlobalVariables.eventManager.CellChanged(this, cellScript);
+            GlobalVariables.eventManager.cellEventManager.CellChanged(this, cellScript);
             Destroy(this.gameObject);
         };
 
@@ -72,7 +72,7 @@ public class Cell : MonoBehaviour, ICell
 
     private void OnMouseDown()
     {
-        GlobalVariables.eventManager.CellClicked(this);
+        GlobalVariables.eventManager.cellEventManager.CellClicked(this);
     }
 }
 

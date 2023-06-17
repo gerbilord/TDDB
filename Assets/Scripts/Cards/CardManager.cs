@@ -19,6 +19,6 @@ public class CardManager
         GameObject card = GameObject.Instantiate(cardPrefab);
 
         cardsInHand.Add(card);
-        GlobalVariables.eventManager.CardAddedToHand(card.GetComponent<ICard>());
+        GlobalVariables.eventManager.cardEventManager.CardAddedToHand(card.GetComponent<ICard>());
     }
 }
