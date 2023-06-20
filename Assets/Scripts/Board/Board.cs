@@ -7,7 +7,7 @@ public class Board : MonoBehaviour
     private GameObject[,] _cells;
     private GameEngine _gameEngine;
 
-    private List<GameObject> _path;
+    public List<GameObject> path;
 
     void Start()
     {
@@ -18,6 +18,7 @@ public class Board : MonoBehaviour
         CreatePath();
         SetupCamera();
         UpdateAllCellPrefabsToMatchType();
+        StartCoroutine(GlobalVariables.gameEngine.waveManager.spawnWave(GlobalVariables.gameEngine.waves[0].waveCreeps, 5));
     }
 
     private void OnDestroy()
@@ -111,7 +112,7 @@ public class Board : MonoBehaviour
     private void CreatePath()
     {
         // Create a path
-        _path = new List<GameObject>();
+        path = new List<GameObject>();
 
         // choose a random y within boardHeight
         int y = Random.Range(0, _gameEngine.boardHeight);
@@ -121,12 +122,14 @@ public class Board : MonoBehaviour
         {
             // Get the cell at the current x and y
             GameObject cellObject = _cells[x, y];
-            _path.Add(cellObject);
+            path.Add(cellObject);
 
             // Set the cell type to dirt (path)
             ICell cell = GetCell(cellObject);
             cell.type = CellType.Dirt;
         }
+        
+        print(path[0]);
     }
 
     private void CreateCellGrid()

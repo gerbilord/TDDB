@@ -734,6 +734,14 @@ PrefabInstance:
       propertyPath: _boardHeight
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 9134716981678926960, guid: 042c52cfa8f2a25449c4cf03f55fbd30, type: 3}
+      propertyPath: waves.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9134716981678926960, guid: 042c52cfa8f2a25449c4cf03f55fbd30, type: 3}
+      propertyPath: waves.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
