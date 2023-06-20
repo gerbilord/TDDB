@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class CellEventManager
@@ -7,6 +8,8 @@ public class CellEventManager
     public event CellChange OnCellChange;
     public void CellChanged(ICell oldCell, ICell newCell)
     {
+        DebugLog("Cell changed from " + oldCell.GetType() + " at " + oldCell.x + ", " + oldCell.y + " to " + newCell.GetType() + " at " + newCell.x + ", " + newCell.y);
+        
         OnCellChange?.Invoke(oldCell, newCell);
     }
     
@@ -15,8 +18,11 @@ public class CellEventManager
     public event CellClick OnCellClick;
     public void CellClicked(ICell cell)
     {
+        DebugLog("Cell clicked at " + cell.x + ", " + cell.y); 
+        
         if (EventSystem.current.IsPointerOverGameObject()) // If a cell was clicked through the ui (such as a card)
         {
+            DebugLog("Cell clicked through UI: No event triggered");
             return; // Don't do anything
         }
         OnCellClick?.Invoke(cell);
@@ -27,6 +33,7 @@ public class CellEventManager
     public event CellMouseEnter OnCellMouseEntered;
     public void CellMouseEntered(ICell cell)
     {
+        DebugLog("Cell hovered over at " + cell.x + ", " + cell.y);
         /* This may cause issues in the future, but for now it's fine.
          * 
          * Example, we are on a card, and on a cell. This will get triggered.
@@ -36,6 +43,7 @@ public class CellEventManager
         */
         if (EventSystem.current.IsPointerOverGameObject())
         {
+            DebugLog("Cell hovered over through UI: No event triggered");
             return;
         }
         OnCellMouseEntered?.Invoke(cell);
@@ -57,7 +65,15 @@ public class CellEventManager
         {
             return;
         }*/
+        DebugLog("Cell unhovered over at " + cell.x + ", " + cell.y);
         OnCellMouseExited?.Invoke(cell);
     }
-    
+
+    private void DebugLog(string message)
+    {
+        if (GlobalVariables.config.showDebugInfo)
+        {
+            Debug.Log(message);
+        }
+    }
 }

@@ -37,8 +37,8 @@ public class Board : MonoBehaviour
 
     private void SetupCamera()
     {
-        int boardWidth = _gameEngine.boardWidth;
-        int boardHeight = _gameEngine.boardHeight;
+        int boardWidth = GlobalVariables.config.boardWidth;
+        int boardHeight = GlobalVariables.config.boardHeight;
 
         // Calculate the center position of the board
         Vector3 boardCenter = CalculateBoardCenter();
@@ -60,12 +60,12 @@ public class Board : MonoBehaviour
     
     private Vector3 CalculateBoardCenter()
     {
-        int totalCells = _gameEngine.boardWidth * _gameEngine.boardHeight;
+        int totalCells = GlobalVariables.config.boardWidth * GlobalVariables.config.boardHeight;
         Vector3 sumPosition = Vector3.zero;
 
-        for (int x = 0; x < _gameEngine.boardWidth; x++)
+        for (int x = 0; x < GlobalVariables.config.boardWidth; x++)
         {
-            for (int y = 0; y < _gameEngine.boardHeight; y++)
+            for (int y = 0; y < GlobalVariables.config.boardHeight; y++)
             {
                 // Get the position of the current cell
                 Vector3 cellPosition = _cells[x, y].transform.position;
@@ -114,10 +114,10 @@ public class Board : MonoBehaviour
         path = new List<GameObject>();
 
         // choose a random y within boardHeight
-        int y = Random.Range(0, _gameEngine.boardHeight);
+        int y = Random.Range(0, GlobalVariables.config.boardHeight);
 
         // Create a simple path from the left side to the right side of the board
-        for (int x = 0; x < _gameEngine.boardWidth; x++)
+        for (int x = 0; x < GlobalVariables.config.boardWidth; x++)
         {
             // Get the cell at the current x and y
             GameObject cellObject = _cells[x, y];
@@ -132,12 +132,12 @@ public class Board : MonoBehaviour
     private void CreateCellGrid()
     {
         // Instantiate cells using _gameEngine's width and height
-        _cells = new GameObject[_gameEngine.boardWidth, _gameEngine.boardHeight];
+        _cells = new GameObject[GlobalVariables.config.boardWidth, GlobalVariables.config.boardHeight];
 
         // Create the "pf_Cell" prefab in every cell
-        for (int x = 0; x < _gameEngine.boardWidth; x++)
+        for (int x = 0; x < GlobalVariables.config.boardWidth; x++)
         {
-            for (int y = 0; y < _gameEngine.boardHeight; y++)
+            for (int y = 0; y < GlobalVariables.config.boardHeight; y++)
             {
                 // Instantiate the prefab // Set the cellObject's parent to this transform
                 GameObject cellObject = Instantiate(Utils.GetRateRandomItem(GlobalVariables.config.grassCellPrefabs), transform, true);
@@ -169,10 +169,10 @@ public class Board : MonoBehaviour
     }
 
     // Given a GameObject, get the cell script at the GameObject's position
-    private ICell GetCell(GameObject gameObject)
+    private ICell GetCell(GameObject cellObject)
     {
         // Get the Cell component of the gameObject
-        ICell cell = gameObject.GetComponent<ICell>();
+        ICell cell = cellObject.GetComponent<ICell>();
 
         // Return the cell
         return cell;

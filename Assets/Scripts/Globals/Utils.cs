@@ -14,34 +14,41 @@ public static class Utils
         return list[randomIndex];
     }
     
-    public static GameObject GetRateRandomItem(List<GameObjectSpawnRate> list)
+    // Get a random item from a Dictionary<>
+    public static TS GetRandomItem<T,TS>(Dictionary<T,TS> list)
     {
-        // Calculate the cumulative spawn rates
-        List<float> cumulativeRates = new List<float>();
-        float cumulativeRate = 0f;
-        foreach (var gameObjectSpawnRate in list)
+        // return a random item from the dictionary
+        return list[GetRandomItem(new List<T>(list.Keys))];
+    }
+    
+    public static GameObject GetRateRandomItem(Dictionary<GameObject, float> dictionary)
+    {
+        
+        // Get a random GameObject based on the spawn rates. GameObjects should have change proportional to their spawn rate.
+        
+        // Get the total spawn rate
+        float totalSpawnRate = 0;
+        foreach (KeyValuePair<GameObject, float> pair in dictionary)
         {
-            var rate = gameObjectSpawnRate.rate;
-            
-            cumulativeRate += rate;
-            cumulativeRates.Add(cumulativeRate);
+            totalSpawnRate += pair.Value;
         }
-
-        // Generate a random number between 0 and the total spawn rate
-        Random random = new Random();
-        float randomNumber = (float)random.NextDouble() * cumulativeRate;
-
-        // Find the item corresponding to the generated random number
-        GameObject selectedItem = default;
-        for (int i = 0; i < cumulativeRates.Count; i++)
+        
+        // Get a random number between 0 and the total spawn rate
+        float random = UnityEngine.Random.Range(0, totalSpawnRate);
+        
+        // Loop through the dictionary
+        foreach (KeyValuePair<GameObject, float> pair in dictionary)
         {
-            if (randomNumber < cumulativeRates[i])
+            // Subtract the spawn rate from the random number
+            random -= pair.Value;
+            
+            // If the random number is less than 0, return the GameObject
+            if (random < 0)
             {
-                selectedItem = list[i].prefab;
-                break;
+                return pair.Key;
             }
         }
-
-        return selectedItem;
+        
+        throw new System.Exception("No item was found");
     }
 }

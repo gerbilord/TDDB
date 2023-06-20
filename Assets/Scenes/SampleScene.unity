@@ -331,19 +331,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20d8f70ceca238d4a82c3ab259c8fe28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boardWidth: 20
+  boardHeight: 20
   grassCellPrefabs:
-  - {fileID: 11400000, guid: 741ba9ae00794724abf70994d5cacb29, type: 2}
+    _serializedList:
+    - Key: {fileID: 2289342492612912154, guid: 9ad5fe44fb8ddfe439ffad82b058c07b, type: 3}
+      Value: 1
   treeCellPrefabs:
-  - {fileID: 11400000, guid: 6aa5b22027b7bcd4da63128fb7b86085, type: 2}
-  - {fileID: 11400000, guid: 9b2282deeda306c44ac9f1a6915ba218, type: 2}
-  - {fileID: 11400000, guid: 0e1477e5cfaf6d547abbd18efb6de389, type: 2}
+    _serializedList:
+    - Key: {fileID: 9001175345020219634, guid: e5712dedc4afcd4439eeed4d6c7718f9, type: 3}
+      Value: 0.8
+    - Key: {fileID: 6453798312756203355, guid: e86a7b3978cd7604582bcdc72900e8b1, type: 3}
+      Value: 0.05
+    - Key: {fileID: 4311821019901492041, guid: 85dc35a1c0611224f804abaebca4a1cd, type: 3}
+      Value: 0.15
   dirtCellPrefabs:
-  - {fileID: 11400000, guid: 4b0dd3db86d1ddf489f0a0878976ce28, type: 2}
+    _serializedList:
+    - Key: {fileID: 3258817265275395646, guid: f0df352038cdbe04bb464777ba2bc5de, type: 3}
+      Value: 1
   waves:
   - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
   towerPrefab: {fileID: 6853013965203123429, guid: f746012a5d2b5d8418207114f0c3239c, type: 3}
   towerCardPrefab: {fileID: 2807112774912832007, guid: e48e6bfb7fa47f742937e7d588937e9b, type: 3}
   treeSpawnRate: 0.3
+  showDebugInfo: 0
 --- !u!4 &956709476
 Transform:
   m_ObjectHideFlags: 0

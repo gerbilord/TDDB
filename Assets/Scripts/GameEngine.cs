@@ -4,9 +4,6 @@ using UnityEngine.EventSystems;
 
 public class GameEngine : MonoBehaviour
 {
-    [SerializeField] public int boardWidth;
-    [SerializeField] public int boardHeight;
-
     public Camera mainCamera;
     
     public Board board;
