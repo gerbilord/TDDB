@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +7,8 @@ public class Config : MonoBehaviour
     public List<GameObjectSpawnRate> grassCellPrefabs;
     public List<GameObjectSpawnRate> treeCellPrefabs;
     public List<GameObjectSpawnRate> dirtCellPrefabs;
+    
+    public List<Wave> waves;
     
     public GameObject towerPrefab;
     

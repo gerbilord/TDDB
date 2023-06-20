@@ -1,52 +1,44 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaveManager : MonoBehaviour
+public class WaveManager: MonoBehaviour
 {
-    GameEngine gameEngine;
-    Vector3 startPos;
-    Vector3 endPos;
-    List<GameObject> creepsOnBoard;
-    List<GameObject> path;
+    private GameEngine _gameEngine;
+    public List<GameObject> creepsOnBoard;
+    private Vector3 _startPos;
+    private Vector3 _endPos;
+    private List<GameObject> _refToBoardsPath;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+        creepsOnBoard = new List<GameObject>();
         
+        _refToBoardsPath = GlobalVariables.gameEngine.board.path;
+        _startPos = _refToBoardsPath[0].transform.position;
+        _endPos = _refToBoardsPath[^1].transform.position;
         
+        StartCoroutine(SpawnWave(GlobalVariables.config.waves[0].waveCreeps, 2));
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SpawnCreep(Creep creep)
     {
+        GameObject creepObject = Instantiate(creep.prefab, new Vector3(_startPos.x, 0.5f, _startPos.z), Quaternion.identity);
+        creepsOnBoard.Add(creepObject);
+    }
+    public IEnumerator SpawnWave(List<Creep> wavePreset, float delay)
+    {
+        // Copy the list so we don't modify the original >.>
+        List<Creep> wave = new List<Creep>(wavePreset);
         
-    }
-    public void setPath()
-    {
-        gameEngine = GlobalVariables.gameEngine;
-        path = gameEngine.board.path;
-        print(path);
-        print(path[0]);
-        startPos = path[0].transform.position;
-        endPos = path[path.Count - 1].transform.position;
-    }
-    public void spawnCreep(Creep creep)
-    {
-        GameObject newCreep = new GameObject();
-        newCreep = Instantiate(creep.prefab, new Vector3(startPos.x, 0.5f, startPos.z), Quaternion.identity) as GameObject;
-        //creepsOnBoard.Add(newCreep);
-    }
-    public IEnumerator spawnWave(List<Creep> wave, float delay)
-    {
         yield return new WaitForEndOfFrame();
-        setPath();
         if (wave.Count > 0)
         {
-            spawnCreep(wave[0]);
+            SpawnCreep(wave[0]);
             wave.RemoveAt(0);
             yield return new WaitForSeconds(delay);
-            yield return spawnWave(wave, delay);
+            yield return SpawnWave(wave, delay);
         }
         else { yield return null; }
     }

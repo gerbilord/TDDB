@@ -6,7 +6,6 @@ public class GameEngine : MonoBehaviour
 {
     [SerializeField] public int boardWidth;
     [SerializeField] public int boardHeight;
-    [SerializeField] public List<Wave> waves;
 
     public Camera mainCamera;
     
@@ -23,11 +22,13 @@ public class GameEngine : MonoBehaviour
         GlobalVariables.config = FindObjectOfType<Config>();
         
         cardManager = new CardManager();
-        waveManager = new WaveManager();
 
-
-        // Create a GameObject and attach the Board script to it
+        // Create an empty GameObject and attach the Board script to it
         GameObject boardObject = new GameObject("Board");
         board = boardObject.AddComponent<Board>();
+        
+        // Create an empty GameObject and attach the wave manager script to it
+        GameObject waveManagerObject = new GameObject("WaveManager");
+        waveManager = waveManagerObject.AddComponent<WaveManager>();
     }
 }

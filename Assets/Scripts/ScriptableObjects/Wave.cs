@@ -5,5 +5,4 @@ using UnityEngine;
 public class Wave : ScriptableObject
 {
     public List<Creep> waveCreeps;
-    public GameObject prefab;
 }

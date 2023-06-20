@@ -18,7 +18,6 @@ public class Board : MonoBehaviour
         CreatePath();
         SetupCamera();
         UpdateAllCellPrefabsToMatchType();
-        StartCoroutine(GlobalVariables.gameEngine.waveManager.spawnWave(GlobalVariables.gameEngine.waves[0].waveCreeps, 5));
     }
 
     private void OnDestroy()
@@ -128,8 +127,6 @@ public class Board : MonoBehaviour
             ICell cell = GetCell(cellObject);
             cell.type = CellType.Dirt;
         }
-        
-        print(path[0]);
     }
 
     private void CreateCellGrid()
@@ -164,7 +161,6 @@ public class Board : MonoBehaviour
                 {
                     cell.type = CellType.Tree;
                 }
-                
 
                 // Set the cell in the _cells array
                 _cells[x, y] = cellObject;
@@ -187,6 +183,19 @@ public class Board : MonoBehaviour
     {
         // Change our reference
         _cells[oldCell.x, oldCell.y] = newCell.GetGameObject();
+        
+        // if old cell was in path, remove it and put new cell, at the same location
+        if (path.Contains(oldCell.GetGameObject()))
+        {
+            // Get the index of the old cell in the path
+            int index = path.IndexOf(oldCell.GetGameObject());
+            
+            // Remove the old cell from the path
+            path.RemoveAt(index);
+            
+            // Insert the new cell at the same index
+            path.Insert(index, newCell.GetGameObject());
+        }
     }
 
     public void PlaceTowerOn(ICell cell)

@@ -339,6 +339,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0e1477e5cfaf6d547abbd18efb6de389, type: 2}
   dirtCellPrefabs:
   - {fileID: 11400000, guid: 4b0dd3db86d1ddf489f0a0878976ce28, type: 2}
+  waves:
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
   towerPrefab: {fileID: 6853013965203123429, guid: f746012a5d2b5d8418207114f0c3239c, type: 3}
   towerCardPrefab: {fileID: 2807112774912832007, guid: e48e6bfb7fa47f742937e7d588937e9b, type: 3}
   treeSpawnRate: 0.3
