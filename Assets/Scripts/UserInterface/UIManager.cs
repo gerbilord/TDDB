@@ -40,7 +40,7 @@ public class UIManager
         if (_selectedCard != null && cell.IsBuildable())
         {
             // Make a phantom tower on the cell
-            _phantomTower = GameObject.Instantiate(GlobalVariables.config.towerPrefab, cell.GetTransform().position, Quaternion.identity);
+            _phantomTower = GameObject.Instantiate(GlobalVariables.config.towerPrefab, GraphicsUtils.GetTopOf(cell.GetGameObject()), Quaternion.identity);
             
             // Make the phantom tower transparent
             _phantomTower.GetComponent<IOpacityChanger>().ToggleOpacity(true);

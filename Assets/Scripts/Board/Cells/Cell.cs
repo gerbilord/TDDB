@@ -37,14 +37,14 @@ public class Cell : MonoBehaviour, ICell
 
         if ( type == CellType.Dirt && classType != typeof(DirtCell))
         {
-            changeThisTo(Utils.GetRateRandomItem(GlobalVariables.config.dirtCellPrefabs));
+            changeThisTo(RandomUtils.GetRateRandomItem(GlobalVariables.config.dirtCellPrefabs));
         } else if (type == CellType.Tree && classType != typeof(TreeCell))
         {
-            changeThisTo(Utils.GetRateRandomItem(GlobalVariables.config.treeCellPrefabs));
+            changeThisTo(RandomUtils.GetRateRandomItem(GlobalVariables.config.treeCellPrefabs));
         }
         else if (classType != typeof(GrassCell))
         {
-            changeThisTo(Utils.GetRateRandomItem(GlobalVariables.config.grassCellPrefabs));
+            changeThisTo(RandomUtils.GetRateRandomItem(GlobalVariables.config.grassCellPrefabs));
         }
     }
 
