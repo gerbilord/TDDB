@@ -16,8 +16,8 @@ public class WaveManager: MonoBehaviour
         creepsOnBoard = new List<ICreep>();
         
         _refToBoardsPath = GlobalVariables.gameEngine.board.path;
-        _startPos = _refToBoardsPath[0].transform.position;
-        _endPos = _refToBoardsPath[^1].transform.position;
+        _startPos = GraphicsUtils.GetTopOf(_refToBoardsPath[0]);
+        _endPos = GraphicsUtils.GetTopOf(_refToBoardsPath[^1]);
         
         StartCoroutine(SpawnWave(GlobalVariables.config.waves[0].waveCreeps, 2));
     }
@@ -29,8 +29,12 @@ public class WaveManager: MonoBehaviour
 
     public void SpawnCreep(CreepPreset creepPreset)
     {
-        GameObject creepObject = Instantiate(creepPreset.prefab, new Vector3(_startPos.x, 0.5f, _startPos.z), Quaternion.identity);
+        GameObject creepObject = Instantiate(creepPreset.prefab, new Vector3(_startPos.x, _startPos.y, _startPos.z), Quaternion.identity);
         creepObject.GetComponent<ICreep>().creepMoveSpeed = creepPreset.moveSpeed;
+
+        // Set creep rotation face the next cell // TODO this needs to be updated after movement.
+        creepObject.transform.LookAt(_refToBoardsPath[1].transform.position);
+
         creepsOnBoard.Add(creepObject.GetComponent<ICreep>());
     }
     public IEnumerator SpawnWave(List<CreepPreset> wavePreset, float delay)
@@ -56,8 +60,7 @@ public class WaveManager: MonoBehaviour
             ICreep creep = creepsOnBoard[i];
             Vector3 des = _refToBoardsPath[creep.currentPathIndex + 1].transform.position;
             Vector3 start = creep.GetGameObject().transform.position;
-            //this value changes based off of the model size of the creepPreset
-            des.y += .5f;
+
             if (start == des){
                 if (creep.currentPathIndex < _refToBoardsPath.Count-2)
                 {
@@ -70,7 +73,6 @@ public class WaveManager: MonoBehaviour
                 }
             }
             Vector3 end = _refToBoardsPath[creep.currentPathIndex + 1].transform.position;
-            end.y += .5f;
             float moveSpeed = creep.creepMoveSpeed * Time.deltaTime;
             creep.GetGameObject().transform.position = Vector3.MoveTowards(start, end, moveSpeed);
         }

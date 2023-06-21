@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
 
-public static class Utils
+public static class RandomUtils
 {
     // Get a random item from a List<>
     public static T GetRandomItem<T>(List<T> list)

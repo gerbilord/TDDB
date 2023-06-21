@@ -140,7 +140,7 @@ public class Board : MonoBehaviour
             for (int y = 0; y < GlobalVariables.config.boardHeight; y++)
             {
                 // Instantiate the prefab // Set the cellObject's parent to this transform
-                GameObject cellObject = Instantiate(Utils.GetRateRandomItem(GlobalVariables.config.grassCellPrefabs), transform, true);
+                GameObject cellObject = Instantiate(RandomUtils.GetRateRandomItem(GlobalVariables.config.grassCellPrefabs), transform, true);
 
                 // Set the cellObject's position to the current x and y
                 cellObject.transform.position = new Vector3(x, 0, y);
@@ -204,12 +204,14 @@ public class Board : MonoBehaviour
         {
             // Get the tower prefab
             GameObject towerPrefab = GlobalVariables.config.towerPrefab;
-        
+
             // Get the cell gameObject
             GameObject cellObject = cell.GetGameObject();
         
             // Instantiate the tower prefab at the cell's position
-            GameObject towerObject = Instantiate(towerPrefab, cellObject.transform.position, Quaternion.identity);
+            GameObject towerObject = Instantiate(towerPrefab, GraphicsUtils.GetTopOf(cellObject), Quaternion.identity);
+            
+            towerObject.GetComponent<Animator>().SetBool("isPlacing", false);
         
             // Set the tower's parent to the cell
             towerObject.transform.SetParent(cellObject.transform);
