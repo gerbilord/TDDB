@@ -18,11 +18,13 @@ public class Config : MonoBehaviour
     
     public List<Wave> waves;
 
-    public GameObject towerPrefab;
+    public GameObject towerPrefab;  
     
     public GameObject towerCardPrefab;
 
     public float treeSpawnRate;
     
     public bool showDebugInfo;
+
+    public DeckPreset DeckPreset;
 }

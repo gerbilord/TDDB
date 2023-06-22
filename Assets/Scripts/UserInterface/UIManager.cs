@@ -7,7 +7,7 @@ public class UIManager
 
     private Canvas _canvas;
     private GameObject _selectedCell;
-    private GameObject _selectedCard;
+    private ICard _selectedCard;
     private GameObject _phantomTower;
     
     public UIManager()
@@ -40,8 +40,9 @@ public class UIManager
         if (_selectedCard != null && cell.IsBuildable())
         {
             // Make a phantom tower on the cell
-            _phantomTower = GameObject.Instantiate(GlobalVariables.config.towerPrefab, GraphicsUtils.GetTopOf(cell.GetGameObject()), Quaternion.identity);
-            
+            _phantomTower = _selectedCard.towerPreset.makeTower();
+            _phantomTower.transform.position = GraphicsUtils.GetTopOf(cell.GetGameObject());
+            (_phantomTower.GetComponent<ITower>() as MonoBehaviour).enabled = false;
             // Make the phantom tower transparent
             _phantomTower.GetComponent<IOpacityChanger>().ToggleOpacity(true);
             
@@ -82,8 +83,8 @@ public class UIManager
 
         if (_selectedCard != null)
         {
-            GlobalVariables.gameEngine.board.PlaceTowerOn(cell);
-            ToggleHighlight(_selectedCard, false);
+            _selectedCard.Play(cell);
+            ToggleHighlight(_selectedCard.GetGameObject(), false);
             _selectedCard = null;
             return;
         }
@@ -120,13 +121,19 @@ public class UIManager
     {
         GameObject cardGameObject = card.GetGameObject();
         cardGameObject.transform.SetParent(_canvas.transform);
-        cardGameObject.transform.localPosition = new Vector3(0, -300, 0); // TODO fix -300?
+        int x = 100*GlobalVariables.gameEngine.cardManager.cardsInHand.IndexOf(card);
+        cardGameObject.transform.localPosition = new Vector3(x, -300, 0); // TODO fix -300?
         
     }
 
     public void OnCardClicked(ICard cardClicked)
     {
-        GameObject oldCard = _selectedCard;
+        GameObject oldCard = null;
+        if (_selectedCard != null)
+        {
+            oldCard = _selectedCard.GetGameObject();
+        }
+
         GameObject newCard = cardClicked.GetGameObject();
 
         if (oldCard != null)
@@ -140,7 +147,7 @@ public class UIManager
             return;
         }
 
-        _selectedCard = newCard;
+        _selectedCard = newCard.GetComponent<ICard>();
         newCard.GetComponent<IHighlighter>().ToggleHighlight(true);
 
 

@@ -198,22 +198,20 @@ public class Board : MonoBehaviour
         }
     }
 
-    public void PlaceTowerOn(ICell cell)
+    public void PlaceTowerOn(ICell cell, ITower tower)
     {
         if (cell.IsBuildable())
         {
-            // Get the tower prefab
-            GameObject towerPrefab = GlobalVariables.config.towerPrefab;
-
             // Get the cell gameObject
             GameObject cellObject = cell.GetGameObject();
-        
-            // Instantiate the tower prefab at the cell's position
-            GameObject towerObject = Instantiate(towerPrefab, GraphicsUtils.GetTopOf(cellObject), Quaternion.identity);
+            
+            //place the ITower on the cell
+            GameObject towerObject = tower.GetGameObject();
+            towerObject.transform.position = GraphicsUtils.GetTopOf(cellObject);
             
             towerObject.GetComponent<Animator>().SetBool("isPlacing", false);
         
-            // Set the tower's parent to the cell
+            // Set the tower's parent to the cell, so that it shows under cell in the object hierarchy
             towerObject.transform.SetParent(cellObject.transform);
 
             // Add tower to occupying game objects

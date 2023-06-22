@@ -1,10 +1,12 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICreep
+public interface IBullet
 {
     public Dictionary<StatType, float> stats { get; set; }
-    int currentPathIndex { get; set; }
     public GameObject GetGameObject();
+    public void Seek(ICreep target, ITower tower);
+    
+
 }

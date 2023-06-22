@@ -9,13 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef6d5c0990c0ae34d9da059f5832a808, type: 3}
-  m_Name: Creep1
+  m_Script: {fileID: 11500000, guid: 6b4100371de84da097ca6af709f5c329, type: 3}
+  m_Name: BulletPreset
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2132874091115908679, guid: 8c767c1e005e1e54f96e77fd4e8ce242, type: 3}
+  bulletPrefab: {fileID: 8534492540457840364, guid: f72607745f3bdfa469b8d4614d99b5ce, type: 3}
   stats:
     _serializedList:
     - Key: 3
-      Value: 3
-    - Key: 2
-      Value: 20
+      Value: 10

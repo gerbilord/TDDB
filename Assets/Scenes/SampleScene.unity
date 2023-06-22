@@ -355,6 +355,7 @@ MonoBehaviour:
   towerCardPrefab: {fileID: 2807112774912832007, guid: e48e6bfb7fa47f742937e7d588937e9b, type: 3}
   treeSpawnRate: 0.3
   showDebugInfo: 0
+  DeckPreset: {fileID: 11400000, guid: b0a3679f85bd58a489b710f351e25792, type: 2}
 --- !u!4 &956709476
 Transform:
   m_ObjectHideFlags: 0

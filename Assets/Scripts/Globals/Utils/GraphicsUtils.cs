@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GraphicsUtils 
@@ -7,7 +8,7 @@ public class GraphicsUtils
     // Get height of 3d game object
     public static float GetHeightOf(GameObject gameObject)
     {
-        return gameObject.GetComponent<Renderer>().bounds.size.y;
+        return gameObject.GetComponentsInChildren<Renderer>().OrderBy(children => children.bounds.size.y).Last().bounds.size.y;
     }
     
     // Get the center, top of 3d game object

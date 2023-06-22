@@ -19,6 +19,7 @@ public class GameEngine : MonoBehaviour
         GlobalVariables.config = FindObjectOfType<Config>();
         
         cardManager = new CardManager();
+        cardManager.LoadDeck();
 
         // Create an empty GameObject and attach the Board script to it
         GameObject boardObject = new GameObject("Board");

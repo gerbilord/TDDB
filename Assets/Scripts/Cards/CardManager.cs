@@ -1,24 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CardManager
 {
-    public List<GameObject> cardsInHand;
+    public List<ICard> cardsInHand = new List<ICard>();
     
     public CardManager()
     {
-        cardsInHand = new List<GameObject>();
-        AddCardToHand(GlobalVariables.config.towerCardPrefab);
+        
     }
 
-    public void AddCardToHand(GameObject cardPrefab)
+    public void LoadDeck()
     {
-
-        // Instantiate cardPrefab
-        GameObject card = GameObject.Instantiate(cardPrefab);
-
-        cardsInHand.Add(card);
-        GlobalVariables.eventManager.cardEventManager.CardAddedToHand(card.GetComponent<ICard>());
+        List<CardPreset> Deck = GlobalVariables.config.DeckPreset.cards;
+        foreach (CardPreset cardPreset in Deck)
+        {
+            GameObject cardObject = GameObject.Instantiate(cardPreset.cardPrefab);
+            ICard card = cardObject.GetComponent<ICard>();
+            card.towerPreset = cardPreset.towerPreset;
+            cardsInHand.Add(card);
+            GlobalVariables.eventManager.cardEventManager.CardAddedToHand(card);
+        }
     }
 }

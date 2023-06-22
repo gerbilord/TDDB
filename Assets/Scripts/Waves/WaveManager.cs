@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore;
+using UnityEngine.TextCore.LowLevel;
 
 public class WaveManager: MonoBehaviour
 {
@@ -29,8 +31,8 @@ public class WaveManager: MonoBehaviour
 
     public void SpawnCreep(CreepPreset creepPreset)
     {
-        GameObject creepObject = Instantiate(creepPreset.prefab, new Vector3(_startPos.x, _startPos.y, _startPos.z), Quaternion.identity);
-        creepObject.GetComponent<ICreep>().creepMoveSpeed = creepPreset.moveSpeed;
+        GameObject creepObject = creepPreset.makeCreep();
+        creepObject.transform.position = new Vector3(_startPos.x, _startPos.y, _startPos.z);
 
         // Set creep rotation face the next cell // TODO this needs to be updated after movement.
         creepObject.transform.LookAt(_refToBoardsPath[1].transform.position);
@@ -73,7 +75,7 @@ public class WaveManager: MonoBehaviour
                 }
             }
             Vector3 end = _refToBoardsPath[creep.currentPathIndex + 1].transform.position;
-            float moveSpeed = creep.creepMoveSpeed * Time.deltaTime;
+            float moveSpeed = creep.stats[StatType.moveSpeed] * Time.deltaTime;
             creep.GetGameObject().transform.position = Vector3.MoveTowards(start, end, moveSpeed);
         }
     }
@@ -84,6 +86,7 @@ public class WaveManager: MonoBehaviour
     public void KillCreep(ICreep creep)
     {
         creepsOnBoard.Remove(creep);
+        GlobalVariables.eventManager.creepEventManager.CreepKilled(creep);
         Destroy(creep.GetGameObject());
     }
 }
