@@ -60,13 +60,14 @@ public class WaveManager: MonoBehaviour
         for (int i = 0; i < creepsOnBoard.Count; i++)
         {
             ICreep creep = creepsOnBoard[i];
-            Vector3 des = _refToBoardsPath[creep.currentPathIndex + 1].transform.position;
+            Vector3 des = GraphicsUtils.GetTopOf(_refToBoardsPath[creep.currentPathIndex + 1]);
             Vector3 start = creep.GetGameObject().transform.position;
 
             if (start == des){
                 if (creep.currentPathIndex < _refToBoardsPath.Count-2)
                 {
                     creep.currentPathIndex += 1;
+                    creep.GetGameObject().transform.LookAt(_refToBoardsPath[creep.currentPathIndex + 1].transform.position);
                 }
                 else
                 {
@@ -74,8 +75,7 @@ public class WaveManager: MonoBehaviour
                     break;
                 }
             }
-            Vector3 end = _refToBoardsPath[creep.currentPathIndex + 1].transform.position;
-            creep.GetGameObject().transform.LookAt(_refToBoardsPath[creep.currentPathIndex + 1].transform.position);
+            Vector3 end = GraphicsUtils.GetTopOf(_refToBoardsPath[creep.currentPathIndex + 1]);
             float moveSpeed = creep.stats[StatType.moveSpeed] * Time.deltaTime;
             creep.GetGameObject().transform.position = Vector3.MoveTowards(start, end, moveSpeed);
         }
