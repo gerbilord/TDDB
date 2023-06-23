@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d88304bbe1044a9a8671ea721b6941a7, type: 3}
   m_Name: Tower1
   m_EditorClassIdentifier: 
-  prefab: {fileID: 6853013965203123429, guid: f746012a5d2b5d8418207114f0c3239c, type: 3}
-  bulletPreset: {fileID: 11400000, guid: bd972c0552fdafd4a977a6f83b1866ee, type: 2}
   stats:
     _serializedList:
     - Key: 1
@@ -22,3 +20,6 @@ MonoBehaviour:
       Value: 7
     - Key: 0
       Value: 7
+  prefab: {fileID: 6853013965203123429, guid: f746012a5d2b5d8418207114f0c3239c, type: 3}
+  towerTargetingPreset: {fileID: 11400000, guid: c520f8708d214174ba9e8da4fdb4ecf0, type: 2}
+  bulletPreset: {fileID: 11400000, guid: bd972c0552fdafd4a977a6f83b1866ee, type: 2}

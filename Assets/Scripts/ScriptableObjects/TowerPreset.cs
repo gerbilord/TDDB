@@ -7,8 +7,9 @@ public class TowerPreset : ScriptableObject
 {
     [SerializedDictionary("StatType", "value")]
     public SerializedDictionary<StatType, float> stats;
-
+    
     public GameObject prefab;
+    public TowerTargetingPreset towerTargetingPreset;
     public BulletPreset bulletPreset;
 
     public ITower makeTower()
@@ -19,7 +20,7 @@ public class TowerPreset : ScriptableObject
         ITower newTower = newTowerObj.GetComponent<ITower>(); 
         newTower.stats = newStats;
         newTower.bulletPreset = bulletPreset;
-        newTower.towerTargetBehavior = new LastCreepTargetBehavior();
+        newTower.towerTargetBehavior = towerTargetingPreset.MakeTowerTargetingBehavior();
         return newTower;
     }
     
