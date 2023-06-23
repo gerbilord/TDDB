@@ -5,8 +5,8 @@ public class BulletBehaviour : MonoBehaviour, IBullet
 {
     public Transform target;
     public Dictionary<StatType, float> stats { get; set; }
-    public ICreep creep;
-    public ITower tower;
+    public ITower tower { get; set; }
+    public ICreep creep { get; set; }
     
     public GameObject GetGameObject()
     {
@@ -52,7 +52,7 @@ public class BulletBehaviour : MonoBehaviour, IBullet
 
         //Deal damage
         //creep.Damage(tower.stats[StatType.damage]);
-
+        creep.takeBulletHit(this);
 
 
         Destroy(gameObject);

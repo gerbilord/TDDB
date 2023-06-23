@@ -15,6 +15,7 @@ public class WaveManager: MonoBehaviour
 
     public void Start()
     {
+        GlobalVariables.eventManager.creepEventManager.OnCreepKilled += CreepKilled;
         creepsOnBoard = new List<ICreep>();
         
         _refToBoardsPath = GlobalVariables.gameEngine.board.path;
@@ -80,14 +81,13 @@ public class WaveManager: MonoBehaviour
             creep.GetGameObject().transform.position = Vector3.MoveTowards(start, end, moveSpeed);
         }
     }
+
     public void OnLeak(ICreep creep)
     {
-        KillCreep(creep);
+        creep.killCreep();
     }
-    public void KillCreep(ICreep creep)
+    private void CreepKilled(ICreep creep)
     {
         creepsOnBoard.Remove(creep);
-        GlobalVariables.eventManager.creepEventManager.CreepKilled(creep);
-        Destroy(creep.GetGameObject());
     }
 }

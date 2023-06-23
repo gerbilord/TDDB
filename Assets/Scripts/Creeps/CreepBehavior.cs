@@ -28,4 +28,20 @@ public class CreepBehavior : MonoBehaviour, ICreep
     {
         return gameObject;
     }
+    public bool takeBulletHit(IBullet bullet)
+    {
+        float damage = bullet.tower.stats[StatType.damage];
+        stats[StatType.health] -= damage;
+        if (stats[StatType.health] <= 0)
+        {
+            killCreep();    
+            return true;
+        }
+        return false;
+    }
+    public void killCreep()
+    {
+        GlobalVariables.eventManager.creepEventManager.CreepKilled(this);
+        Destroy(gameObject);
+    }
 }
