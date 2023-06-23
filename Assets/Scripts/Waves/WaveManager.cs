@@ -75,6 +75,7 @@ public class WaveManager: MonoBehaviour
                 }
             }
             Vector3 end = _refToBoardsPath[creep.currentPathIndex + 1].transform.position;
+            creep.GetGameObject().transform.LookAt(_refToBoardsPath[creep.currentPathIndex + 1].transform.position);
             float moveSpeed = creep.stats[StatType.moveSpeed] * Time.deltaTime;
             creep.GetGameObject().transform.position = Vector3.MoveTowards(start, end, moveSpeed);
         }

@@ -8,6 +8,8 @@ public class Config : MonoBehaviour
 
     public int boardWidth;
     public int boardHeight;
+    
+    public List<Vector2Int> pathRoadMap;
 
     [SerializedDictionary("prefab", "spawnRate")]
     public SerializedDictionary<GameObject, float> grassCellPrefabs;

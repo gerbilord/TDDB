@@ -15,7 +15,7 @@ public class Board : MonoBehaviour
 
         SubscribeToAllEvents();
         CreateCellGrid();
-        CreatePath();
+        LoadPath();
         SetupCamera();
         UpdateAllCellPrefabsToMatchType();
     }
@@ -108,24 +108,21 @@ public class Board : MonoBehaviour
         return allCells;
     }
 
-    private void CreatePath()
+    private void LoadPath()
     {
-        // Create a path
         path = new List<GameObject>();
 
-        // choose a random y within boardHeight
-        int y = Random.Range(0, GlobalVariables.config.boardHeight);
+        // Get the path from the config
+        List<Vector2Int> pathPositions = GlobalVariables.config.pathRoadMap;
 
-        // Create a simple path from the left side to the right side of the board
-        for (int x = 0; x < GlobalVariables.config.boardWidth; x++)
+        // For each position in the path, get the cell at that position and add it to the path
+        foreach (Vector2Int pathPosition in pathPositions)
         {
-            // Get the cell at the current x and y
-            GameObject cellObject = _cells[x, y];
+            
+            GameObject cellObject = _cells[pathPosition.x, pathPosition.y];
+            
+            GetCell(cellObject).type = CellType.Dirt;
             path.Add(cellObject);
-
-            // Set the cell type to dirt (path)
-            ICell cell = GetCell(cellObject);
-            cell.type = CellType.Dirt;
         }
     }
 
@@ -185,7 +182,7 @@ public class Board : MonoBehaviour
         _cells[oldCell.x, oldCell.y] = newCell.GetGameObject();
         
         // if old cell was in path, remove it and put new cell, at the same location
-        if (path.Contains(oldCell.GetGameObject()))
+        while (path.Contains(oldCell.GetGameObject())) // While because a cell can appear in the path multiple times (like a loop)
         {
             // Get the index of the old cell in the path
             int index = path.IndexOf(oldCell.GetGameObject());

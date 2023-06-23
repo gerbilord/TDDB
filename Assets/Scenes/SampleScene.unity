@@ -331,8 +331,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20d8f70ceca238d4a82c3ab259c8fe28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showDebugInfo: 0
   boardWidth: 20
   boardHeight: 20
+  pathRoadMap:
+  - {x: 0, y: 10}
+  - {x: 1, y: 10}
+  - {x: 2, y: 10}
+  - {x: 3, y: 10}
+  - {x: 4, y: 10}
+  - {x: 5, y: 10}
+  - {x: 6, y: 10}
+  - {x: 7, y: 10}
+  - {x: 8, y: 10}
+  - {x: 9, y: 10}
+  - {x: 10, y: 10}
+  - {x: 11, y: 10}
+  - {x: 12, y: 10}
+  - {x: 13, y: 10}
+  - {x: 14, y: 10}
+  - {x: 14, y: 11}
+  - {x: 14, y: 12}
+  - {x: 14, y: 13}
+  - {x: 14, y: 14}
+  - {x: 13, y: 14}
+  - {x: 12, y: 14}
+  - {x: 11, y: 14}
+  - {x: 10, y: 14}
+  - {x: 10, y: 13}
+  - {x: 10, y: 12}
+  - {x: 10, y: 11}
+  - {x: 10, y: 10}
+  - {x: 10, y: 9}
+  - {x: 10, y: 8}
+  - {x: 10, y: 7}
+  - {x: 10, y: 6}
+  - {x: 10, y: 5}
+  - {x: 10, y: 4}
+  - {x: 10, y: 3}
+  - {x: 10, y: 2}
+  - {x: 10, y: 1}
+  - {x: 10, y: 0}
   grassCellPrefabs:
     _serializedList:
     - Key: {fileID: 2289342492612912154, guid: 9ad5fe44fb8ddfe439ffad82b058c07b, type: 3}
@@ -351,10 +390,7 @@ MonoBehaviour:
       Value: 1
   waves:
   - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
-  towerPrefab: {fileID: 6853013965203123429, guid: f746012a5d2b5d8418207114f0c3239c, type: 3}
-  towerCardPrefab: {fileID: 2807112774912832007, guid: e48e6bfb7fa47f742937e7d588937e9b, type: 3}
   treeSpawnRate: 0.3
-  showDebugInfo: 0
   DeckPreset: {fileID: 11400000, guid: b0a3679f85bd58a489b710f351e25792, type: 2}
 --- !u!4 &956709476
 Transform:
