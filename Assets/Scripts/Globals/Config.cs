@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Config : MonoBehaviour
 {
+    public bool showDebugInfo;
+
     public int boardWidth;
     public int boardHeight;
 
@@ -18,13 +20,7 @@ public class Config : MonoBehaviour
     
     public List<Wave> waves;
 
-    public GameObject towerPrefab;  
-    
-    public GameObject towerCardPrefab;
-
     public float treeSpawnRate;
-    
-    public bool showDebugInfo;
 
     public DeckPreset DeckPreset;
 }

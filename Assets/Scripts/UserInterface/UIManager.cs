@@ -8,7 +8,7 @@ public class UIManager
     private Canvas _canvas;
     private GameObject _selectedCell;
     private ICard _selectedCard;
-    private GameObject _phantomTower;
+    private ITower _phantomTower;
     
     public UIManager()
     {
@@ -34,23 +34,25 @@ public class UIManager
     {
         if(_phantomTower != null) // Destroy previous phantoms, we only want one at a time
         {
-            GameObject.Destroy(_phantomTower);
+            GameObject.Destroy(_phantomTower.GetGameObject());
+            _phantomTower = null; // Is this needed? Or will it auto become null?
         }
 
         if (_selectedCard != null && cell.IsBuildable())
         {
             // Make a phantom tower on the cell
             _phantomTower = _selectedCard.towerPreset.makeTower();
-            _phantomTower.transform.position = GraphicsUtils.GetTopOf(cell.GetGameObject());
-            (_phantomTower.GetComponent<ITower>() as MonoBehaviour).enabled = false;
+            _phantomTower.GetGameObject().transform.position = GraphicsUtils.GetTopOf(cell.GetGameObject());
+            ((MonoBehaviour)_phantomTower).enabled = false;
+
             // Make the phantom tower transparent
-            _phantomTower.GetComponent<IOpacityChanger>().ToggleOpacity(true);
+            _phantomTower.GetGameObject().GetComponent<IOpacityChanger>().ToggleOpacity(true);
             
             // Set _phantomTower isPlacing animation bool to true
-            _phantomTower.GetComponent<Animator>().SetBool("isPlacing", true);
+            _phantomTower.GetGameObject().GetComponent<Animator>().SetBool("isPlacing", true);
 
             // In the viewer name it phantom tower
-            _phantomTower.name = "Phantom Tower";
+            _phantomTower.GetGameObject().name = "Phantom Tower";
         }
     }
 
@@ -58,7 +60,8 @@ public class UIManager
     {
         if(_phantomTower != null)
         {
-            GameObject.Destroy(_phantomTower);
+            GameObject.Destroy(_phantomTower.GetGameObject());
+            _phantomTower = null;
         }
     }
     
@@ -66,7 +69,8 @@ public class UIManager
     {
         if(_phantomTower != null)
         {
-            GameObject.Destroy(_phantomTower);
+            GameObject.Destroy(_phantomTower.GetGameObject());
+            _phantomTower = null;
         }
 
         GameObject oldCell = _selectedCell;

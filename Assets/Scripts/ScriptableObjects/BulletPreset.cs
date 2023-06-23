@@ -6,15 +6,17 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "BulletPreset", menuName = "ScriptableObjects/BulletPreset", order = 1)]
 public class BulletPreset : ScriptableObject
 {
-    public GameObject bulletPrefab;
     [SerializedDictionary("StatType", "value")]
     public SerializedDictionary<StatType,float> stats;
-    public GameObject makeBullet()
+    
+    public GameObject bulletPrefab;
+
+    public IBullet makeBullet()
     {
         GameObject newBullet = Instantiate(bulletPrefab);
         Dictionary<StatType, float> newStats = new Dictionary<StatType, float>(stats);
         newBullet.GetComponent<IBullet>().stats = newStats;
-        return newBullet;
+        return newBullet.GetComponent<IBullet>();
     }
 
 }

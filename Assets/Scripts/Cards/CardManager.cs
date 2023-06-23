@@ -6,20 +6,13 @@ using UnityEngine;
 public class CardManager
 {
     public List<ICard> cardsInHand = new List<ICard>();
-    
-    public CardManager()
-    {
-        
-    }
 
     public void LoadDeck()
     {
-        List<CardPreset> Deck = GlobalVariables.config.DeckPreset.cards;
-        foreach (CardPreset cardPreset in Deck)
+        List<CardPreset> deck = GlobalVariables.config.DeckPreset.cards;
+        foreach (CardPreset cardPreset in deck)
         {
-            GameObject cardObject = GameObject.Instantiate(cardPreset.cardPrefab);
-            ICard card = cardObject.GetComponent<ICard>();
-            card.towerPreset = cardPreset.towerPreset;
+            ICard card = cardPreset.makeCard();
             cardsInHand.Add(card);
             GlobalVariables.eventManager.cardEventManager.CardAddedToHand(card);
         }

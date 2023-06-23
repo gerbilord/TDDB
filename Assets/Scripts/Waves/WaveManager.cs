@@ -31,13 +31,13 @@ public class WaveManager: MonoBehaviour
 
     public void SpawnCreep(CreepPreset creepPreset)
     {
-        GameObject creepObject = creepPreset.makeCreep();
-        creepObject.transform.position = new Vector3(_startPos.x, _startPos.y, _startPos.z);
+        ICreep newCreep = creepPreset.makeCreep();
+        newCreep.GetGameObject().transform.position = new Vector3(_startPos.x, _startPos.y, _startPos.z);
 
         // Set creep rotation face the next cell // TODO this needs to be updated after movement.
-        creepObject.transform.LookAt(_refToBoardsPath[1].transform.position);
+        newCreep.GetGameObject().transform.LookAt(_refToBoardsPath[1].transform.position);
 
-        creepsOnBoard.Add(creepObject.GetComponent<ICreep>());
+        creepsOnBoard.Add(newCreep);
     }
     public IEnumerator SpawnWave(List<CreepPreset> wavePreset, float delay)
     {
