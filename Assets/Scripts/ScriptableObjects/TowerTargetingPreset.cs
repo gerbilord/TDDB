@@ -7,6 +7,7 @@ public enum TowerTargetBehaviorEnum
 {
     // FirstCreep,
     LastCreep,
+    ClosestCreep,
     // StrongestCreep,
     // WeakestCreep,
     // RandomCreep
@@ -25,6 +26,8 @@ public class TowerTargetingPreset : ScriptableObject
             //     return new FirstCreepTargetBehavior();
             case TowerTargetBehaviorEnum.LastCreep:
                 return new LastCreepTargetBehavior();
+            case TowerTargetBehaviorEnum.ClosestCreep:
+                return new ClosestCreepTargetBehavior();
             // case TowerTargetBehaviorEnum.StrongestCreep:
             //     return new StrongestCreepTargetBehavior();
             // case TowerTargetBehaviorEnum.WeakestCreep:

@@ -47,7 +47,7 @@ public class TowerBehavior : MonoBehaviour, ITower
       {
           IBullet bullet = bulletPreset.makeBullet();
           //TODO:make it fire from the firepoint on a tower rather than the middle of the tower
-          bullet.GetGameObject().transform.position = GraphicsUtils.GetTopOf(this.GetGameObject());
+          bullet.GetGameObject().transform.position = GraphicsUtils.GetTowerShootSpawnPoint(this);
 
           ICreep creepTarget = getTarget();
 

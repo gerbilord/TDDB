@@ -18,5 +18,15 @@ public class GraphicsUtils
 
         return new Vector3(position.x, position.y + GetHeightOf(gameObject), position.z);
     }
+
+    public static Vector3 GetTowerShootSpawnPoint(ITower tower)
+    {
+        GameObject towerObj = tower.GetGameObject();
+        
+        // Get child called "ShootSpawnPoint" on towerObj
+        GameObject shootSpawnPoint = towerObj.transform.Find("ShootSpawnPoint").gameObject;
+
+        return shootSpawnPoint.transform.position;
+    }
     
 }

@@ -15,11 +15,11 @@ MonoBehaviour:
   stats:
     _serializedList:
     - Key: 1
-      Value: 7
+      Value: 4
     - Key: 4
-      Value: 7
+      Value: 2
     - Key: 0
       Value: 7
   prefab: {fileID: 6853013965203123429, guid: f746012a5d2b5d8418207114f0c3239c, type: 3}
-  towerTargetingPreset: {fileID: 11400000, guid: c520f8708d214174ba9e8da4fdb4ecf0, type: 2}
+  towerTargetingPreset: {fileID: 11400000, guid: 4fe373bad55d78148a0aa4b4789046c2, type: 2}
   bulletPreset: {fileID: 11400000, guid: bd972c0552fdafd4a977a6f83b1866ee, type: 2}
