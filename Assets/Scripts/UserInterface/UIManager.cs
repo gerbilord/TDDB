@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager
 {
@@ -9,10 +11,12 @@ public class UIManager
     private GameObject _selectedCell;
     private ICard _selectedCard;
     private ITower _phantomTower;
+    private GameObject _deckCardBack;
+    private GameObject _discardCardBack;
     
     public UIManager()
     {
-        _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        LoadBasicUI();
         
         GlobalVariables.eventManager.cellEventManager.OnCellClick += OnCellClicked;
         GlobalVariables.eventManager.cardEventManager.OnCardAddedToHand += OnCardAddedToHand;
@@ -32,6 +36,39 @@ public class UIManager
         GlobalVariables.eventManager.cellEventManager.OnCellMouseExited -= OnCellExited;
         GlobalVariables.eventManager.cardEventManager.OnCardPlay -= OnCardPlayed;
         GlobalVariables.eventManager.cardEventManager.OnHandSizeChange += OnHandSizeChanged;
+    }
+
+    private void LoadBasicUI()
+    {
+        _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+
+        Vector3 bottomLeft = new Vector3(0, 0, 0);
+        Vector3 bottomRight = new Vector3(Screen.width, 0, 0);
+        
+        
+        // Instantiate the deck card back
+        _deckCardBack = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/deck_card_back"));
+        _deckCardBack.transform.SetParent(_canvas.transform);
+        
+        _discardCardBack = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/discard_card_back"));
+        _discardCardBack.transform.SetParent(_canvas.transform);
+        
+        // put the _deckCardBack in the bottom left corner using bottomLeft, and offset by card width and height
+        _deckCardBack.transform.position = bottomLeft + new Vector3(_deckCardBack.GetComponent<RectTransform>().rect.width, _deckCardBack.GetComponent<RectTransform>().rect.height, 0);
+        
+        // put the _discardCardBack in the bottom right corner using bottomRight
+        _discardCardBack.transform.position = bottomRight + new Vector3(-_discardCardBack.GetComponent<RectTransform>().rect.width, _discardCardBack.GetComponent<RectTransform>().rect.height, 0);
+    }
+
+    private void UpdateDeckTextUI()
+    {
+        // get the text from the deck card back
+        TextMeshProUGUI deckText = _deckCardBack.GetComponentInChildren<TextMeshProUGUI>();
+        deckText.text = GlobalVariables.gameEngine.cardManager.cardsInDeck.Count.ToString();
+        
+        // get the text from the discard card back
+        TextMeshProUGUI discardText = _discardCardBack.GetComponentInChildren<TextMeshProUGUI>();
+        discardText.text = GlobalVariables.gameEngine.cardManager.cardsInDiscard.Count.ToString();
     }
 
     public void OnCellEntered(ICell cell)
@@ -201,5 +238,6 @@ public class UIManager
     public void OnHandSizeChanged()
     {
         ResetCardsInHandPosition();
+        UpdateDeckTextUI();
     }
 }
