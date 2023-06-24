@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef6d5c0990c0ae34d9da059f5832a808, type: 3}
-  m_Name: Creep1
+  m_Name: Creep_sparrow_purple
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2132874091115908679, guid: 8c767c1e005e1e54f96e77fd4e8ce242, type: 3}
   stats:
     _serializedList:
     - Key: 3
       Value: 3
     - Key: 2
       Value: 20
+  prefab: {fileID: 1780831228322171359, guid: 4b57d733e7415df4f90aa5707372f5df, type: 3}
