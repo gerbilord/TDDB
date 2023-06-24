@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 9033715415350292481}
   - component: {fileID: 2241844449378904098}
   m_Layer: 0
-  m_Name: crystal_tower
+  m_Name: crystal_tower_pink
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
