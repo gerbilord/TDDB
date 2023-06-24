@@ -19,6 +19,8 @@ public class UIManager
         GlobalVariables.eventManager.cardEventManager.OnCardClick += OnCardClicked;
         GlobalVariables.eventManager.cellEventManager.OnCellMouseEntered += OnCellEntered;
         GlobalVariables.eventManager.cellEventManager.OnCellMouseExited += OnCellExited;
+        GlobalVariables.eventManager.cardEventManager.OnCardPlay += OnCardPlayed;
+        GlobalVariables.eventManager.cardEventManager.OnHandSizeChange += OnHandSizeChanged;
     }
 
     ~UIManager()
@@ -28,6 +30,8 @@ public class UIManager
         GlobalVariables.eventManager.cardEventManager.OnCardClick -= OnCardClicked;
         GlobalVariables.eventManager.cellEventManager.OnCellMouseEntered -= OnCellEntered;
         GlobalVariables.eventManager.cellEventManager.OnCellMouseExited -= OnCellExited;
+        GlobalVariables.eventManager.cardEventManager.OnCardPlay -= OnCardPlayed;
+        GlobalVariables.eventManager.cardEventManager.OnHandSizeChange += OnHandSizeChanged;
     }
 
     public void OnCellEntered(ICell cell)
@@ -123,11 +127,38 @@ public class UIManager
     // OnCardAddedToHand event
     public void OnCardAddedToHand(ICard card)
     {
-        GameObject cardGameObject = card.GetGameObject();
-        cardGameObject.transform.SetParent(_canvas.transform);
-        int x = 100*GlobalVariables.gameEngine.cardManager.cardsInHand.IndexOf(card);
-        cardGameObject.transform.localPosition = new Vector3(x, -300, 0); // TODO fix -300?
-        
+    }
+
+    private void ResetCardsInHandPosition()
+    {
+        // Get bottom center of the UI canvas
+        Vector3 bottomCenter = new Vector3(Screen.width / 2f, 0, 0);
+
+        // Get the cards in hand
+        GlobalVariables.gameEngine.cardManager.cardsInHand.ForEach(aCard =>
+        {
+            // Get the card game object
+            GameObject cardGameObject = aCard.GetGameObject();
+
+            int totalCards = GlobalVariables.gameEngine.cardManager.cardsInHand.Count;
+            int cardIndex = GlobalVariables.gameEngine.cardManager.cardsInHand.IndexOf(aCard);
+
+            float offsetMultiplier = cardIndex - (totalCards / 2f) + 0.5f;
+            float magicNumberExtraPaddingY = 20f;
+            float magicNumberExtraPaddingX = 0f; // 30f;
+
+            // Put the card game object at the bottom of the canvas UI, off set by the width of the card
+            cardGameObject.transform.position = bottomCenter +
+                                                new Vector3(
+                                                    offsetMultiplier *
+                                                    (cardGameObject.GetComponent<RectTransform>().rect.width +
+                                                     magicNumberExtraPaddingX),
+                                                    cardGameObject.GetComponent<RectTransform>().rect.height / 2 +
+                                                    magicNumberExtraPaddingY, 0);
+
+            // Set the parent of the card game object to the canvas, this makes the card visible.
+            cardGameObject.transform.SetParent(_canvas.transform);
+        });
     }
 
     public void OnCardClicked(ICard cardClicked)
@@ -161,5 +192,14 @@ public class UIManager
         // Make dark red color
         Color darkRed = new Color(0.5f, 0, 0, 0.7f);
         notBuildableCells.ForEach(anICell => ToggleHighlightCellAndObjects(anICell, true, darkRed, .7f));
+    }
+
+    public void OnCardPlayed(ICard cardPlayed)
+    {
+    }
+
+    public void OnHandSizeChanged()
+    {
+        ResetCardsInHandPosition();
     }
 }

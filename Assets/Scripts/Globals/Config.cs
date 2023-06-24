@@ -25,4 +25,5 @@ public class Config : MonoBehaviour
     public float treeSpawnRate;
 
     public DeckPreset DeckPreset;
+    public int startingCardAmount;
 }

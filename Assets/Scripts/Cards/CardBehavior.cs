@@ -21,6 +21,9 @@ public class CardBehavior : MonoBehaviour, IPointerClickHandler, ICard
     public void Play(ICell cell)
     {
         if (cell.IsBuildable())
+        {
             GlobalVariables.gameEngine.board.PlaceTowerOn(cell, towerPreset.makeTower());
+            GlobalVariables.eventManager.cardEventManager.CardPlayed(this);
+        }
     }
 }

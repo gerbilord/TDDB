@@ -20,6 +20,7 @@ public class GameEngine : MonoBehaviour
         
         cardManager = new CardManager();
         cardManager.LoadDeck();
+        cardManager.StartTurn();
 
         // Create an empty GameObject and attach the Board script to it
         GameObject boardObject = new GameObject("Board");
