@@ -9,8 +9,7 @@ public class UIManager
 
     private Canvas _canvas;
     private GameObject _selectedCell;
-    private ICard _selectedCard;
-    private ITower _phantomTower;
+    private ICard _selectedCard; // Selected card is responsible for custom UI. (Such as a tower preview when hovering over a cell)
     private GameObject _deckCardBack;
     private GameObject _discardCardBack;
     
@@ -73,69 +72,32 @@ public class UIManager
 
     public void OnCellEntered(ICell cell)
     {
-        if(_phantomTower != null) // Destroy previous phantoms, we only want one at a time
+        if (_selectedCard != null)
         {
-            GameObject.Destroy(_phantomTower.GetGameObject());
-            _phantomTower = null; // Is this needed? Or will it auto become null?
-        }
-
-        if (_selectedCard != null && cell.IsBuildable())
-        {
-            // Make a phantom tower on the cell
-            _phantomTower = _selectedCard.towerPreset.makeTower();
-            _phantomTower.GetGameObject().transform.position = GraphicsUtils.GetTopOf(cell.GetGameObject());
-            ((MonoBehaviour)_phantomTower).enabled = false;
-
-            // Make the phantom tower transparent
-            _phantomTower.GetGameObject().GetComponent<IOpacityChanger>().ToggleOpacity(true);
-            
-            // Set _phantomTower isPlacing animation bool to true
-            _phantomTower.GetGameObject().GetComponent<Animator>().SetBool("isPlacing", true);
-
-            // In the viewer name it phantom tower
-            _phantomTower.GetGameObject().name = "Phantom Tower";
+            _selectedCard.UI_OnCellEntered(cell);
         }
     }
 
     public void OnCellExited(ICell cell)
     {
-        if(_phantomTower != null)
+        if(_selectedCard != null)
         {
-            GameObject.Destroy(_phantomTower.GetGameObject());
-            _phantomTower = null;
+            _selectedCard.UI_OnCellExited(cell);
         }
     }
     
     public void OnCellClicked(ICell cell)
     {
-        if(_phantomTower != null)
-        {
-            GameObject.Destroy(_phantomTower.GetGameObject());
-            _phantomTower = null;
-        }
-
-        GameObject oldCell = _selectedCell;
-        _selectedCell = cell.GetGameObject();
-        
-        GlobalVariables.gameEngine.board.GetAllCells().ForEach(anICell => ToggleHighlightCellAndObjects(anICell, false));
-        
-        /* Currently not needed with above statement
-        if(oldCell != null)
-        {
-            ToggleHighlightCellAndObjects(oldCell.GetComponent<ICell>(), false);
-        }
-        */
-
         if (_selectedCard != null)
         {
-            _selectedCard.Play(cell);
-            ToggleHighlight(_selectedCard.GetGameObject(), false);
-            _selectedCard = null;
-            return;
+             _selectedCard.UI_OnCellClicked(cell);
+        }
+        else
+        {
+            GlobalVariables.gameEngine.board.GetAllCells().ForEach(anICell => ToggleHighlightCellAndObjects(anICell, false));
+            ToggleHighlightCellAndObjects(cell, true);
         }
         
-        _selectedCard = null;
-        ToggleHighlightCellAndObjects(cell, true);
     }
 
     public void ToggleHighlightCellAndObjects(ICell cell, bool toggle)
@@ -200,39 +162,49 @@ public class UIManager
 
     public void OnCardClicked(ICard cardClicked)
     {
+        // Unhighlight all cells and objects.
+        GlobalVariables.gameEngine.board.GetAllCells().ForEach(anICell => ToggleHighlightCellAndObjects(anICell, false));
+        
+        // Get both the old and new card game objects
+        GameObject newCard = cardClicked.GetGameObject();
         GameObject oldCard = null;
         if (_selectedCard != null)
         {
             oldCard = _selectedCard.GetGameObject();
         }
 
-        GameObject newCard = cardClicked.GetGameObject();
-
+        // If the old card is not null, unhighlight it.
         if (oldCard != null)
         {
             oldCard.GetComponent<IHighlighter>().ToggleHighlight(false);
         }
+        
+        // If the old card is the same as the new card, unselect it. (It will also be unhighlighted from the above code).
         if(oldCard == newCard)
         {
-            GlobalVariables.gameEngine.board.GetAllCells().ForEach(anICell => ToggleHighlightCellAndObjects(anICell, false));
+            oldCard.GetComponent<ICard>().UI_OnCardDeselected();
             _selectedCard = null;
             return;
         }
 
-        _selectedCard = newCard.GetComponent<ICard>();
-        newCard.GetComponent<IHighlighter>().ToggleHighlight(true);
-
-
-        List<ICell> allCells = GlobalVariables.gameEngine.board.GetAllCells();
-        List<ICell> notBuildableCells = allCells.Where(anICell => !anICell.IsBuildable()).ToList();
+        // Since the new card is not the same as the old card, we need to unselect the old card.
+        if (oldCard != null)
+        {
+            oldCard.GetComponent<ICard>().UI_OnCardDeselected();
+        }
         
-        // Make dark red color
-        Color darkRed = new Color(0.5f, 0, 0, 0.7f);
-        notBuildableCells.ForEach(anICell => ToggleHighlightCellAndObjects(anICell, true, darkRed, .7f));
+        // And select the new card.
+        _selectedCard = newCard.GetComponent<ICard>();
+        _selectedCard.UI_OnCardSelected();
+        newCard.GetComponent<IHighlighter>().ToggleHighlight(true);
     }
 
     public void OnCardPlayed(ICard cardPlayed)
     {
+        // turn off highlight of card
+        cardPlayed.GetGameObject().GetComponent<IHighlighter>().ToggleHighlight(false);
+
+        _selectedCard = null;
     }
 
     public void OnHandSizeChanged()

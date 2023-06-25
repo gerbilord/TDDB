@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2147663753380899238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b47bc6c6fc174a48a8b44e669cfe556, type: 3}
+  m_Name: BuildTowerEffect
+  m_EditorClassIdentifier: 
+  _towerPreset: {fileID: 11400000, guid: 91fcc6efcadae67489aa9f68e731b140, type: 2}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df1e11d25104c4dad33669370e05023, type: 3}
+  m_Name: Card_Tower_Purple
+  m_EditorClassIdentifier: 
+  cardPrefab: {fileID: 2807112774912832007, guid: b882bb61a8ef3624f8992deda89b2dc4, type: 3}
+  playEffectsList:
+  - {fileID: -2147663753380899238}

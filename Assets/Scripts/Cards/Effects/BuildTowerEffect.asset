@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1df1e11d25104c4dad33669370e05023, type: 3}
-  m_Name: Card_Tower_Purple
+  m_Script: {fileID: 11500000, guid: 3b47bc6c6fc174a48a8b44e669cfe556, type: 3}
+  m_Name: BuildTowerEffect
   m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 2807112774912832007, guid: b882bb61a8ef3624f8992deda89b2dc4, type: 3}
-  towerPreset: {fileID: 11400000, guid: 91fcc6efcadae67489aa9f68e731b140, type: 2}
+  _towerPreset: {fileID: 11400000, guid: 3351a8ac3cf53bf428d2192126c7cd42, type: 2}
