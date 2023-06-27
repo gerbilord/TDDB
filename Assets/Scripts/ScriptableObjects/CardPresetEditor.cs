@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
@@ -188,3 +189,4 @@ public class CardPresetEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
+#endif
