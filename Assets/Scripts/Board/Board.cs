@@ -16,8 +16,8 @@ public class Board : MonoBehaviour
         SubscribeToAllEvents();
         CreateCellGrid();
         LoadPath();
-        SetupCamera();
         UpdateAllCellPrefabsToMatchType();
+        GlobalVariables.uiManager.SetupCamera(); // Maybe do this via event? Or call in game engine?
     }
 
     private void OnDestroy()
@@ -35,30 +35,7 @@ public class Board : MonoBehaviour
         GlobalVariables.eventManager.cellEventManager.OnCellChange -= OnCellChanged;
     }
 
-    private void SetupCamera()
-    {
-        int boardWidth = GlobalVariables.config.boardWidth;
-        int boardHeight = GlobalVariables.config.boardHeight;
-
-        // Calculate the center position of the board
-        Vector3 boardCenter = CalculateBoardCenter();
-
-        Camera mainCamera = _gameEngine.mainCamera;
-        
-        // Set the camera perspective
-        mainCamera.orthographic = false;
-
-        // Calculate the distance from the board to the camera
-        float distance = Mathf.Max(boardWidth, boardHeight) / (2f * Mathf.Tan(mainCamera.fieldOfView * 0.5f * Mathf.Deg2Rad));
-
-        // Set the camera position to view from the top
-        mainCamera.transform.position = new Vector3(boardCenter.x - distance/2, distance, boardCenter.z - distance/2);
-
-        // Set the camera rotation to view from the top
-        mainCamera.transform.rotation = Quaternion.Euler(50f, 40f, 0f);
-    }
-    
-    private Vector3 CalculateBoardCenter()
+    public Vector3 CalculateBoardCenter()
     {
         int totalCells = GlobalVariables.config.boardWidth * GlobalVariables.config.boardHeight;
         Vector3 sumPosition = Vector3.zero;
@@ -204,7 +181,7 @@ public class Board : MonoBehaviour
             
             //place the ITower on the cell
             GameObject towerObject = tower.GetGameObject();
-            towerObject.transform.position = GraphicsUtils.GetTopOf(cellObject);
+            towerObject.transform.position = GraphicsUtils.GetTopOf3d(cellObject);
             
             towerObject.GetComponent<Animator>().SetBool("isPlacing", false);
         

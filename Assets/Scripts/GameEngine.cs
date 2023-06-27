@@ -7,16 +7,21 @@ public class GameEngine : MonoBehaviour
     public Camera mainCamera;
     
     public Board board;
+    public Player player;
     public CardManager cardManager;
     public WaveManager waveManager;
     
     
     void Start()
     {
+        GlobalVariables.config = FindObjectOfType<Config>();
         GlobalVariables.gameEngine = this;
         GlobalVariables.eventManager = new EventManager();
+        
+        player = new Player();
+
         GlobalVariables.uiManager = new UIManager();
-        GlobalVariables.config = FindObjectOfType<Config>();
+        
         
         cardManager = new CardManager();
         cardManager.LoadDeck();

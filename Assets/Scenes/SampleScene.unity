@@ -393,6 +393,10 @@ MonoBehaviour:
   treeSpawnRate: 0.3
   DeckPreset: {fileID: 11400000, guid: b0a3679f85bd58a489b710f351e25792, type: 2}
   startingCardAmount: 3
+  shopSize: 5
+  startingIncome: 1
+  startingMoney: 0
+  startingHealth: 50
 --- !u!4 &956709476
 Transform:
   m_ObjectHideFlags: 0

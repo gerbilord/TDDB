@@ -19,8 +19,8 @@ public class WaveManager: MonoBehaviour
         creepsOnBoard = new List<ICreep>();
         
         _refToBoardsPath = GlobalVariables.gameEngine.board.path;
-        _startPos = GraphicsUtils.GetTopOf(_refToBoardsPath[0]);
-        _endPos = GraphicsUtils.GetTopOf(_refToBoardsPath[^1]);
+        _startPos = GraphicsUtils.GetTopOf3d(_refToBoardsPath[0]);
+        _endPos = GraphicsUtils.GetTopOf3d(_refToBoardsPath[^1]);
         
         StartCoroutine(SpawnWave(GlobalVariables.config.waves[0].waveCreeps, 2));
     }
@@ -61,7 +61,7 @@ public class WaveManager: MonoBehaviour
         for (int i = 0; i < creepsOnBoard.Count; i++)
         {
             ICreep creep = creepsOnBoard[i];
-            Vector3 des = GraphicsUtils.GetTopOf(_refToBoardsPath[creep.currentPathIndex + 1]);
+            Vector3 des = GraphicsUtils.GetTopOf3d(_refToBoardsPath[creep.currentPathIndex + 1]);
             Vector3 start = creep.GetGameObject().transform.position;
 
             if (start == des){
@@ -76,7 +76,7 @@ public class WaveManager: MonoBehaviour
                     break;
                 }
             }
-            Vector3 end = GraphicsUtils.GetTopOf(_refToBoardsPath[creep.currentPathIndex + 1]);
+            Vector3 end = GraphicsUtils.GetTopOf3d(_refToBoardsPath[creep.currentPathIndex + 1]);
             float moveSpeed = creep.stats[StatType.moveSpeed] * Time.deltaTime;
             creep.GetGameObject().transform.position = Vector3.MoveTowards(start, end, moveSpeed);
         }
@@ -85,6 +85,7 @@ public class WaveManager: MonoBehaviour
     public void OnLeak(ICreep creep)
     {
         creep.killCreep();
+        GlobalVariables.eventManager.creepEventManager.CreepLeaked(creep);
     }
     private void CreepKilled(ICreep creep)
     {

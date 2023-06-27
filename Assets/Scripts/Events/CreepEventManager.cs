@@ -10,4 +10,12 @@ using UnityEngine.EventSystems;
         {
             OnCreepKilled?.Invoke(creep);
         }
+        
+        // Create event for when a creep is leaked
+        public delegate void CreepLeak(ICreep creep);
+        public event CreepLeak OnCreepLeaked;
+        public void CreepLeaked(ICreep creep)
+        {
+            OnCreepLeaked?.Invoke(creep);
+        }
     }

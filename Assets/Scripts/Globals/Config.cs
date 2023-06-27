@@ -26,4 +26,10 @@ public class Config : MonoBehaviour
 
     public DeckPreset DeckPreset;
     public int startingCardAmount;
+
+    public int shopSize;
+    
+    public int startingIncome;
+    public int startingMoney;
+    public int startingHealth;
 }

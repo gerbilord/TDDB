@@ -37,7 +37,7 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
         {
             // Make a phantom tower on the cell
             _phantomTower = _towerPreset.makeTower();
-            _phantomTower.GetGameObject().transform.position = GraphicsUtils.GetTopOf(cell.GetGameObject());
+            _phantomTower.GetGameObject().transform.position = GraphicsUtils.GetTopOf3d(cell.GetGameObject());
             ((MonoBehaviour)_phantomTower).enabled = false;
 
             // Make the phantom tower transparent

@@ -13,6 +13,10 @@ public class UIManager
     private GameObject _deckCardBack;
     private GameObject _discardCardBack;
     
+    private GameObject _playerHealth;
+    private GameObject _playerIncome;
+    private GameObject _playerMoney;
+    
     public UIManager()
     {
         LoadBasicUI();
@@ -40,23 +44,70 @@ public class UIManager
     private void LoadBasicUI()
     {
         _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        LoadDeckAndDiscardUI();
+        LoadPlayerStatsUI();
+        LoadCameraIcon();
+    }
 
+    private void LoadCameraIcon()
+    {
+        GameObject cameraIcon = GameObject.Instantiate(Resources.Load<GameObject>("UI/MiscIcons/CameraSwitchIcon"), _canvas.transform, true);
+        cameraIcon.transform.position = new Vector3(Screen.width - GraphicsUtils.GetWidthOf2d(cameraIcon) / 2, Screen.height - GraphicsUtils.GetHeightOf2d(cameraIcon) / 2, 0);
+    }
+
+    private void LoadPlayerStatsUI()
+    {
+        _playerHealth = GameObject.Instantiate(Resources.Load<GameObject>("UI/Player/Health"), _canvas.transform, true);
+        _playerIncome = GameObject.Instantiate(Resources.Load<GameObject>("UI/Player/Income"), _canvas.transform, true);
+        _playerMoney = GameObject.Instantiate(Resources.Load<GameObject>("UI/Player/Money"), _canvas.transform, true);
+        
+        Vector3 topRight = new Vector3(Screen.width, Screen.height, 0);
+        
+        float magicNumber_yOffsetExtra = 5f;
+        float yOffset = -GraphicsUtils.GetHeightOf2d(_playerIncome) - magicNumber_yOffsetExtra;
+        
+        // place _playerHealth in the top right corner of the screen
+        _playerHealth.transform.position = topRight + new Vector3(-GraphicsUtils.GetWidthOf2d(_playerHealth) / 2, -GraphicsUtils.GetHeightOf2d(_playerHealth) / 2, 0);
+        _playerIncome.transform.position = _playerHealth.transform.position + new Vector3(0, yOffset, 0);
+        _playerMoney.transform.position = _playerIncome.transform.position + new Vector3(0, yOffset, 0);
+
+        UpdatePlayerStatsUI();
+    }
+    
+    public void UpdatePlayerStatsUI()
+    {
+        // get text from the text mesh pro from _playerHealth
+        TextMeshProUGUI textMeshHealth = _playerHealth.GetComponentInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI textMeshIncome = _playerIncome.GetComponentInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI textMeshMoney = _playerMoney.GetComponentInChildren<TextMeshProUGUI>();
+
+        textMeshHealth.text = GlobalVariables.gameEngine.player.health.ToString();
+        textMeshIncome.text = GlobalVariables.gameEngine.player.income.ToString();
+        textMeshMoney.text = GlobalVariables.gameEngine.player.money.ToString();
+    }
+
+    private void LoadDeckAndDiscardUI()
+    {
         Vector3 bottomLeft = new Vector3(0, 0, 0);
-        Vector3 bottomRight = new Vector3(Screen.width, 0, 0);
-        
-        
-        // Instantiate the deck card back
-        _deckCardBack = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/deck_card_back"));
-        _deckCardBack.transform.SetParent(_canvas.transform);
-        
-        _discardCardBack = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/discard_card_back"));
-        _discardCardBack.transform.SetParent(_canvas.transform);
-        
-        // put the _deckCardBack in the bottom left corner using bottomLeft, and offset by card width and height
-        _deckCardBack.transform.position = bottomLeft + new Vector3(_deckCardBack.GetComponent<RectTransform>().rect.width, _deckCardBack.GetComponent<RectTransform>().rect.height, 0);
-        
-        // put the _discardCardBack in the bottom right corner using bottomRight
-        _discardCardBack.transform.position = bottomRight + new Vector3(-_discardCardBack.GetComponent<RectTransform>().rect.width, _discardCardBack.GetComponent<RectTransform>().rect.height, 0);
+
+        // Instantiate the deck and card back
+        _deckCardBack = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/deck_card_back"), _canvas.transform, true);
+        _discardCardBack = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/discard_card_back"), _canvas.transform, true);
+
+        // Just use one scale for both cards, assume they are the same size
+        Vector3 scale = _discardCardBack.transform.localScale;
+        float magicNumber_xOffSetExtra = 20f;
+        float magicNumber_yOffsetExtra = 20f;
+        float magicNumber_SpaceBetweenCards = 5f;
+
+        float cardWidth = GraphicsUtils.GetWidthOf2d(_deckCardBack);
+        float cardHeight = GraphicsUtils.GetHeightOf2d(_deckCardBack);
+
+        // put the _discardCardBack in the bottom left corner, and put the deck card back above it
+        _discardCardBack.transform.position = bottomLeft + new Vector3(cardWidth / 2 + magicNumber_xOffSetExtra,
+            cardHeight / 2 + magicNumber_yOffsetExtra, 0);
+        _deckCardBack.transform.position = _discardCardBack.transform.position +
+                                           new Vector3(0, cardHeight + magicNumber_SpaceBetweenCards, 0);
     }
 
     private void UpdateDeckTextUI()
@@ -144,15 +195,20 @@ public class UIManager
 
             float offsetMultiplier = cardIndex - (totalCards / 2f) + 0.5f;
             float magicNumberExtraPaddingY = 20f;
-            float magicNumberExtraPaddingX = 0f; // 30f;
+            float magicNumberExtraPaddingX = 10f;
+
+            var localScale = cardGameObject.transform.localScale;
+
+            float cardWidth = GraphicsUtils.GetWidthOf2d(cardGameObject);
+            float cardHeight = GraphicsUtils.GetHeightOf2d(cardGameObject);
 
             // Put the card game object at the bottom of the canvas UI, off set by the width of the card
             cardGameObject.transform.position = bottomCenter +
                                                 new Vector3(
                                                     offsetMultiplier *
-                                                    (cardGameObject.GetComponent<RectTransform>().rect.width +
+                                                    (cardWidth +
                                                      magicNumberExtraPaddingX),
-                                                    cardGameObject.GetComponent<RectTransform>().rect.height / 2 +
+                                                    cardHeight / 2 +
                                                     magicNumberExtraPaddingY, 0);
 
             // Set the parent of the card game object to the canvas, this makes the card visible.
@@ -211,5 +267,42 @@ public class UIManager
     {
         ResetCardsInHandPosition();
         UpdateDeckTextUI();
+    }
+
+    public void SetupCamera()
+    {
+        int boardWidth = GlobalVariables.config.boardWidth;
+        int boardHeight = GlobalVariables.config.boardHeight;
+
+        // Calculate the center position of the board
+        Vector3 boardCenter = GlobalVariables.gameEngine.board.CalculateBoardCenter();
+
+        Camera mainCamera = GlobalVariables.gameEngine.mainCamera;
+        
+        // Set the camera perspective
+        mainCamera.orthographic = false;
+
+        // Calculate the distance from the board to the camera
+        float distance = Mathf.Max(boardWidth, boardHeight) / (2f * Mathf.Tan(mainCamera.fieldOfView * 0.5f * Mathf.Deg2Rad));
+
+        // Set the camera position to view from the top
+        mainCamera.transform.position = new Vector3(boardCenter.x - distance/2, distance, boardCenter.z - distance/2);
+
+        // Set the camera rotation to view from the top
+        mainCamera.transform.rotation = Quaternion.Euler(70f, 0f, 0f);
+    }
+
+    public void ToggleCameraPerspective()
+    {
+        Camera mainCamera = GlobalVariables.gameEngine.mainCamera;
+        if (mainCamera.transform.rotation == Quaternion.Euler(50f, 40f, 0f))
+        {
+            mainCamera.transform.rotation = Quaternion.Euler(70f, 0f, 0f);
+        }
+        else
+        {
+            mainCamera.transform.rotation = Quaternion.Euler(50f, 40f, 0f);
+        }
+        
     }
 }
