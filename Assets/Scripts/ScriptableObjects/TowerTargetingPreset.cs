@@ -17,7 +17,7 @@ public class TowerTargetingPreset : ScriptableObject
 {
     public TowerTargetBehaviorEnum towerTargetingBehaviorEnum;
     
-    public ITowerTargetBehavior MakeTowerTargetingBehavior()
+    public ITowerTargetBehavior MakeTowerTargetingBehavior(IGameEngine gameEngine)
     {
         // Switch on towerTargetingBehaviorEnum
         switch (towerTargetingBehaviorEnum)
@@ -25,9 +25,9 @@ public class TowerTargetingPreset : ScriptableObject
             // case TowerTargetBehaviorEnum.FirstCreep:
             //     return new FirstCreepTargetBehavior();
             case TowerTargetBehaviorEnum.LastCreep:
-                return new LastCreepTargetBehavior();
+                return new LastCreepTargetBehavior(gameEngine);
             case TowerTargetBehaviorEnum.ClosestCreep:
-                return new ClosestCreepTargetBehavior();
+                return new ClosestCreepTargetBehavior(gameEngine);
             // case TowerTargetBehaviorEnum.StrongestCreep:
             //     return new StrongestCreepTargetBehavior();
             // case TowerTargetBehaviorEnum.WeakestCreep:

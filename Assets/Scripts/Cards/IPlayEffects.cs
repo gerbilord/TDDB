@@ -6,7 +6,7 @@
  * or have a list of IPlayEffects it calls.
  * 
  */
-public interface IPlayEffects
+public interface IPlayEffects: IHasIGameEngine
 {
     /**
      * Returns true if the effect was played successfully, false otherwise.

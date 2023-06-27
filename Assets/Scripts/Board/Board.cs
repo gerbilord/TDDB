@@ -1,25 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Board : MonoBehaviour
+public class Board : MonoBehaviour, IHasIGameEngine
 {
+    public IGameEngine gameEngine { get; set; }
+
     // Field of 2d List of Cells
     private GameObject[,] _cells;
-    private GameEngine _gameEngine;
 
     public List<GameObject> path;
 
-    void Start()
+    public void Setup(IGameEngine gameEngine)
     {
-        _gameEngine = GlobalVariables.gameEngine;
-
+        this.gameEngine = gameEngine;
         SubscribeToAllEvents();
         CreateCellGrid();
         LoadPath();
         UpdateAllCellPrefabsToMatchType();
-        GlobalVariables.uiManager.SetupCamera(); // Maybe do this via event? Or call in game engine?
     }
-
     private void OnDestroy()
     {
         UnsubscribeToAllEvents();
@@ -37,12 +35,12 @@ public class Board : MonoBehaviour
 
     public Vector3 CalculateBoardCenter()
     {
-        int totalCells = GlobalVariables.config.boardWidth * GlobalVariables.config.boardHeight;
+        int totalCells = gameEngine.config.boardWidth * gameEngine.config.boardHeight;
         Vector3 sumPosition = Vector3.zero;
 
-        for (int x = 0; x < GlobalVariables.config.boardWidth; x++)
+        for (int x = 0; x < gameEngine.config.boardWidth; x++)
         {
-            for (int y = 0; y < GlobalVariables.config.boardHeight; y++)
+            for (int y = 0; y < gameEngine.config.boardHeight; y++)
             {
                 // Get the position of the current cell
                 Vector3 cellPosition = _cells[x, y].transform.position;
@@ -90,7 +88,7 @@ public class Board : MonoBehaviour
         path = new List<GameObject>();
 
         // Get the path from the config
-        List<Vector2Int> pathPositions = GlobalVariables.config.pathRoadMap;
+        List<Vector2Int> pathPositions = gameEngine.config.pathRoadMap;
 
         // For each position in the path, get the cell at that position and add it to the path
         foreach (Vector2Int pathPosition in pathPositions)
@@ -106,15 +104,15 @@ public class Board : MonoBehaviour
     private void CreateCellGrid()
     {
         // Instantiate cells using _gameEngine's width and height
-        _cells = new GameObject[GlobalVariables.config.boardWidth, GlobalVariables.config.boardHeight];
+        _cells = new GameObject[gameEngine.config.boardWidth, gameEngine.config.boardHeight];
 
         // Create the "pf_Cell" prefab in every cell
-        for (int x = 0; x < GlobalVariables.config.boardWidth; x++)
+        for (int x = 0; x < gameEngine.config.boardWidth; x++)
         {
-            for (int y = 0; y < GlobalVariables.config.boardHeight; y++)
+            for (int y = 0; y < gameEngine.config.boardHeight; y++)
             {
                 // Instantiate the prefab // Set the cellObject's parent to this transform
-                GameObject cellObject = Instantiate(RandomUtils.GetRateRandomItem(GlobalVariables.config.grassCellPrefabs), transform, true);
+                GameObject cellObject = Instantiate(RandomUtils.GetRateRandomItem(gameEngine.config.grassCellPrefabs), transform, true);
 
                 // Set the cellObject's position to the current x and y
                 cellObject.transform.position = new Vector3(x, 0, y);
@@ -124,6 +122,7 @@ public class Board : MonoBehaviour
 
                 // Get the Cell component of the cellObject
                 Cell cell = cellObject.GetComponent<Cell>();
+                cell.Setup(gameEngine);
                 cell.x = x;
                 cell.y = y;
                 
@@ -131,7 +130,7 @@ public class Board : MonoBehaviour
                 float random = Random.Range(0f, 1f);
                 
                 // If the random number is less than the treeSpawnRate, set the cell type to a tree
-                if (random < GlobalVariables.config.treeSpawnRate)
+                if (random < gameEngine.config.treeSpawnRate)
                 {
                     cell.type = CellType.Tree;
                 }

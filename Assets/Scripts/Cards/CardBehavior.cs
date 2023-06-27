@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -13,6 +14,9 @@ public enum CardPlayResult
 }
 public class CardBehavior : MonoBehaviour, IPointerClickHandler, ICard
 {
+    [DoNotSerialize]
+    public IGameEngine gameEngine { get; set; }
+
     public List<IPlayEffects> playEffects { get; set; }
 
     public void OnPointerClick (PointerEventData eventData)

@@ -81,9 +81,9 @@ public class UIManager
         TextMeshProUGUI textMeshIncome = _playerIncome.GetComponentInChildren<TextMeshProUGUI>();
         TextMeshProUGUI textMeshMoney = _playerMoney.GetComponentInChildren<TextMeshProUGUI>();
 
-        textMeshHealth.text = GlobalVariables.gameEngine.player.health.ToString();
-        textMeshIncome.text = GlobalVariables.gameEngine.player.income.ToString();
-        textMeshMoney.text = GlobalVariables.gameEngine.player.money.ToString();
+        textMeshHealth.text = GlobalVariables.playerGameEngine.player.health.ToString();
+        textMeshIncome.text = GlobalVariables.playerGameEngine.player.income.ToString();
+        textMeshMoney.text = GlobalVariables.playerGameEngine.player.money.ToString();
     }
 
     private void LoadDeckAndDiscardUI()
@@ -114,11 +114,11 @@ public class UIManager
     {
         // get the text from the deck card back
         TextMeshProUGUI deckText = _deckCardBack.GetComponentInChildren<TextMeshProUGUI>();
-        deckText.text = GlobalVariables.gameEngine.cardManager.cardsInDeck.Count.ToString();
+        deckText.text = GlobalVariables.playerGameEngine.cardManager.cardsInDeck.Count.ToString();
         
         // get the text from the discard card back
         TextMeshProUGUI discardText = _discardCardBack.GetComponentInChildren<TextMeshProUGUI>();
-        discardText.text = GlobalVariables.gameEngine.cardManager.cardsInDiscard.Count.ToString();
+        discardText.text = GlobalVariables.playerGameEngine.cardManager.cardsInDiscard.Count.ToString();
     }
 
     public void OnCellEntered(ICell cell)
@@ -145,7 +145,7 @@ public class UIManager
         }
         else
         {
-            GlobalVariables.gameEngine.board.GetAllCells().ForEach(anICell => ToggleHighlightCellAndObjects(anICell, false));
+            GlobalVariablesUtils.ForEachCellInGame(anICell => ToggleHighlightCellAndObjects(anICell, false));
             ToggleHighlightCellAndObjects(cell, true);
         }
         
@@ -185,13 +185,13 @@ public class UIManager
         Vector3 bottomCenter = new Vector3(Screen.width / 2f, 0, 0);
 
         // Get the cards in hand
-        GlobalVariables.gameEngine.cardManager.cardsInHand.ForEach(aCard =>
+        GlobalVariables.playerGameEngine.cardManager.cardsInHand.ForEach(aCard =>
         {
             // Get the card game object
             GameObject cardGameObject = aCard.GetGameObject();
 
-            int totalCards = GlobalVariables.gameEngine.cardManager.cardsInHand.Count;
-            int cardIndex = GlobalVariables.gameEngine.cardManager.cardsInHand.IndexOf(aCard);
+            int totalCards = GlobalVariables.playerGameEngine.cardManager.cardsInHand.Count;
+            int cardIndex = GlobalVariables.playerGameEngine.cardManager.cardsInHand.IndexOf(aCard);
 
             float offsetMultiplier = cardIndex - (totalCards / 2f) + 0.5f;
             float magicNumberExtraPaddingY = 20f;
@@ -219,7 +219,7 @@ public class UIManager
     public void OnCardClicked(ICard cardClicked)
     {
         // Unhighlight all cells and objects.
-        GlobalVariables.gameEngine.board.GetAllCells().ForEach(anICell => ToggleHighlightCellAndObjects(anICell, false));
+        GlobalVariables.playerGameEngine.board.GetAllCells().ForEach(anICell => ToggleHighlightCellAndObjects(anICell, false));
         
         // Get both the old and new card game objects
         GameObject newCard = cardClicked.GetGameObject();
@@ -271,13 +271,13 @@ public class UIManager
 
     public void SetupCamera()
     {
-        int boardWidth = GlobalVariables.config.boardWidth;
-        int boardHeight = GlobalVariables.config.boardHeight;
+        int boardWidth = GlobalVariables.playerGameEngine.config.boardWidth;
+        int boardHeight = GlobalVariables.playerGameEngine.config.boardHeight;
 
         // Calculate the center position of the board
-        Vector3 boardCenter = GlobalVariables.gameEngine.board.CalculateBoardCenter();
+        Vector3 boardCenter = GlobalVariables.playerGameEngine.board.CalculateBoardCenter();
 
-        Camera mainCamera = GlobalVariables.gameEngine.mainCamera;
+        Camera mainCamera = GlobalVariables.mainCamera;
         
         // Set the camera perspective
         mainCamera.orthographic = false;
@@ -294,7 +294,7 @@ public class UIManager
 
     public void ToggleCameraPerspective()
     {
-        Camera mainCamera = GlobalVariables.gameEngine.mainCamera;
+        Camera mainCamera = GlobalVariables.mainCamera;
         if (mainCamera.transform.rotation == Quaternion.Euler(50f, 40f, 0f))
         {
             mainCamera.transform.rotation = Quaternion.Euler(70f, 0f, 0f);

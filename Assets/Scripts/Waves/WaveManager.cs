@@ -5,24 +5,25 @@ using UnityEngine;
 using UnityEngine.TextCore;
 using UnityEngine.TextCore.LowLevel;
 
-public class WaveManager: MonoBehaviour
+public class WaveManager: MonoBehaviour, IHasIGameEngine
 {
-    private GameEngine _gameEngine;
+    public IGameEngine gameEngine { get; set; }
     public List<ICreep> creepsOnBoard;
     private Vector3 _startPos;
     private Vector3 _endPos;
     private List<GameObject> _refToBoardsPath;
 
-    public void Start()
+    public void Setup(IGameEngine gameEngine)
     {
+        this.gameEngine = gameEngine;
         GlobalVariables.eventManager.creepEventManager.OnCreepKilled += CreepKilled;
         creepsOnBoard = new List<ICreep>();
         
-        _refToBoardsPath = GlobalVariables.gameEngine.board.path;
+        _refToBoardsPath = gameEngine.board.path;
         _startPos = GraphicsUtils.GetTopOf3d(_refToBoardsPath[0]);
         _endPos = GraphicsUtils.GetTopOf3d(_refToBoardsPath[^1]);
         
-        StartCoroutine(SpawnWave(GlobalVariables.config.waves[0].waveCreeps, 2));
+        StartCoroutine(SpawnWave(gameEngine.config.waves[0].waveCreeps, 2));
     }
 
     public void Update()

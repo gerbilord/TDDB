@@ -71,7 +71,7 @@ public class CellEventManager
 
     private void DebugLog(string message)
     {
-        if (GlobalVariables.config.showDebugInfo)
+        if (GlobalVariables.playerGameEngine.config.showDebugInfo)
         {
             Debug.Log(message);
         }

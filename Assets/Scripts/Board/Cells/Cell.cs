@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class Cell : MonoBehaviour, ICell
 {
+    public IGameEngine gameEngine { get; set; }
+
     // Field: List of game objects on cell
     public List<GameObject> occupyingGameObjects { get; set; }
 
@@ -19,6 +21,12 @@ public class Cell : MonoBehaviour, ICell
     {
         occupyingGameObjects = new List<GameObject>();
     }
+
+    public void Setup(IGameEngine gameEngine)
+    {
+        this.gameEngine = gameEngine;
+    }
+
     public virtual void UpdateCellPrefabToMatchType()
     {
         // Create lambda function
@@ -37,14 +45,14 @@ public class Cell : MonoBehaviour, ICell
 
         if ( type == CellType.Dirt && classType != typeof(DirtCell))
         {
-            changeThisTo(RandomUtils.GetRateRandomItem(GlobalVariables.config.dirtCellPrefabs));
+            changeThisTo(RandomUtils.GetRateRandomItem(gameEngine.config.dirtCellPrefabs));
         } else if (type == CellType.Tree && classType != typeof(TreeCell))
         {
-            changeThisTo(RandomUtils.GetRateRandomItem(GlobalVariables.config.treeCellPrefabs));
+            changeThisTo(RandomUtils.GetRateRandomItem(gameEngine.config.treeCellPrefabs));
         }
         else if (classType != typeof(GrassCell))
         {
-            changeThisTo(RandomUtils.GetRateRandomItem(GlobalVariables.config.grassCellPrefabs));
+            changeThisTo(RandomUtils.GetRateRandomItem(gameEngine.config.grassCellPrefabs));
         }
     }
 
@@ -69,6 +77,8 @@ public class Cell : MonoBehaviour, ICell
         // Get passed in cell's transform and set this transform to same position and rotation
         transform.position = cell.GetTransform().position;
         transform.rotation = cell.GetTransform().rotation;
+        
+        gameEngine = cell.gameEngine;
     }
 
     private void OnMouseDown()

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class CardManager
+public class CardManager : IHasIGameEngine
 {
+    public IGameEngine gameEngine { get; set; }
+
     public List<ICard> cardsInHand = new List<ICard>();
     public List<ICard> cardsInDeck = new List<ICard>();
     public List<ICard> cardsInDiscard = new List<ICard>();
@@ -13,8 +15,10 @@ public class CardManager
     GameObject deckGameObjectParent;
 
     // Constructor
-    public CardManager()
+    public CardManager(IGameEngine gameEngine)
     {
+        this.gameEngine = gameEngine;
+
         // Create a empty game object
         discardGameObjectParent = new GameObject("DiscardPile"); // TODO should this be in the UI?
         deckGameObjectParent = new GameObject("Deck");
@@ -30,7 +34,7 @@ public class CardManager
 
     public void LoadDeck()
     {
-        List<CardPreset> deck = GlobalVariables.config.DeckPreset.cards;
+        List<CardPreset> deck = gameEngine.config.DeckPreset.cards;
         foreach (CardPreset cardPreset in deck)
         {
             ICard card = cardPreset.makeCard();
@@ -43,7 +47,7 @@ public class CardManager
 
     public void StartTurn()
     {
-        DrawCards(GlobalVariables.config.startingCardAmount);
+        DrawCards(gameEngine.config.startingCardAmount);
     }
     
     // Draw cards from the deck

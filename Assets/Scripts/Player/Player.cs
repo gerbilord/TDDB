@@ -2,18 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player
+public class Player : IHasIGameEngine
 {
+    public IGameEngine gameEngine { get; set; }
+
     public int income;
     public int money;
     public int health;
     
     // Constructor
-    public Player()
+    public Player(IGameEngine gameEngine)
     {
-        income = GlobalVariables.config.startingIncome;
-        money = GlobalVariables.config.startingMoney;
-        health = GlobalVariables.config.startingHealth;
+        this.gameEngine = gameEngine;
+
+        income = gameEngine.config.startingIncome;
+        money = gameEngine.config.startingMoney;
+        health = gameEngine.config.startingHealth;
         
         GlobalVariables.eventManager.creepEventManager.OnCreepLeaked += CreepLeaked;
     }

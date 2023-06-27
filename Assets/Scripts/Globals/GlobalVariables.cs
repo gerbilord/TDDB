@@ -1,9 +1,12 @@
-using UnityEngine.EventSystems;
+using UnityEngine;
 
 public static class GlobalVariables
 {
-    public static GameEngine gameEngine;
     public static UIManager uiManager;
     public static EventManager eventManager;
-    public static Config config;
+
+    public static IGameEngine playerGameEngine;
+    public static IGameEngine enemyGameEngine;
+    
+    public static Camera mainCamera;
 }

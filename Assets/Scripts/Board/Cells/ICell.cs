@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICell
+public interface ICell: IHasIGameEngine
 {
     public List<GameObject> occupyingGameObjects { get; set; }
     public int x { get; set; }

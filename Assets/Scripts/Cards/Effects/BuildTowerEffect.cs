@@ -1,22 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 // Create asset menu
 [CreateAssetMenu(fileName = "BuildTowerEffect", menuName = "ScriptableObjects/CardEffects/BuildTowerEffect", order = 1)]
 public class BuildTowerEffect : ScriptableObject, IPlayEffects
 {
+    [DoNotSerialize]
+    public IGameEngine gameEngine { get; set; }
+
     [SerializeField]
     private TowerPreset _towerPreset;
 
     private ITower _phantomTower; // Tower to show on hover when this card is selected.
     
+    
     public CardPlayResult Play(ICell cell)
     {
         if (cell.IsBuildable())
         {
-            GlobalVariables.gameEngine.board.PlaceTowerOn(cell, _towerPreset.makeTower());
+            gameEngine.board.PlaceTowerOn(cell, _towerPreset.makeTower(gameEngine));
             UI_OnCardDeselected(); // Clean up our UI mess as well.
             return CardPlayResult.SUCCESS;
         }
@@ -36,7 +41,7 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
         if (cell.IsBuildable())
         {
             // Make a phantom tower on the cell
-            _phantomTower = _towerPreset.makeTower();
+            _phantomTower = _towerPreset.makeTower(gameEngine);
             _phantomTower.GetGameObject().transform.position = GraphicsUtils.GetTopOf3d(cell.GetGameObject());
             ((MonoBehaviour)_phantomTower).enabled = false;
 
@@ -70,7 +75,11 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
     // When we select the card, mark all unbuildable cells in red.
     public CardPlayResult UI_OnCardSelected()
     {
-        List<ICell> allCells = GlobalVariables.gameEngine.board.GetAllCells();
+        // If we are using this card from the UI, it must be the player game engine.
+        // If we want the AI to use this card, we will need to inject the AI game engine.
+        gameEngine = GlobalVariables.playerGameEngine; 
+
+        List<ICell> allCells = gameEngine.board.GetAllCells();
         List<ICell> notBuildableCells = allCells.Where(anICell => !anICell.IsBuildable()).ToList();
  
         // Make dark red color
@@ -83,10 +92,9 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
     // When we deselect the card, unhighlight all cells, and remove the phantom tower. 
     public CardPlayResult UI_OnCardDeselected()
     {
-        GlobalVariables.gameEngine.board.GetAllCells().ForEach(anICell => GlobalVariables.uiManager.ToggleHighlightCellAndObjects(anICell, false));
+        gameEngine.board.GetAllCells().ForEach(anICell => GlobalVariables.uiManager.ToggleHighlightCellAndObjects(anICell, false));
         UI_OnCellExited(null); // Clean up our phantom tower as well.
 
         return CardPlayResult.IGNORE;
     }
-    
 }

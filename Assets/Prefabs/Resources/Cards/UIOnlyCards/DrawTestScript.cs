@@ -7,6 +7,6 @@ public class DrawTestScript : MonoBehaviour, IPointerClickHandler
 {
     public void OnPointerClick(PointerEventData eventData)
     {
-        GlobalVariables.gameEngine.cardManager.DrawCards(1);
+        GlobalVariables.playerGameEngine.cardManager.DrawCards(1);
     }
 }
