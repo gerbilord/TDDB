@@ -19,7 +19,7 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
     
     public CardPlayResult Play(ICell cell)
     {
-        if (cell.IsBuildable())
+        if (cell.IsBuildable() && gameEngine.board.IsCellInMainBoard(cell))
         {
             gameEngine.board.PlaceTowerOn(cell, _towerPreset.makeTower(gameEngine));
             UI_OnCardDeselected(); // Clean up our UI mess as well.
@@ -38,7 +38,7 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
     // If the cell is buildable, lets show a phantom tower on hover.
     public CardPlayResult UI_OnCellEntered(ICell cell)
     {
-        if (cell.IsBuildable())
+        if (cell.IsBuildable() && gameEngine.board.IsCellInMainBoard(cell))
         {
             // Make a phantom tower on the cell
             _phantomTower = _towerPreset.makeTower(gameEngine);
@@ -79,8 +79,10 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
         // If we want the AI to use this card, we will need to inject the AI game engine.
         gameEngine = GlobalVariables.playerGameEngine; 
 
-        List<ICell> allCells = gameEngine.board.GetAllCells();
-        List<ICell> notBuildableCells = allCells.Where(anICell => !anICell.IsBuildable()).ToList();
+        List<ICell> allMainBoardCells = gameEngine.board.GetAllMainBoardCells();
+        List<ICell> notBuildableCells = allMainBoardCells.Where(anICell => !anICell.IsBuildable()).ToList();
+        notBuildableCells.AddRange(gameEngine.board.GetAllCorralCells());
+        notBuildableCells.AddRange(gameEngine.board.GetAllImmediateSendCells());
  
         // Make dark red color
         Color darkRed = new Color(0.5f, 0, 0, 0.7f);
@@ -92,7 +94,7 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
     // When we deselect the card, unhighlight all cells, and remove the phantom tower. 
     public CardPlayResult UI_OnCardDeselected()
     {
-        gameEngine.board.GetAllCells().ForEach(anICell => GlobalVariables.uiManager.ToggleHighlightCellAndObjects(anICell, false));
+        GlobalVariablesUtils.ForEachCellInGame(anICell => GlobalVariables.uiManager.ToggleHighlightCellAndObjects(anICell, false));
         UI_OnCellExited(null); // Clean up our phantom tower as well.
 
         return CardPlayResult.IGNORE;

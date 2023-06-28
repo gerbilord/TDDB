@@ -334,6 +334,9 @@ MonoBehaviour:
   showDebugInfo: 0
   boardWidth: 20
   boardHeight: 20
+  corralWidth: 2
+  corralHeight: 2
+  corralGap: 1
   pathRoadMap:
   - {x: 0, y: 10}
   - {x: 1, y: 10}
@@ -651,6 +654,9 @@ MonoBehaviour:
   showDebugInfo: 0
   boardWidth: 20
   boardHeight: 20
+  corralWidth: 0
+  corralHeight: 0
+  corralGap: 0
   pathRoadMap:
   - {x: 0, y: 10}
   - {x: 1, y: 10}

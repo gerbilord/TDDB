@@ -9,6 +9,10 @@ public class Config : MonoBehaviour
     public int boardWidth;
     public int boardHeight;
     
+    public int corralWidth;
+    public int corralHeight;
+    public int corralGap; // gap between corral and main board
+    
     public List<Vector2Int> pathRoadMap;
 
     [SerializedDictionary("prefab", "spawnRate")]

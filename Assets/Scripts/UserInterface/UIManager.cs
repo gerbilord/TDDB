@@ -219,7 +219,7 @@ public class UIManager
     public void OnCardClicked(ICard cardClicked)
     {
         // Unhighlight all cells and objects.
-        GlobalVariables.playerGameEngine.board.GetAllCells().ForEach(anICell => ToggleHighlightCellAndObjects(anICell, false));
+        GlobalVariables.playerGameEngine.board.GetAllMainBoardCells().ForEach(anICell => ToggleHighlightCellAndObjects(anICell, false));
         
         // Get both the old and new card game objects
         GameObject newCard = cardClicked.GetGameObject();
