@@ -22,10 +22,13 @@ public class Player : IHasIGameEngine
         GlobalVariables.eventManager.creepEventManager.OnCreepLeaked += CreepLeaked;
     }
 
-    private void CreepLeaked(ICreep creep)
+    private void CreepLeaked(ICreep creep, IGameEngine gameEngine)
     {
-        health -= 1; // TODO make creep effect this.
-        GlobalVariables.uiManager.UpdatePlayerStatsUI();
+        if(gameEngine == this.gameEngine)
+        {
+            health -= 1; // TODO make creep effect this.
+            GlobalVariables.uiManager.UpdatePlayerStatsUI();
+        }
     }
 
     // Destructor

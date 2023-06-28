@@ -12,7 +12,6 @@ public class PlayerGameEngine : MonoBehaviour, IGameEngine
 
     void Start()
     {
-        // Get main camera and set it in the global variables
         GlobalVariables.mainCamera = Camera.main;
 
         GlobalVariables.playerGameEngine = this;
@@ -33,12 +32,14 @@ public class PlayerGameEngine : MonoBehaviour, IGameEngine
         // Create an empty GameObject and attach the Board script to it
         GameObject boardObject = new GameObject("Board");
         board = boardObject.AddComponent<Board>();
-        board.Setup(this);
+        board.Setup(CorralPosition.BottomRight, this);
         GlobalVariables.uiManager.SetupCamera();
         
         // Create an empty GameObject and attach the wave manager script to it
         GameObject waveManagerObject = new GameObject("WaveManager");
         waveManager = waveManagerObject.AddComponent<WaveManager>();
         waveManager.Setup(this);
+        
+        this.GetComponent<EnemyGameEngine>().Setup();
     }
 }

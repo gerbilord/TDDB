@@ -13,12 +13,12 @@ public class Board : MonoBehaviour, IHasIGameEngine
 
     public List<GameObject> path;
 
-    public void Setup(IGameEngine gameEngine)
+    public void Setup(CorralPosition position, IGameEngine gameEngine)
     {
         this.gameEngine = gameEngine;
         SubscribeToAllEvents();
         CreateMainBoardGrid();
-        CreateCorralGrid();
+        CreateCorralGrid(position);
         LoadPath();
         UpdateAllCellPrefabsToMatchType();
     }
@@ -238,13 +238,13 @@ public class Board : MonoBehaviour, IHasIGameEngine
         }
     }
     
-    private void CreateCorralGrid()
+    private void CreateCorralGrid(CorralPosition corralPosition)
     {
         // Instantiate cells using _gameEngine's width and height
         _corralCells = new GameObject[gameEngine.config.corralWidth, gameEngine.config.corralHeight];
         _immediateSendCells = new GameObject[gameEngine.config.corralWidth, gameEngine.config.corralHeight];
         
-        CreateUIOnlyFenceAroundCorral();
+        CreateUIOnlyFenceAroundCorral(corralPosition);
         
         // Create the "pf_Cell" prefab in every corral cell, to the right of the board, separated by a gap
         for (int x = 0; x < gameEngine.config.corralWidth; x++)
@@ -254,8 +254,19 @@ public class Board : MonoBehaviour, IHasIGameEngine
                 // Instantiate the prefab // Set the cellObject's parent to this transform
                 GameObject cellObject = Instantiate(RandomUtils.GetRateRandomItem(gameEngine.config.grassCellPrefabs), transform, true);
 
-                // Set the cellObject's position to the current x and y, plus the width of the board, plus the gap
-                cellObject.transform.position = new Vector3(x + gameEngine.config.boardWidth + gameEngine.config.corralGap, 0, y);
+                if (corralPosition == CorralPosition.BottomRight)
+                {
+                    // Set the cellObject's position to the current x and y, plus the width of the board, plus the gap
+                    cellObject.transform.position = new Vector3(x + gameEngine.config.boardWidth + gameEngine.config.corralGap, 0, y);
+                }
+                else if(corralPosition == CorralPosition.TopLeft)
+                {
+                    cellObject.transform.position = new Vector3(-x - gameEngine.config.corralGap -1, 0, -y + gameEngine.config.boardHeight -1);
+                }
+                else
+                {
+                    Debug.LogError("CorralPosition not implemented: " + corralPosition);
+                }
 
                 // Randomly rotate the cellObject by 90 degrees
                 cellObject.transform.Rotate(0, Random.Range(0, 4) * 90, 0);
@@ -279,8 +290,20 @@ public class Board : MonoBehaviour, IHasIGameEngine
                 // Instantiate the prefab // Set the cellObject's parent to this transform
                 GameObject cellObject = Instantiate(RandomUtils.GetRateRandomItem(gameEngine.config.grassCellPrefabs), transform, true);
 
-                // Set the cellObject's position to the current x and y, plus the width of the board, plus the gap
-                cellObject.transform.position = new Vector3(x + gameEngine.config.boardWidth + gameEngine.config.corralGap, 0, y + gameEngine.config.corralHeight + gameEngine.config.corralGap);
+                if (corralPosition == CorralPosition.BottomRight)
+                {
+                    // Set the cellObject's position to the current x and y, plus the width of the board, plus the gap
+                    cellObject.transform.position = new Vector3(x + gameEngine.config.boardWidth + gameEngine.config.corralGap, 0, y + gameEngine.config.corralHeight + gameEngine.config.corralGap);
+                }
+                else if(corralPosition == CorralPosition.TopLeft)
+                {
+                    // Set the cellObject's position to the current x and y, plus the width of the board, plus the gap
+                    cellObject.transform.position = new Vector3(-x - gameEngine.config.corralGap - 1, 0, -y + -gameEngine.config.corralGap - gameEngine.config.corralHeight + gameEngine.config.boardHeight - 1);
+                }
+                else
+                {
+                    Debug.LogError("CorralPosition not implemented: " + corralPosition);
+                }
 
                 // Randomly rotate the cellObject by 90 degrees
                 cellObject.transform.Rotate(0, Random.Range(0, 4) * 90, 0);
@@ -297,15 +320,28 @@ public class Board : MonoBehaviour, IHasIGameEngine
         }
     }
 
-    private void CreateUIOnlyFenceAroundCorral()
+    private void CreateUIOnlyFenceAroundCorral(CorralPosition corralPosition)
     {
         // Put a little extra ui thing // TODO maybe put in UI Manager
         GameObject woodStructure = Resources.Load<GameObject>("Cells/Cosmetics/woodStructure");
         // instantiate the wood structure, in the middle of the corral
         GameObject woodStructureObject = Instantiate(woodStructure, transform, true);
 
-        woodStructureObject.transform.position =
-            new Vector3(gameEngine.config.boardWidth + gameEngine.config.corralGap, 0, 0) + new Vector3(.5f, 0, .5f); // .5f is for the cell size
+        if (corralPosition == CorralPosition.BottomRight)
+        {
+            woodStructureObject.transform.position =
+                new Vector3(gameEngine.config.boardWidth + gameEngine.config.corralGap, 0, 0) + new Vector3(.5f, 0, .5f); // .5f is for the cell size
+
+        }
+        else if(corralPosition == CorralPosition.TopLeft)
+        {
+            woodStructureObject.transform.position =
+                new Vector3(-1 - gameEngine.config.corralGap, 0, gameEngine.config.boardHeight - 1) + new Vector3(-.5f, 0, -.5f); // .5f is for the cell size
+        }
+        else
+        {
+            Debug.LogError("CorralPosition not implemented: " + corralPosition);
+        }
         
         // Scale it to fit the corral
         woodStructureObject.transform.localScale = new Vector3(gameEngine.config.corralWidth, 1, gameEngine.config.corralHeight);
@@ -324,6 +360,11 @@ public class Board : MonoBehaviour, IHasIGameEngine
     // Create a function to call when a cell is changed
     private void OnCellChanged(ICell oldCell, ICell newCell)
     {
+        if (!IsCellOurCell(oldCell))
+        {
+            return; // We don't care if the cell belongs to a different board
+        }
+
         // Change our reference
         _mainBoardCells[oldCell.x, oldCell.y] = newCell.GetGameObject();
         
@@ -361,4 +402,11 @@ public class Board : MonoBehaviour, IHasIGameEngine
             cell.occupyingGameObjects.Add(towerObject);
         }
     }
+}
+
+// Enum for corral position
+public enum CorralPosition
+{
+    TopLeft,
+    BottomRight
 }

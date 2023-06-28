@@ -86,7 +86,7 @@ public class WaveManager: MonoBehaviour, IHasIGameEngine
     public void OnLeak(ICreep creep)
     {
         creep.killCreep();
-        GlobalVariables.eventManager.creepEventManager.CreepLeaked(creep);
+        GlobalVariables.eventManager.creepEventManager.CreepLeaked(creep, gameEngine);
     }
     private void CreepKilled(ICreep creep)
     {
