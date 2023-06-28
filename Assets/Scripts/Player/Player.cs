@@ -27,7 +27,7 @@ public class Player : IHasIGameEngine
         if(gameEngine == this.gameEngine)
         {
             health -= 1; // TODO make creep effect this.
-            GlobalVariables.uiManager.UpdatePlayerStatsUI();
+            GlobalVariables.uiManager.UpdateStatsUI();
         }
     }
 

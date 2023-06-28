@@ -714,23 +714,19 @@ MonoBehaviour:
   - {x: 10, y: 0}
   grassCellPrefabs:
     _serializedList:
-    - Key: {fileID: 2289342492612912154, guid: 9ad5fe44fb8ddfe439ffad82b058c07b, type: 3}
+    - Key: {fileID: 4294131191568073970, guid: 1bf86ec0e38903d4882ad64a645590df, type: 3}
       Value: 1
   treeCellPrefabs:
     _serializedList:
-    - Key: {fileID: 9001175345020219634, guid: e5712dedc4afcd4439eeed4d6c7718f9, type: 3}
-      Value: 0.8
-    - Key: {fileID: 6453798312756203355, guid: e86a7b3978cd7604582bcdc72900e8b1, type: 3}
-      Value: 0.05
-    - Key: {fileID: 4311821019901492041, guid: 85dc35a1c0611224f804abaebca4a1cd, type: 3}
-      Value: 0.15
+    - Key: {fileID: 8196696947751634390, guid: 1830aecf398f6474692a757a8147b0a8, type: 3}
+      Value: 1
   dirtCellPrefabs:
     _serializedList:
     - Key: {fileID: 3258817265275395646, guid: f0df352038cdbe04bb464777ba2bc5de, type: 3}
       Value: 1
   waves:
   - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
-  treeSpawnRate: 0.3
+  treeSpawnRate: 0.2
   DeckPreset: {fileID: 11400000, guid: b0a3679f85bd58a489b710f351e25792, type: 2}
   startingCardAmount: 3
   shopSize: 5

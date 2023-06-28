@@ -41,5 +41,7 @@ public class PlayerGameEngine : MonoBehaviour, IGameEngine
         waveManager.Setup(this);
         
         this.GetComponent<EnemyGameEngine>().Setup();
+        
+        GlobalVariables.uiManager.Setup();
     }
 }

@@ -17,7 +17,13 @@ public class UIManager
     private GameObject _playerIncome;
     private GameObject _playerMoney;
     
+    private GameObject _enemyHealth;
+    
     public UIManager()
+    {
+    }
+
+    public void Setup()
     {
         LoadBasicUI();
         
@@ -46,7 +52,10 @@ public class UIManager
         _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         LoadDeckAndDiscardUI();
         LoadPlayerStatsUI();
+        LoadEnemyStatsUI();
+        UpdateStatsUI();
         LoadCameraIcon();
+        ResetCardsInHandPosition();
     }
 
     private void LoadCameraIcon()
@@ -63,18 +72,29 @@ public class UIManager
         
         Vector3 topRight = new Vector3(Screen.width, Screen.height, 0);
         
-        float magicNumber_yOffsetExtra = 5f;
-        float yOffset = -GraphicsUtils.GetHeightOf2d(_playerIncome) - magicNumber_yOffsetExtra;
+        float magicNumber_offsetExtra = 15f;
+        float yOffset = -GraphicsUtils.GetHeightOf2d(_playerIncome) - magicNumber_offsetExtra;
         
         // place _playerHealth in the top right corner of the screen
-        _playerHealth.transform.position = topRight + new Vector3(-GraphicsUtils.GetWidthOf2d(_playerHealth) / 2, -GraphicsUtils.GetHeightOf2d(_playerHealth) / 2, 0);
+        _playerHealth.transform.position = topRight + new Vector3(-GraphicsUtils.GetWidthOf2d(_playerHealth) / 2 - magicNumber_offsetExtra, -GraphicsUtils.GetHeightOf2d(_playerHealth) / 2 - magicNumber_offsetExtra, 0);
         _playerIncome.transform.position = _playerHealth.transform.position + new Vector3(0, yOffset, 0);
         _playerMoney.transform.position = _playerIncome.transform.position + new Vector3(0, yOffset, 0);
-
-        UpdatePlayerStatsUI();
     }
     
-    public void UpdatePlayerStatsUI()
+    private void LoadEnemyStatsUI()
+    {
+        float magicNumber_offsetExtra = 15f;
+        _enemyHealth = GameObject.Instantiate(Resources.Load<GameObject>("UI/Player/EnemyHealth"), _canvas.transform, true);
+        _enemyHealth.transform.position = new Vector3(_playerHealth.transform.position.x - GraphicsUtils.GetWidthOf2d(_playerHealth) - magicNumber_offsetExtra, Screen.height - GraphicsUtils.GetHeightOf2d(_enemyHealth) / 2 - magicNumber_offsetExtra, 0);
+    }
+    
+    public void UpdateStatsUI()
+    {
+        UpdatePlayerStatsUI();
+        UpdateEnemyStatsUI();
+    }
+
+    private void UpdatePlayerStatsUI()
     {
         // get text from the text mesh pro from _playerHealth
         TextMeshProUGUI textMeshHealth = _playerHealth.GetComponentInChildren<TextMeshProUGUI>();
@@ -84,6 +104,13 @@ public class UIManager
         textMeshHealth.text = GlobalVariables.playerGameEngine.player.health.ToString();
         textMeshIncome.text = GlobalVariables.playerGameEngine.player.income.ToString();
         textMeshMoney.text = GlobalVariables.playerGameEngine.player.money.ToString();
+    }
+
+    public void UpdateEnemyStatsUI()
+    {
+        // get text from the text mesh pro from _playerHealth
+        TextMeshProUGUI textMeshHealth = _enemyHealth.GetComponentInChildren<TextMeshProUGUI>();
+        textMeshHealth.text = GlobalVariables.enemyGameEngine.player.health.ToString();
     }
 
     private void LoadDeckAndDiscardUI()

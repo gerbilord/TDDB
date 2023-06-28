@@ -13,8 +13,7 @@ public class EnemyGameEngine : MonoBehaviour, IGameEngine
     public void Setup()
     {
         GlobalVariables.enemyGameEngine = this;
-        // config = GameObject.Find("EnemyConfig").GetComponent<Config>();
-        config = GameObject.Find("PlayerConfig").GetComponent<Config>();
+        config = CreateEnemyConfig();
         
         player = new Player(this);
         cardManager = null; // TODO Add AI card manager
@@ -29,5 +28,25 @@ public class EnemyGameEngine : MonoBehaviour, IGameEngine
         GameObject waveManagerObject = new GameObject("WaveManager");
         waveManager = waveManagerObject.AddComponent<WaveManager>();
         waveManager.Setup(this);
+    }
+
+    private Config CreateEnemyConfig()
+    {
+        // Some things we want to copy from the player config!
+        Config enemyConfig = GameObject.Find("EnemyConfig").GetComponent<Config>();
+        Config playerConfig = GameObject.Find("PlayerConfig").GetComponent<Config>();
+        
+        enemyConfig.boardWidth = playerConfig.boardWidth;
+        enemyConfig.boardHeight = playerConfig.boardHeight;
+        
+        enemyConfig.corralWidth = playerConfig.corralWidth;
+        enemyConfig.corralHeight = playerConfig.corralHeight;
+        enemyConfig.corralGap = playerConfig.corralGap;
+        
+        enemyConfig.pathRoadMap = playerConfig.pathRoadMap;
+        
+        enemyConfig.waves = playerConfig.waves;
+
+        return enemyConfig;
     }
 }
