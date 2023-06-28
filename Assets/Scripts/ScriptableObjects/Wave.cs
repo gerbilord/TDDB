@@ -4,5 +4,5 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Wave", menuName = "ScriptableObjects/Wave", order = 1)]
 public class Wave : ScriptableObject
 {
-    public List<CreepPreset> waveCreeps;
+    public List<CreepPresetWithTime> waveCreeps;
 }

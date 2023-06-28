@@ -23,7 +23,7 @@ public class WaveManager: MonoBehaviour, IHasIGameEngine
         _startPos = GraphicsUtils.GetTopOf3d(_refToBoardsPath[0]);
         _endPos = GraphicsUtils.GetTopOf3d(_refToBoardsPath[^1]);
         
-        StartCoroutine(SpawnWave(gameEngine.config.waves[0].waveCreeps, 2));
+        StartCoroutine(SpawnWave(gameEngine.config.waves[0].waveCreeps));
     }
 
     public void Update()
@@ -41,18 +41,19 @@ public class WaveManager: MonoBehaviour, IHasIGameEngine
 
         creepsOnBoard.Add(newCreep);
     }
-    public IEnumerator SpawnWave(List<CreepPreset> wavePreset, float delay)
+    public IEnumerator SpawnWave(List<CreepPresetWithTime> wavePreset)
     {
         // Copy the list so we don't modify the original >.>
-        List<CreepPreset> wave = new List<CreepPreset>(wavePreset);
+        List<CreepPresetWithTime> wave = new List<CreepPresetWithTime>(wavePreset);
         
         yield return new WaitForEndOfFrame();
         if (wave.Count > 0)
         {
-            SpawnCreep(wave[0]);
+            CreepPresetWithTime creepPresetWithTime = wave[0];
+            SpawnCreep(creepPresetWithTime.creepPreset);
             wave.RemoveAt(0);
-            yield return new WaitForSeconds(delay);
-            yield return SpawnWave(wave, delay);
+            yield return new WaitForSeconds(creepPresetWithTime.timeTillNextCreep);
+            yield return SpawnWave(wave);
         }
         else { yield return null; }
     }

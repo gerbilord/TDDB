@@ -245,6 +245,14 @@ public class UIManager
 
     public void OnCardClicked(ICard cardClicked)
     {
+        if (_selectedCard != null)
+        {
+            if (_selectedCard.UI_OnCardDeselected() != CardPlayResult.IGNORE)
+            {
+                return; // This lets the card potentially do something with other cards.
+            }
+        }
+
         // Unhighlight all cells and objects.
         GlobalVariables.playerGameEngine.board.GetAllMainBoardCells().ForEach(anICell => ToggleHighlightCellAndObjects(anICell, false));
         
