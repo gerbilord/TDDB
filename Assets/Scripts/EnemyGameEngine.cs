@@ -9,9 +9,33 @@ public class EnemyGameEngine : MonoBehaviour, IGameEngine
     public CardManager cardManager { get; set; }
     public WaveManager waveManager { get; set; }
     public Config config { get; set; }
+    public int currentTurnNumber { get; set; }
     
+    public void SendCreepToEnemyCorral(CreepPreset creepToSend)
+    {
+        GlobalVariables.playerGameEngine.waveManager.AddCreepToCorral(creepToSend);
+    }
+
+    public void SendCreepToEnemyImmediateSend(CreepPreset creepToSend)
+    {
+        GlobalVariables.playerGameEngine.waveManager.AddCreepToSendImmediate(creepToSend);
+    }
+
+
+    public void FinishCardTurn_StartWave()
+    {
+        waveManager.SpawnWave(currentTurnNumber);
+    }
+
+    public void OnWaveEnd_StartCardTurn()
+    {
+        currentTurnNumber += 1;
+    }
+
+
     public void Setup()
     {
+        currentTurnNumber = 1;
         GlobalVariables.enemyGameEngine = this;
         config = CreateEnemyConfig();
         

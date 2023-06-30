@@ -9,4 +9,13 @@ public interface IGameEngine
     public CardManager cardManager { get; set; }
     public WaveManager waveManager { get; set; }
     public Config config { get; set; }
+
+    public void FinishCardTurn_StartWave();
+
+    public void OnWaveEnd_StartCardTurn(); // Current turn increments here.
+
+    public int currentTurnNumber { get; set; }
+    
+    public void SendCreepToEnemyCorral(CreepPreset creepToSend);
+    public void SendCreepToEnemyImmediateSend(CreepPreset creepToSend);
 }

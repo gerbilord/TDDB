@@ -10,6 +10,9 @@ public class CardManager : IHasIGameEngine
     public List<ICard> cardsInHand = new List<ICard>();
     public List<ICard> cardsInDeck = new List<ICard>();
     public List<ICard> cardsInDiscard = new List<ICard>();
+    public List<ICard> cardsUsedThisTurn = new List<ICard>();
+    public List<ICard> cardsInCorral = new List<ICard>();
+    
     
     public List<ICard> cardsInShop = new List<ICard>();
     
@@ -37,6 +40,16 @@ public class CardManager : IHasIGameEngine
         GlobalVariables.eventManager.cardEventManager.OnCardPlay -= OnCardPlayed;
     }
 
+    public void DiscardHand()
+    {
+        foreach (var card in cardsInHand)
+        {
+            cardsInDiscard.Add(card);
+        }
+
+        cardsInHand.Clear();
+    }
+    
     public void RerollShop()
     {
         GlobalVariables.playerGameEngine.player.money -= 2; // TODO change how this works. Use a stack for keeping track of next rolls, and if stack is empty, then default cost in config is used.
@@ -121,10 +134,30 @@ public class CardManager : IHasIGameEngine
     public void OnCardPlayed(ICard card)
     {
         cardsInHand.Remove(card);
-        cardsInDiscard.Add(card);
+
+        switch (card.GetWhereToSendThisCard())
+        {
+            // case for each enum value
+            case CardWhereToSend.CORRAL:
+                cardsInCorral.Add(card);
+                break;
+            case CardWhereToSend.DEFAULT:
+                cardsUsedThisTurn.Add(card);
+                break;
+            default:
+                Debug.LogError("CardWhereToSend enum value not handled in CardManager.OnCardPlayed");
+                break;
+        }
+
         GlobalVariables.eventManager.cardEventManager.HandSizeChanged();
         
         // Set the card's parent to the discard pile, this makes it hidden
         card.GetGameObject().transform.SetParent(discardGameObjectParent.transform); // Should this be the UI?
+    }
+
+    public void MoveUsedCardsToDiscard()
+    {
+        cardsInDiscard.AddRange(cardsUsedThisTurn);
+        cardsUsedThisTurn.Clear();
     }
 }

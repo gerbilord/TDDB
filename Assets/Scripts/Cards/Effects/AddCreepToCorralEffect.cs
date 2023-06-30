@@ -5,28 +5,44 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 // Create asset menu
-[CreateAssetMenu(fileName = "BuildTowerEffect", menuName = "ScriptableObjects/CardEffects/BuildTowerEffect", order = 1)]
-public class BuildTowerEffect : ScriptableObject, IPlayEffects
+[CreateAssetMenu(fileName = "AddCreepToCorralEffect", menuName = "ScriptableObjects/CardEffects/AddCreepToCorralEffect", order = 1)]
+public class AddCreepToCorralEffect : ScriptableObject, IPlayEffects
 {
     [DoNotSerialize]
     public IGameEngine gameEngine { get; set; }
 
     [SerializeField]
-    private TowerPreset _towerPreset;
+    private CreepPreset _creepPreset;
 
-    private ITower _phantomTower; // Tower to show on hover when this card is selected.
+    private ICreep _phantomCreep; // Creep to show on hover when this card is selected.
+    
+    private CardWhereToSend _whereToSend;
     
     
     public CardPlayResult Play(ICell cell)
     {
-        if (cell.IsBuildable() && gameEngine.board.IsCellInMainBoard(cell))
+        if (gameEngine.board.IsCellInImmediateSend(cell) || gameEngine.board.IsCellInCorral(cell))
         {
-            gameEngine.board.PlaceTowerOn(cell, _towerPreset.makeTower(gameEngine));
+            if (gameEngine.board.IsCellInImmediateSend(cell))
+            {
+                gameEngine.SendCreepToEnemyImmediateSend(_creepPreset);
+                _whereToSend = CardWhereToSend.DEFAULT;
+            }
+            else
+            {
+                gameEngine.SendCreepToEnemyCorral(_creepPreset);
+                _whereToSend = CardWhereToSend.CORRAL;
+            }
             UI_OnCardDeselected(); // Clean up our UI mess as well.
             return CardPlayResult.SUCCESS;
         }
-
-        return CardPlayResult.IGNORE_BUT_STOP_OTHER_EFFECTS; // If we couldn't build, don't do anything, let the user try to click again.
+        
+        return CardPlayResult.IGNORE_BUT_STOP_OTHER_EFFECTS; // If we couldn't put a creep, don't do anything, let the user try to click again.
+    }
+    
+    public CardWhereToSend GetWhereToSendThisCard()
+    {
+        return _whereToSend;
     }
     
     // Play this card when we selected a cell!
@@ -35,26 +51,10 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
         return Play(cell);
     }
 
-    // If the cell is buildable, lets show a phantom tower on hover.
+    // If the cell can take a creep, lets show a phantom creep on hover.
     public CardPlayResult UI_OnCellEntered(ICell cell)
     {
-        if (cell.IsBuildable() && gameEngine.board.IsCellInMainBoard(cell))
-        {
-            // Make a phantom tower on the cell
-            _phantomTower = _towerPreset.makeTower(gameEngine);
-            _phantomTower.GetGameObject().transform.position = GraphicsUtils.GetTopOf3d(cell.GetGameObject());
-            ((MonoBehaviour)_phantomTower).enabled = false;
-
-            // Make the phantom tower transparent
-            _phantomTower.GetGameObject().GetComponent<IOpacityChanger>().ToggleOpacity(true);
-        
-            // Set _phantomTower isPlacing animation bool to true
-            _phantomTower.GetGameObject().GetComponent<Animator>().SetBool("isPlacing", true);
-
-            // In the viewer name it phantom tower
-            _phantomTower.GetGameObject().name = "Phantom Tower";
-
-        }
+        // Make a phantom creep!
 
         return CardPlayResult.IGNORE;
     }
@@ -62,12 +62,7 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
     // Clean up our phantom tower when we exit the cell.
     public CardPlayResult UI_OnCellExited(ICell cell)
     {
-        // Destroy the phantom tower
-        if (_phantomTower != null)
-        {
-            GameObject.Destroy(_phantomTower.GetGameObject());
-            _phantomTower = null;
-        }
+        // Destroy the phantom creep. 
 
         return CardPlayResult.IGNORE;
     }
@@ -80,10 +75,8 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
         gameEngine = GlobalVariables.playerGameEngine; 
 
         List<ICell> allMainBoardCells = gameEngine.board.GetAllMainBoardCells();
-        List<ICell> notBuildableCells = allMainBoardCells.Where(anICell => !anICell.IsBuildable()).ToList();
-        notBuildableCells.AddRange(gameEngine.board.GetAllCorralCells());
-        notBuildableCells.AddRange(gameEngine.board.GetAllImmediateSendCells());
- 
+        List<ICell> notBuildableCells = allMainBoardCells;
+        
         // Make dark red color
         Color darkRed = new Color(0.5f, 0, 0, 0.7f);
         notBuildableCells.ForEach(anICell => GlobalVariables.uiManager.ToggleHighlightCellAndObjects(anICell, true, darkRed, .7f)); // TODO: Move this to a util?

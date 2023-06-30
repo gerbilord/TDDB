@@ -12,8 +12,11 @@ public class UIManager
     private ICard _selectedCard; // Selected card is responsible for custom UI. (Such as a tower preview when hovering over a cell)
     private GameObject _deckCardBack;
     private GameObject _discardCardBack;
+    private GameObject _usedCardBack;
     private GameObject _rerollButton;
     private GameObject _levelUpButton;
+    private GameObject _nextTurnButton;
+    private GameObject _levelIndicator;
     
     private GameObject _playerHealth;
     private GameObject _playerIncome;
@@ -55,6 +58,8 @@ public class UIManager
     private void LoadBasicUI()
     {
         _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        LoadNextTurnButtonUI();
+        LoadLevelIndicatorUI();
         LoadDeckAndDiscardUI();
         LoadPlayerStatsUI();
         LoadEnemyStatsUI();
@@ -62,8 +67,38 @@ public class UIManager
         LoadCameraIcon();
         ResetCardsInHandPosition();
         UpdateDeckTextUI();
+        UpdateLevelIndicatorUI();
         ResetCardsInShopPosition();
         LoadShopStaticUI();
+    }
+
+    private void LoadLevelIndicatorUI()
+    {
+        // Get middle top of screen;
+        Vector3 middleTop = new Vector3(Screen.width / 2f, Screen.height, 0); 
+
+        _levelIndicator = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/level_indicator"), _canvas.transform, true);
+        float magicNumber_yOffsetExtra = 20f;
+
+        _levelIndicator.transform.position = middleTop
+                                             + new Vector3(0, -GraphicsUtils.GetHeightOf2d(_levelIndicator)/2f, 0)
+                                             + new Vector3(0, -magicNumber_yOffsetExtra, 0);
+    }
+
+    private void LoadNextTurnButtonUI()
+    {
+        _nextTurnButton = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/next_turn_card"), _canvas.transform, true);
+        
+        float magicNumber_xOffSetExtra = 10f;
+        float magicNumber_yOffsetExtra = 10f;
+
+        _nextTurnButton.transform.localScale = new Vector3(1, 1, 1);
+
+        Vector3 bottomRight  = new Vector3(Screen.width, 0, 0);
+        
+        _nextTurnButton.transform.position = bottomRight 
+                                             + new Vector3( - GraphicsUtils.GetWidthOf2d(_nextTurnButton), GraphicsUtils.GetHeightOf2d(_nextTurnButton), 0) 
+                                             + new Vector3(-magicNumber_xOffSetExtra, magicNumber_yOffsetExtra, 0); 
     }
 
     private void LoadCameraIcon()
@@ -126,8 +161,9 @@ public class UIManager
         Vector3 bottomLeft = new Vector3(0, 0, 0);
 
         // Instantiate the deck and card back
-        _deckCardBack = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/deck_card_back"), _canvas.transform, true);
+        _deckCardBack = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/top_deck_card"), _canvas.transform, true);
         _discardCardBack = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/discard_card_back"), _canvas.transform, true);
+        _usedCardBack = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/used_card"), _canvas.transform, true);
 
         // Just use one scale for both cards, assume they are the same size
         Vector3 scale = _discardCardBack.transform.localScale;
@@ -139,10 +175,18 @@ public class UIManager
         float cardHeight = GraphicsUtils.GetHeightOf2d(_deckCardBack);
 
         // put the _discardCardBack in the bottom left corner, and put the deck card back above it
-        _discardCardBack.transform.position = bottomLeft + new Vector3(cardWidth / 2 + magicNumber_xOffSetExtra,
+        _usedCardBack.transform.position = bottomLeft + new Vector3(cardWidth / 2 + magicNumber_xOffSetExtra,
             cardHeight / 2 + magicNumber_yOffsetExtra, 0);
+        _discardCardBack.transform.position = _usedCardBack.transform.position +
+                                              new Vector3(0, cardHeight + magicNumber_SpaceBetweenCards, 0);
         _deckCardBack.transform.position = _discardCardBack.transform.position +
                                            new Vector3(0, cardHeight + magicNumber_SpaceBetweenCards, 0);
+    }
+
+    public void UpdateLevelIndicatorUI()
+    {
+        TextMeshProUGUI lvl = _levelIndicator.GetComponentInChildren<TextMeshProUGUI>();
+        lvl.text = GlobalVariables.playerGameEngine.currentTurnNumber.ToString();
     }
 
     private void UpdateDeckTextUI()
@@ -154,6 +198,10 @@ public class UIManager
         // get the text from the discard card back
         TextMeshProUGUI discardText = _discardCardBack.GetComponentInChildren<TextMeshProUGUI>();
         discardText.text = GlobalVariables.playerGameEngine.cardManager.cardsInDiscard.Count.ToString();
+        
+        // get the text for the used card UI
+        TextMeshProUGUI usedText = _usedCardBack.GetComponentInChildren<TextMeshProUGUI>();
+        usedText.text = GlobalVariables.playerGameEngine.cardManager.cardsUsedThisTurn.Count.ToString();
     }
 
     public void OnCellEntered(ICell cell)

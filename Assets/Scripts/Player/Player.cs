@@ -22,6 +22,12 @@ public class Player : IHasIGameEngine
         GlobalVariables.eventManager.creepEventManager.OnCreepLeaked += CreepLeaked;
     }
 
+    public void AddIncomeToMoney()
+    {
+        money += income;
+        GlobalVariables.uiManager.UpdateStatsUI();
+    }
+
     private void CreepLeaked(ICreep creep, IGameEngine gameEngine)
     {
         if(gameEngine == this.gameEngine)

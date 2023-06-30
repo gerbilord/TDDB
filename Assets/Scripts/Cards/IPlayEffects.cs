@@ -13,6 +13,10 @@ public interface IPlayEffects: IHasIGameEngine
      */
     public CardPlayResult Play(ICell cell);
 
+    public CardWhereToSend GetWhereToSendThisCard()
+    {
+        return CardWhereToSend.DEFAULT;
+    }
 
     public CardPlayResult UI_OnCellEntered(ICell cell)
     {

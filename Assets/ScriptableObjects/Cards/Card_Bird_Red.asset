@@ -13,6 +13,19 @@ MonoBehaviour:
   m_Name: DrawCardsEffect
   m_EditorClassIdentifier: 
   numCardsToDraw: 2
+--- !u!114 &-1928727192952782027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d6ab088b5ce4404f926ba1a706a0c64, type: 3}
+  m_Name: AddCreepToCorralEffect
+  m_EditorClassIdentifier: 
+  _creepPreset: {fileID: 11400000, guid: 42adaa639525f414d8db9762e1dd0c32, type: 2}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27,4 +40,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 2807112774912832007, guid: 7bcf5935673bd7f448b01a92a3408c5e, type: 3}
   playEffectsList:
+  - {fileID: -1928727192952782027}
   - {fileID: -9197221735761844728}

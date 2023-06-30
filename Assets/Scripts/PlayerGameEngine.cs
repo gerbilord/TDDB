@@ -9,9 +9,38 @@ public class PlayerGameEngine : MonoBehaviour, IGameEngine
     public CardManager cardManager { get; set; }
     public WaveManager waveManager { get; set; }
     public Config config { get; set; }
+    
+    public int currentTurnNumber { get; set; }
+    
+    public void SendCreepToEnemyCorral(CreepPreset creepToSend)
+    {
+        GlobalVariables.enemyGameEngine.waveManager.AddCreepToCorral(creepToSend);
+    }
+
+    public void SendCreepToEnemyImmediateSend(CreepPreset creepToSend)
+    {
+        GlobalVariables.enemyGameEngine.waveManager.AddCreepToSendImmediate(creepToSend);
+    }
+
+    public void FinishCardTurn_StartWave()
+    {
+        waveManager.SpawnWave(currentTurnNumber);
+    }
+
+    public void OnWaveEnd_StartCardTurn()
+    {
+        currentTurnNumber += 1;
+        GlobalVariables.uiManager.UpdateLevelIndicatorUI();
+        player.AddIncomeToMoney();
+        cardManager.MoveUsedCardsToDiscard();
+        cardManager.DiscardHand();
+        cardManager.DrawCards(config.startingCardAmount);
+    }
+
 
     void Start()
     {
+        currentTurnNumber = 1;
         GlobalVariables.mainCamera = Camera.main;
 
         GlobalVariables.playerGameEngine = this;

@@ -10,8 +10,16 @@ public enum CardPlayResult
 {
     SUCCESS, // We tried to play the card, and it was successful
     FAIL,    // We tried to play the card, and it was not successful
-    IGNORE   // We did not try to do anything
+    IGNORE_BUT_STOP_OTHER_EFFECTS,   // We did not try to do anything, but don't let other effects play.
+    IGNORE // Let other effects do things. (For example, ui highlighting, some effects may not care to do anything on hover)
 }
+
+public enum CardWhereToSend
+{
+    DEFAULT, // Send the card to the used pile, but allow others to send elsewhere.
+    CORRAL,
+}
+
 public class CardBehavior : MonoBehaviour, IPointerClickHandler, ICard
 {
     [DoNotSerialize]
@@ -37,6 +45,11 @@ public class CardBehavior : MonoBehaviour, IPointerClickHandler, ICard
         {
             CardPlayResult result = playEffect.Play(cell);
             results.Add(result);
+            if (result == CardPlayResult.IGNORE_BUT_STOP_OTHER_EFFECTS)
+            {
+                return CardPlayResult.IGNORE_BUT_STOP_OTHER_EFFECTS;
+            }
+                
             if (result == CardPlayResult.FAIL) // Play the effect on the cell, and check the return value
             {
                 // if playEffect.Play returns false, then the card was not played successfully.
@@ -44,10 +57,71 @@ public class CardBehavior : MonoBehaviour, IPointerClickHandler, ICard
                 return CardPlayResult.FAIL;
             }
         }
-        return ProcessResults(results);
+
+        return ProcessResultsAndSendEvent(results);
+    }
+    
+    public CardPlayResult CallEffectsAndGetResult<T>(ICell cell, Func<T, ICell, CardPlayResult> action) where T : IPlayEffects
+    {
+        List<CardPlayResult> results = new List<CardPlayResult>();
+    
+        foreach (T playEffect in playEffects.OfType<T>())
+        {
+            CardPlayResult result = action(playEffect, cell);
+            results.Add(result);
+            if (result == CardPlayResult.IGNORE_BUT_STOP_OTHER_EFFECTS)
+            {
+                return CardPlayResult.IGNORE; // The top level doesn't need to know about our stop effects.
+            }
+            
+            if (result == CardPlayResult.FAIL) // Play the effect on the cell, and check the return value
+            {
+                // if action returns false, then the card was not played successfully.
+                // Return false to indicate that the card was not played successfully.
+                return CardPlayResult.FAIL;
+            }
+        }
+
+        return ProcessResultsAndSendEvent(results);
+    }
+    
+    public CardPlayResult CallEffectsAndGetResult<T>(Func<T, CardPlayResult> action) where T : IPlayEffects
+    {
+        List<CardPlayResult> results = new List<CardPlayResult>();
+    
+        foreach (T playEffect in playEffects.OfType<T>())
+        {
+            CardPlayResult result = action(playEffect);
+            results.Add(result);
+            if (result == CardPlayResult.IGNORE_BUT_STOP_OTHER_EFFECTS)
+            {
+                return CardPlayResult.IGNORE; // The top level doesn't need to know about our stop effects.
+            }
+            
+            if (result == CardPlayResult.FAIL) // Play the effect on the cell, and check the return value
+            {
+                // if action returns false, then the card was not played successfully.
+                // Return false to indicate that the card was not played successfully.
+                return CardPlayResult.FAIL;
+            }
+        }
+
+        return ProcessResultsAndSendEvent(results);
     }
 
-    private CardPlayResult ProcessResults(List<CardPlayResult> cardPlayResults)
+    public CardWhereToSend GetWhereToSendThisCard()
+    {
+        foreach (var effect in playEffects)
+        {
+            if(effect.GetWhereToSendThisCard() != CardWhereToSend.DEFAULT)
+                return effect.GetWhereToSendThisCard();
+        }
+
+        return CardWhereToSend.DEFAULT;
+    }
+
+    // This function sucks
+    private CardPlayResult ProcessResultsAndSendEvent(List<CardPlayResult> cardPlayResults)
     {
         // Create a set
         HashSet<CardPlayResult> cardPlayResultSet = new HashSet<CardPlayResult>();
@@ -85,66 +159,26 @@ public class CardBehavior : MonoBehaviour, IPointerClickHandler, ICard
 
     public CardPlayResult UI_OnCellClicked(ICell cell)
     {
-        List<CardPlayResult> results = new List<CardPlayResult>();
-        
-        foreach (IPlayEffects playEffect in playEffects)
-        {
-            CardPlayResult result = playEffect.UI_OnCellClicked(cell);
-            results.Add(result);
-        }
-        
-        return ProcessResults(results);
+        return CallEffectsAndGetResult<IPlayEffects>(cell, (playEffect, cell) => playEffect.UI_OnCellClicked(cell));
     }
     
     public CardPlayResult UI_OnCellEntered(ICell cell)
     {
-        List<CardPlayResult> results = new List<CardPlayResult>();
-        
-        foreach (IPlayEffects playEffect in playEffects)
-        {
-            CardPlayResult result = playEffect.UI_OnCellEntered(cell);
-            results.Add(result);
-        }
-        
-        return ProcessResults(results);
+       return CallEffectsAndGetResult<IPlayEffects>(cell, (playEffect, cell) => playEffect.UI_OnCellEntered(cell));
     }
 
     public CardPlayResult UI_OnCellExited(ICell cell)
     {
-        List<CardPlayResult> results = new List<CardPlayResult>();
-        
-        foreach (IPlayEffects playEffect in playEffects)
-        {
-            CardPlayResult result = playEffect.UI_OnCellExited(cell);
-            results.Add(result);
-        }
-        
-        return ProcessResults(results);
+        return CallEffectsAndGetResult<IPlayEffects>(cell, (playEffect, cell) => playEffect.UI_OnCellExited(cell));
     }
     
     public CardPlayResult UI_OnCardSelected()
     {
-        List<CardPlayResult> results = new List<CardPlayResult>();
-        
-        foreach (IPlayEffects playEffect in playEffects)
-        {
-            CardPlayResult result = playEffect.UI_OnCardSelected();
-            results.Add(result);
-        }
-        
-        return ProcessResults(results);
+        return CallEffectsAndGetResult<IPlayEffects>((playEffect) => playEffect.UI_OnCardSelected());
     }
     
     public CardPlayResult UI_OnCardDeselected()
     {
-        List<CardPlayResult> results = new List<CardPlayResult>();
-        
-        foreach (IPlayEffects playEffect in playEffects)
-        {
-            CardPlayResult result = playEffect.UI_OnCardDeselected();
-            results.Add(result);
-        }
-        
-        return ProcessResults(results);
+        return CallEffectsAndGetResult<IPlayEffects>((playEffect) => playEffect.UI_OnCardDeselected());
     }
 }

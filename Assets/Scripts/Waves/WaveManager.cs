@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.TextCore;
 using UnityEngine.TextCore.LowLevel;
@@ -9,21 +10,60 @@ public class WaveManager: MonoBehaviour, IHasIGameEngine
 {
     public IGameEngine gameEngine { get; set; }
     public List<ICreep> creepsOnBoard;
+    public List<CreepPresetWithTime> creepsYetToSpawnInWave;
+    public List<CreepPreset> creepsInCorral;          // THIS IS TECHNICALLY THE ENEMY CORRAL
+    public List<CreepPreset> creepsInSendImmediate;   // THIS IS TECHNICALLY THE ENEMY CREEPS TO SEND IMMEDIATELY
     private Vector3 _startPos;
     private Vector3 _endPos;
     private List<GameObject> _refToBoardsPath;
+    private GameObject _creepHierarchyParent;
 
     public void Setup(IGameEngine gameEngine)
     {
         this.gameEngine = gameEngine;
         GlobalVariables.eventManager.creepEventManager.OnCreepKilled += CreepKilled;
         creepsOnBoard = new List<ICreep>();
+        creepsInCorral = new List<CreepPreset>();
+        creepsYetToSpawnInWave = new List<CreepPresetWithTime>();
+        creepsInSendImmediate = new List<CreepPreset>();
         
+        // create _creepHierarchyParent
+        _creepHierarchyParent = new GameObject("Creeps");
+
         _refToBoardsPath = gameEngine.board.path;
         _startPos = GraphicsUtils.GetTopOf3d(_refToBoardsPath[0]);
         _endPos = GraphicsUtils.GetTopOf3d(_refToBoardsPath[^1]);
-        
-        StartCoroutine(SpawnWave(gameEngine.config.waves[0].waveCreeps));
+    }
+
+    public void AddCreepToCorral(CreepPreset creepPreset)
+    {
+        creepsInCorral.Add(creepPreset);
+    }
+
+    public void AddCreepToSendImmediate(CreepPreset creepPreset)
+    {
+        creepsInSendImmediate.Add(creepPreset);
+    }
+    
+    public void SendCreepsInCorral()
+    {
+        creepsInSendImmediate.AddRange(creepsInCorral);
+        creepsInCorral.Clear();
+    }
+
+    public void SpawnWave(int turnNumber)
+    {
+        // Copy the list so we don't modify the original >.>
+        List<CreepPresetWithTime> creepsToSpawn = new List<CreepPresetWithTime>();
+
+        creepsToSpawn.AddRange(creepsInSendImmediate.Select(preset => new CreepPresetWithTime(preset, .2f)).ToList());
+        creepsInSendImmediate.Clear();
+
+        creepsToSpawn.AddRange(gameEngine.config.waves[turnNumber].waveCreeps);
+
+        creepsYetToSpawnInWave = creepsToSpawn;
+
+        StartCoroutine(SpawnCurrentWave());
     }
 
     public void Update()
@@ -31,9 +71,12 @@ public class WaveManager: MonoBehaviour, IHasIGameEngine
         MoveCreeps();
     }
 
-    public void SpawnCreep(CreepPreset creepPreset)
+    private void SpawnCreep(CreepPreset creepPreset)
     {
         ICreep newCreep = creepPreset.makeCreep();
+        
+        newCreep.GetGameObject().transform.SetParent(_creepHierarchyParent.transform);
+        
         newCreep.GetGameObject().transform.position = new Vector3(_startPos.x, _startPos.y, _startPos.z);
 
         // Set creep rotation face the next cell // TODO this needs to be updated after movement.
@@ -41,19 +84,16 @@ public class WaveManager: MonoBehaviour, IHasIGameEngine
 
         creepsOnBoard.Add(newCreep);
     }
-    public IEnumerator SpawnWave(List<CreepPresetWithTime> wavePreset)
+    public IEnumerator SpawnCurrentWave()
     {
-        // Copy the list so we don't modify the original >.>
-        List<CreepPresetWithTime> wave = new List<CreepPresetWithTime>(wavePreset);
-        
         yield return new WaitForEndOfFrame();
-        if (wave.Count > 0)
+        if (creepsYetToSpawnInWave.Count > 0)
         {
-            CreepPresetWithTime creepPresetWithTime = wave[0];
+            CreepPresetWithTime creepPresetWithTime = creepsYetToSpawnInWave[0];
             SpawnCreep(creepPresetWithTime.creepPreset);
-            wave.RemoveAt(0);
+            creepsYetToSpawnInWave.RemoveAt(0);
             yield return new WaitForSeconds(creepPresetWithTime.timeTillNextCreep);
-            yield return SpawnWave(wave);
+            yield return SpawnCurrentWave();
         }
         else { yield return null; }
     }
@@ -91,6 +131,24 @@ public class WaveManager: MonoBehaviour, IHasIGameEngine
     }
     private void CreepKilled(ICreep creep)
     {
-        creepsOnBoard.Remove(creep);
+        if (creepsOnBoard.Contains(creep))
+        {
+            creepsOnBoard.Remove(creep);
+            GameObject.Destroy(creep.GetGameObject());
+            EndWaveIfNoCreepsLeft();
+        }
+    }
+
+    private void EndWaveIfNoCreepsLeft()
+    {
+        if (IsWaveOver())
+        {
+            gameEngine.OnWaveEnd_StartCardTurn();
+        }
+    }
+
+    public bool IsWaveOver()
+    {
+        return creepsYetToSpawnInWave.Count == 0 && creepsOnBoard.Count == 0;
     }
 }

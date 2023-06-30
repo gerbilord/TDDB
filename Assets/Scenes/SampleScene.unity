@@ -410,6 +410,20 @@ MonoBehaviour:
       Value: 1
   waves:
   - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
+  - {fileID: 11400000, guid: a716f14bd72930f45a81faece861b92b, type: 2}
   treeSpawnRate: 0.3
   DeckPreset: {fileID: 11400000, guid: b0a3679f85bd58a489b710f351e25792, type: 2}
   startingCardAmount: 3
