@@ -659,7 +659,6 @@ GameObject:
   - component: {fileID: 8016050818367020947}
   - component: {fileID: 1524743674449883473}
   - component: {fileID: 3431790344860547497}
-  - component: {fileID: 6886623063220157661}
   m_Layer: 5
   m_Name: used_card
   m_TagString: Untagged
@@ -746,15 +745,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.43867922, b: 0.43867922, a: 1}
   intensity: 0.8
---- !u!114 &6886623063220157661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8868769455686839921}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e44993fdb3dfe0240ae7851dc58cb64a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

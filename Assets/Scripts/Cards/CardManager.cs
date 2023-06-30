@@ -17,6 +17,7 @@ public class CardManager : IHasIGameEngine
     public List<ICard> cardsInShop = new List<ICard>();
     
     GameObject discardGameObjectParent; // Gameobjects are set to children of these to appear nicely organized in the unity hierarchy editor
+    GameObject corralGameObjectParent; 
     GameObject deckGameObjectParent;
     GameObject shopGameObjectParent;
 
@@ -28,7 +29,7 @@ public class CardManager : IHasIGameEngine
         // Create a empty game object
         discardGameObjectParent = new GameObject("DiscardPile"); // TODO should this be in the UI?
         deckGameObjectParent = new GameObject("Deck");
-        
+        corralGameObjectParent = new GameObject("CorralCards");
         shopGameObjectParent = new GameObject("Shop");
         
         GlobalVariables.eventManager.cardEventManager.OnCardPlay += OnCardPlayed;
@@ -45,6 +46,7 @@ public class CardManager : IHasIGameEngine
         foreach (var card in cardsInHand)
         {
             cardsInDiscard.Add(card);
+            card.GetGameObject().transform.SetParent(discardGameObjectParent.transform);
         }
 
         cardsInHand.Clear();
@@ -140,9 +142,11 @@ public class CardManager : IHasIGameEngine
             // case for each enum value
             case CardWhereToSend.CORRAL:
                 cardsInCorral.Add(card);
+                card.GetGameObject().transform.SetParent(corralGameObjectParent.transform);
                 break;
             case CardWhereToSend.DEFAULT:
                 cardsUsedThisTurn.Add(card);
+                card.GetGameObject().transform.SetParent(discardGameObjectParent.transform); // Set the card's parent to the discard pile, this makes it hidden
                 break;
             default:
                 Debug.LogError("CardWhereToSend enum value not handled in CardManager.OnCardPlayed");
@@ -150,14 +154,29 @@ public class CardManager : IHasIGameEngine
         }
 
         GlobalVariables.eventManager.cardEventManager.HandSizeChanged();
-        
-        // Set the card's parent to the discard pile, this makes it hidden
-        card.GetGameObject().transform.SetParent(discardGameObjectParent.transform); // Should this be the UI?
     }
 
     public void MoveUsedCardsToDiscard()
     {
+        foreach (var card in cardsUsedThisTurn)
+        {
+            // set card parent to discard parent
+            card.GetGameObject().transform.SetParent(discardGameObjectParent.transform);
+        }
+
         cardsInDiscard.AddRange(cardsUsedThisTurn);
         cardsUsedThisTurn.Clear();
+    }
+    
+    public void MoveCorralCardsToDiscard()
+    {
+        foreach (var card in cardsInCorral)
+        {
+            // set card parent to discard parent
+            card.GetGameObject().transform.SetParent(discardGameObjectParent.transform);
+        }
+
+        cardsInDiscard.AddRange(cardsInCorral);
+        cardsInCorral.Clear();
     }
 }

@@ -16,6 +16,7 @@ public class UIManager
     private GameObject _rerollButton;
     private GameObject _levelUpButton;
     private GameObject _nextTurnButton;
+    private GameObject _nextTurnWithCorralButton;
     private GameObject _levelIndicator;
     
     private GameObject _playerHealth;
@@ -58,7 +59,7 @@ public class UIManager
     private void LoadBasicUI()
     {
         _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-        LoadNextTurnButtonUI();
+        LoadNextTurnButtonsUI();
         LoadLevelIndicatorUI();
         LoadDeckAndDiscardUI();
         LoadPlayerStatsUI();
@@ -85,20 +86,25 @@ public class UIManager
                                              + new Vector3(0, -magicNumber_yOffsetExtra, 0);
     }
 
-    private void LoadNextTurnButtonUI()
+    private void LoadNextTurnButtonsUI()
     {
         _nextTurnButton = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/next_turn_card"), _canvas.transform, true);
+        _nextTurnWithCorralButton = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/next_turn_with_corral"), _canvas.transform, true);
         
         float magicNumber_xOffSetExtra = 10f;
         float magicNumber_yOffsetExtra = 10f;
 
         _nextTurnButton.transform.localScale = new Vector3(1, 1, 1);
+        _nextTurnWithCorralButton.transform.localScale = new Vector3(1, 1, 1);
 
         Vector3 bottomRight  = new Vector3(Screen.width, 0, 0);
         
         _nextTurnButton.transform.position = bottomRight 
                                              + new Vector3( - GraphicsUtils.GetWidthOf2d(_nextTurnButton), GraphicsUtils.GetHeightOf2d(_nextTurnButton), 0) 
-                                             + new Vector3(-magicNumber_xOffSetExtra, magicNumber_yOffsetExtra, 0); 
+                                             + new Vector3(-magicNumber_xOffSetExtra, magicNumber_yOffsetExtra, 0);
+        _nextTurnWithCorralButton.transform.position = _nextTurnButton.transform.position 
+                                             + new Vector3(0, GraphicsUtils.GetHeightOf2d(_nextTurnButton), 0) 
+                                             + new Vector3(0, magicNumber_yOffsetExtra, 0);
     }
 
     private void LoadCameraIcon()
