@@ -27,6 +27,7 @@ public class PlayerGameEngine : MonoBehaviour, IGameEngine
         cardManager = new CardManager(this);
         
         cardManager.LoadDeck();
+        cardManager.LoadShop();
         cardManager.StartTurn();
 
         // Create an empty GameObject and attach the Board script to it

@@ -12,6 +12,8 @@ public class UIManager
     private ICard _selectedCard; // Selected card is responsible for custom UI. (Such as a tower preview when hovering over a cell)
     private GameObject _deckCardBack;
     private GameObject _discardCardBack;
+    private GameObject _rerollButton;
+    private GameObject _levelUpButton;
     
     private GameObject _playerHealth;
     private GameObject _playerIncome;
@@ -34,10 +36,13 @@ public class UIManager
         GlobalVariables.eventManager.cellEventManager.OnCellMouseExited += OnCellExited;
         GlobalVariables.eventManager.cardEventManager.OnCardPlay += OnCardPlayed;
         GlobalVariables.eventManager.cardEventManager.OnHandSizeChange += OnHandSizeChanged;
+        GlobalVariables.eventManager.cardEventManager.OnCardAddedToShop += OnCardAddedToShop;
+        GlobalVariables.eventManager.cardEventManager.OnShopRerolled += OnShopRerolled;
     }
 
     ~UIManager()
     {
+        // TODO FIX THESE TO INCLUDE ALL THE ABOVE ONES
         GlobalVariables.eventManager.cellEventManager.OnCellClick -= OnCellClicked;
         GlobalVariables.eventManager.cardEventManager.OnCardAddedToHand -= OnCardAddedToHand;
         GlobalVariables.eventManager.cardEventManager.OnCardClick -= OnCardClicked;
@@ -56,6 +61,9 @@ public class UIManager
         UpdateStatsUI();
         LoadCameraIcon();
         ResetCardsInHandPosition();
+        UpdateDeckTextUI();
+        ResetCardsInShopPosition();
+        LoadShopStaticUI();
     }
 
     private void LoadCameraIcon()
@@ -201,10 +209,88 @@ public class UIManager
         objectToHighlight.GetComponent<IHighlighter>().ToggleHighlight(toggle);
     }
 
+
+    public void OnCardAddedToShop(ICard card)
+    {
+        
+    }
+    
+    
     // OnCardAddedToHand event
     public void OnCardAddedToHand(ICard card)
     {
     }
+    
+    private void ResetCardsInShopPosition()
+    {
+        Vector3 topLeft = new Vector3(0, Screen.height, 0);
+        
+        List<ICard> cardsInShop = GlobalVariables.playerGameEngine.cardManager.cardsInShop;
+        
+        for (int i = 0; i < cardsInShop.Count; i++)
+        {
+            // Get the card game object
+            GameObject cardGameObject = cardsInShop[i].GetGameObject();
+            
+            // make local scale of the cardGameObject smaller
+            cardGameObject.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+
+            float offsetMultiplier = i;
+            float magicNumberExtraPaddingY = 20f;
+            float magicNumberExtraPaddingX = 10f;
+            
+            float cardWidth = GraphicsUtils.GetWidthOf2d(cardGameObject);
+            float cardHeight = GraphicsUtils.GetHeightOf2d(cardGameObject);
+            
+            // Put the card game object at the top left of the canvas UI, off set by the width of the card
+            cardGameObject.transform.position = topLeft + new Vector3(
+                cardWidth / 2 + magicNumberExtraPaddingX + offsetMultiplier * (cardWidth + magicNumberExtraPaddingX),
+                -cardHeight / 2 - magicNumberExtraPaddingY,
+                0
+            );
+            
+            // Set the card game object to be the child of the canvas
+            cardGameObject.transform.SetParent(_canvas.transform, true);
+        }
+    }
+    
+    private void LoadShopStaticUI()
+    {
+        Vector3 topLeft = new Vector3(0, Screen.height, 0);
+        
+        _rerollButton = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/reroll_card"), _canvas.transform, true);
+        _levelUpButton = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/level_card"), _canvas.transform, true);
+        
+        // make local scale of the cardGameObject smaller
+        _rerollButton.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+        _levelUpButton.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+
+        float offsetMultiplier = GlobalVariables.playerGameEngine.config.shopSize;
+        
+        // Get a random card's width
+        GameObject refCard = GlobalVariables.playerGameEngine.cardManager.cardsInShop[0].GetGameObject();
+        float cardWidth = GraphicsUtils.GetWidthOf2d(refCard);
+        
+        float magicNumberExtraPaddingY = 20f;
+        float magicNumberExtraPaddingX = 10f;
+
+        // Put the card game object at the top left of the canvas UI, off set by the width of the card
+        _levelUpButton.transform.position = topLeft + new Vector3(
+            cardWidth / 2 + magicNumberExtraPaddingX + offsetMultiplier * (cardWidth + magicNumberExtraPaddingX),
+            -cardWidth / 2 - magicNumberExtraPaddingY/2,
+            0
+        );
+
+        // Put the card game object at the top left of the canvas UI, off set by the width of the card
+        _rerollButton.transform.position = _levelUpButton.transform.position + new Vector3(
+            0,
+            -GraphicsUtils.GetHeightOf2d(_levelUpButton) - magicNumberExtraPaddingY/2,
+            0
+        );
+        
+        
+    }
+
 
     private void ResetCardsInHandPosition()
     {
@@ -302,6 +388,11 @@ public class UIManager
     {
         ResetCardsInHandPosition();
         UpdateDeckTextUI();
+    }
+
+    private void OnShopRerolled()
+    {
+        ResetCardsInShopPosition();
     }
 
     public void SetupCamera()

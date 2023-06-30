@@ -30,6 +30,9 @@ public class Config : MonoBehaviour
 
     public DeckPreset DeckPreset;
     public int startingCardAmount;
+    
+    [SerializedDictionary("prefab", "spawnRate")]
+    public SerializedDictionary<CardPreset, float> shopCardPrefabs_1;
 
     public int shopSize;
     

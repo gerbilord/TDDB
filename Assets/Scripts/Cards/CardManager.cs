@@ -11,8 +11,11 @@ public class CardManager : IHasIGameEngine
     public List<ICard> cardsInDeck = new List<ICard>();
     public List<ICard> cardsInDiscard = new List<ICard>();
     
-    GameObject discardGameObjectParent;
+    public List<ICard> cardsInShop = new List<ICard>();
+    
+    GameObject discardGameObjectParent; // Gameobjects are set to children of these to appear nicely organized in the unity hierarchy editor
     GameObject deckGameObjectParent;
+    GameObject shopGameObjectParent;
 
     // Constructor
     public CardManager(IGameEngine gameEngine)
@@ -23,6 +26,8 @@ public class CardManager : IHasIGameEngine
         discardGameObjectParent = new GameObject("DiscardPile"); // TODO should this be in the UI?
         deckGameObjectParent = new GameObject("Deck");
         
+        shopGameObjectParent = new GameObject("Shop");
+        
         GlobalVariables.eventManager.cardEventManager.OnCardPlay += OnCardPlayed;
     }
     
@@ -32,6 +37,20 @@ public class CardManager : IHasIGameEngine
         GlobalVariables.eventManager.cardEventManager.OnCardPlay -= OnCardPlayed;
     }
 
+    public void RerollShop()
+    {
+        GlobalVariables.playerGameEngine.player.money -= 2; // TODO change how this works. Use a stack for keeping track of next rolls, and if stack is empty, then default cost in config is used.
+        GlobalVariables.uiManager.UpdateStatsUI();
+
+        // Destroy all objects in the shop
+        foreach (ICard card in cardsInShop)
+        {
+            GameObject.Destroy(card.GetGameObject());
+        }
+        cardsInShop.Clear();
+        LoadShop();
+        GlobalVariables.eventManager.cardEventManager.ShopRerolled();
+    }
     public void LoadDeck()
     {
         List<CardPreset> deck = gameEngine.config.DeckPreset.cards;
@@ -42,6 +61,23 @@ public class CardManager : IHasIGameEngine
             // Set the card's parent to the deck, this makes it hidden
             card.GetGameObject().transform.SetParent(deckGameObjectParent.transform);
             GlobalVariables.eventManager.cardEventManager.CardAddedToDeck(card);
+        }
+    }
+
+    public void LoadShop()
+    {
+        // iterate as many times as the shop size
+        for (int i = 0; i < gameEngine.config.shopSize; i++)
+        {
+            // Get a random card from the lvl 1 cards
+            ICard newShopCard = RandomUtils.GetRateRandomItem(gameEngine.config.shopCardPrefabs_1).makeCard(); 
+
+            // Add it to the shop
+            cardsInShop.Add(newShopCard);
+            // Set the card's parent to the shop, this makes it visible
+            newShopCard.GetGameObject().transform.SetParent(shopGameObjectParent.transform);
+            
+            GlobalVariables.eventManager.cardEventManager.CardAddedToShop(newShopCard);
         }
     }
 

@@ -15,20 +15,14 @@ public static class RandomUtils
     }
     
     // Get a random item from a Dictionary<>
-    public static TS GetRandomItem<T,TS>(Dictionary<T,TS> list)
-    {
-        // return a random item from the dictionary
-        return list[GetRandomItem(new List<T>(list.Keys))];
-    }
-    
-    public static GameObject GetRateRandomItem(Dictionary<GameObject, float> dictionary)
+    public static T GetRateRandomItem<T>(Dictionary<T, float> dictionary)
     {
         
         // Get a random GameObject based on the spawn rates. GameObjects should have change proportional to their spawn rate.
         
         // Get the total spawn rate
         float totalSpawnRate = 0;
-        foreach (KeyValuePair<GameObject, float> pair in dictionary)
+        foreach (KeyValuePair<T, float> pair in dictionary)
         {
             totalSpawnRate += pair.Value;
         }
@@ -37,7 +31,7 @@ public static class RandomUtils
         float random = UnityEngine.Random.Range(0, totalSpawnRate);
         
         // Loop through the dictionary
-        foreach (KeyValuePair<GameObject, float> pair in dictionary)
+        foreach (KeyValuePair<T, float> pair in dictionary)
         {
             // Subtract the spawn rate from the random number
             random -= pair.Value;

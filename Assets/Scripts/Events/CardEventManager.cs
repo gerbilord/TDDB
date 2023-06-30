@@ -43,4 +43,20 @@ public class CardEventManager
     {
         OnHandSizeChange?.Invoke();
     }
+    
+    // Create event for when a card is added to the shop
+    public delegate void CardAddToShop(ICard card);
+    public event CardAddToShop OnCardAddedToShop;
+    public void CardAddedToShop(ICard card)
+    {
+        OnCardAddedToShop?.Invoke(card);
+    }
+    
+    // Create event for when the shop is rerolled
+    public delegate void ShopReroll();
+    public event ShopReroll OnShopRerolled;
+    public void ShopRerolled()
+    {
+        OnShopRerolled?.Invoke();
+    }
 }
