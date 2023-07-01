@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef6d5c0990c0ae34d9da059f5832a808, type: 3}
   m_Name: Creep_sparrow_basic
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2132874091115908679, guid: 8c767c1e005e1e54f96e77fd4e8ce242, type: 3}
   stats:
     _serializedList:
     - Key: 3
-      Value: 3
+      Value: 6
     - Key: 2
       Value: 20
+  prefab: {fileID: 2132874091115908679, guid: 8c767c1e005e1e54f96e77fd4e8ce242, type: 3}

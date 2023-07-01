@@ -356,6 +356,7 @@ public class UIManager
         {
             // Get the card game object
             GameObject cardGameObject = aCard.GetGameObject();
+            cardGameObject.transform.localScale = new Vector3(1f,1f,1f);
 
             int totalCards = GlobalVariables.playerGameEngine.cardManager.cardsInHand.Count;
             int cardIndex = GlobalVariables.playerGameEngine.cardManager.cardsInHand.IndexOf(aCard);

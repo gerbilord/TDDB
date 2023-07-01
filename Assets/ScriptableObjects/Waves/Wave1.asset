@@ -14,18 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waveCreeps:
   - creepPreset: {fileID: 11400000, guid: 8fdc39661c647744b8fd2252038623cd, type: 2}
-    timeTillNextCreep: 0.7
+    timeTillNextCreep: 0.3
   - creepPreset: {fileID: 11400000, guid: 8fdc39661c647744b8fd2252038623cd, type: 2}
-    timeTillNextCreep: 0.7
+    timeTillNextCreep: 0.3
   - creepPreset: {fileID: 11400000, guid: 8fdc39661c647744b8fd2252038623cd, type: 2}
-    timeTillNextCreep: 0.7
+    timeTillNextCreep: 0.3
   - creepPreset: {fileID: 11400000, guid: 8fdc39661c647744b8fd2252038623cd, type: 2}
-    timeTillNextCreep: 0.7
-  - creepPreset: {fileID: 11400000, guid: 42adaa639525f414d8db9762e1dd0c32, type: 2}
-    timeTillNextCreep: 0.2
-  - creepPreset: {fileID: 11400000, guid: 42adaa639525f414d8db9762e1dd0c32, type: 2}
-    timeTillNextCreep: 0.2
-  - creepPreset: {fileID: 11400000, guid: 42adaa639525f414d8db9762e1dd0c32, type: 2}
-    timeTillNextCreep: 2
-  - creepPreset: {fileID: 11400000, guid: 3522f7c3087232f46908bc5f00525e7a, type: 2}
-    timeTillNextCreep: 0
+    timeTillNextCreep: 0.3

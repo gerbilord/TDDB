@@ -135,7 +135,10 @@ public class CardManager : IHasIGameEngine
     
     public void OnCardPlayed(ICard card)
     {
+        // Cards can currently be played from the hand or the shop. 
+        // Just make sure the card is removed from both before we send it elsewhere.
         cardsInHand.Remove(card);
+        cardsInShop.Remove(card);
 
         switch (card.GetWhereToSendThisCard())
         {
