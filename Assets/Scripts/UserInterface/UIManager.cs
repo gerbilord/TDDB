@@ -78,7 +78,7 @@ public class UIManager
         // Get middle top of screen;
         Vector3 middleTop = new Vector3(Screen.width / 2f, Screen.height, 0); 
 
-        _levelIndicator = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/level_indicator"), _canvas.transform, true);
+        _levelIndicator = GameObject.Instantiate(Resources.Load<GameObject>("UI/LargeNonIntractables/level_indicator"), _canvas.transform, true);
         float magicNumber_yOffsetExtra = 20f;
 
         _levelIndicator.transform.position = middleTop
@@ -88,8 +88,8 @@ public class UIManager
 
     private void LoadNextTurnButtonsUI()
     {
-        _nextTurnButton = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/next_turn_card"), _canvas.transform, true);
-        _nextTurnWithCorralButton = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/next_turn_with_corral"), _canvas.transform, true);
+        _nextTurnButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/LargeClickables/next_turn_card"), _canvas.transform, true);
+        _nextTurnWithCorralButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/LargeClickables/next_turn_with_corral"), _canvas.transform, true);
         
         float magicNumber_xOffSetExtra = 10f;
         float magicNumber_yOffsetExtra = 10f;
@@ -167,9 +167,9 @@ public class UIManager
         Vector3 bottomLeft = new Vector3(0, 0, 0);
 
         // Instantiate the deck and card back
-        _deckCardBack = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/top_deck_card"), _canvas.transform, true);
-        _discardCardBack = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/discard_card_back"), _canvas.transform, true);
-        _usedCardBack = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/used_card"), _canvas.transform, true);
+        _deckCardBack = GameObject.Instantiate(Resources.Load<GameObject>("UI/LargeClickables/top_deck_card"), _canvas.transform, true);
+        _discardCardBack = GameObject.Instantiate(Resources.Load<GameObject>("UI/LargeNonIntractables/discard_card_back"), _canvas.transform, true);
+        _usedCardBack = GameObject.Instantiate(Resources.Load<GameObject>("UI/LargeNonIntractables/used_card"), _canvas.transform, true);
 
         // Just use one scale for both cards, assume they are the same size
         Vector3 scale = _discardCardBack.transform.localScale;
@@ -312,8 +312,8 @@ public class UIManager
     {
         Vector3 topLeft = new Vector3(0, Screen.height, 0);
         
-        _rerollButton = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/reroll_card"), _canvas.transform, true);
-        _levelUpButton = GameObject.Instantiate(Resources.Load<GameObject>("Cards/UIOnlyCards/level_card"), _canvas.transform, true);
+        _rerollButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/LargeClickables/reroll_card"), _canvas.transform, true);
+        _levelUpButton = GameObject.Instantiate(Resources.Load<GameObject>("UI/LargeClickables/level_card"), _canvas.transform, true);
         
         // make local scale of the cardGameObject smaller
         _rerollButton.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);

@@ -54,9 +54,6 @@ public class CardManager : IHasIGameEngine
     
     public void RerollShop()
     {
-        GlobalVariables.playerGameEngine.player.money -= 2; // TODO change how this works. Use a stack for keeping track of next rolls, and if stack is empty, then default cost in config is used.
-        GlobalVariables.uiManager.UpdateStatsUI();
-
         // Destroy all objects in the shop
         foreach (ICard card in cardsInShop)
         {

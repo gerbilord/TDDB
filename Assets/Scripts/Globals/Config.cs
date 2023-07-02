@@ -35,6 +35,7 @@ public class Config : MonoBehaviour
     public SerializedDictionary<CardPreset, float> shopCardPrefabs_1;
 
     public int shopSize;
+    public int rollShopCost;
     
     public int startingIncome;
     public int startingMoney;

@@ -442,6 +442,7 @@ MonoBehaviour:
     - Key: {fileID: 11400000, guid: 101b7777738013d4ca0e671b1f4addd3, type: 2}
       Value: 1
   shopSize: 5
+  rollShopCost: 0
   startingIncome: 1
   startingMoney: 0
   startingHealth: 50
@@ -760,6 +761,7 @@ MonoBehaviour:
   shopCardPrefabs_1:
     _serializedList: []
   shopSize: 5
+  rollShopCost: 0
   startingIncome: 1
   startingMoney: 0
   startingHealth: 50
