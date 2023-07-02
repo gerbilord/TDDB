@@ -38,17 +38,20 @@ public class WaveManager: MonoBehaviour, IHasIGameEngine
     public void AddCreepToCorral(CreepPreset creepPreset)
     {
         creepsInCorral.Add(creepPreset);
+        GlobalVariables.uiManager.UpdateCreepSendAmountUI();
     }
 
     public void AddCreepToSendImmediate(CreepPreset creepPreset)
     {
         creepsInSendImmediate.Add(creepPreset);
+        GlobalVariables.uiManager.UpdateCreepSendAmountUI();
     }
     
     public void SendCreepsInCorral()
     {
         creepsInSendImmediate.AddRange(creepsInCorral);
         creepsInCorral.Clear();
+        GlobalVariables.uiManager.UpdateCreepSendAmountUI();
     }
 
     public void SpawnWave(int turnNumber)
@@ -58,6 +61,7 @@ public class WaveManager: MonoBehaviour, IHasIGameEngine
 
         creepsToSpawn.AddRange(creepsInSendImmediate.Select(preset => new CreepPresetWithTime(preset, .2f)).ToList());
         creepsInSendImmediate.Clear();
+        GlobalVariables.uiManager.UpdateCreepSendAmountUI();
 
         creepsToSpawn.AddRange(gameEngine.config.waves[turnNumber].waveCreeps);
 

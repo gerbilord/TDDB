@@ -71,6 +71,7 @@ public class UIManager
         UpdateLevelIndicatorUI();
         ResetCardsInShopPosition();
         LoadShopStaticUI();
+        UpdateCreepSendAmountUI();
     }
 
     private void LoadLevelIndicatorUI()
@@ -193,6 +194,15 @@ public class UIManager
     {
         TextMeshProUGUI lvl = _levelIndicator.GetComponentInChildren<TextMeshProUGUI>();
         lvl.text = GlobalVariables.playerGameEngine.currentTurnNumber.ToString();
+    }
+    
+    public void UpdateCreepSendAmountUI()
+    {
+        TextMeshProUGUI creepAmountImmediate = _nextTurnButton.GetComponentInChildren<TextMeshProUGUI>();
+        creepAmountImmediate.text = GlobalVariables.enemyGameEngine.waveManager.creepsInSendImmediate.Count.ToString();
+        
+        TextMeshProUGUI creepAmountCorral = _nextTurnWithCorralButton.GetComponentInChildren<TextMeshProUGUI>();
+        creepAmountCorral.text = GlobalVariables.enemyGameEngine.waveManager.creepsInCorral.Count.ToString();
     }
 
     private void UpdateDeckTextUI()
