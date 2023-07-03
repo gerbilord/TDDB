@@ -14,7 +14,7 @@ public class DrawCardsEffect : ScriptableObject, IPlayEffects
     [SerializeField]
     private int numCardsToDraw;
     
-    public CardPlayResult Play(ICell cell)
+    public CardPlayResult Play()
     {
         gameEngine.cardManager.DrawCards(numCardsToDraw);
 
@@ -33,6 +33,6 @@ public class DrawCardsEffect : ScriptableObject, IPlayEffects
     // UI On Clicked
     public CardPlayResult UI_OnCellClicked(ICell cell)
     {
-        return Play(cell);
+        return Play();
     }
 }

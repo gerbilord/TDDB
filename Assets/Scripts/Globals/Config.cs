@@ -1,6 +1,7 @@
 using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Config : MonoBehaviour
 {
@@ -40,4 +41,6 @@ public class Config : MonoBehaviour
     public int startingIncome;
     public int startingMoney;
     public int startingHealth;
+    
+    public List<CardPreset> turnEffectsToPlayOnATurn = new List<CardPreset>();
 }

@@ -402,6 +402,21 @@ public class Board : MonoBehaviour, IHasIGameEngine
             cell.occupyingGameObjects.Add(towerObject);
         }
     }
+
+    public ICell GetMainBoardCellAt(int x, int y)
+    {
+        return _mainBoardCells[x, y].GetComponent<ICell>();
+    }
+
+    public ICell GetCorralCellAt(int x, int y)
+    {
+        return _corralCells[x, y].GetComponent<ICell>();
+    }
+    
+    public ICell GetImmediateSendCellAt(int x, int y)
+    {
+        return _immediateSendCells[x, y].GetComponent<ICell>();
+    }
 }
 
 // Enum for corral position

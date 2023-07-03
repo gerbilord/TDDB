@@ -49,8 +49,6 @@ public class CardPresetEditor : Editor
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-
-            ReorderableList.defaultBehaviours.DoRemoveButton(l);
         };
 
         playEffectsList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
@@ -174,17 +172,6 @@ public class CardPresetEditor : Editor
 
         EditorGUILayout.PropertyField(cardPrefabProp);
         playEffectsList.DoLayoutList();
-
-        /*if (GUILayout.Button("Delete All Play Effects"))
-        {
-            var cardPreset = (CardPreset)target;
-            Undo.RecordObject(cardPreset, "Delete All Play Effects");
-
-            cardPreset.playEffectsList.Clear();
-
-            EditorUtility.SetDirty(cardPreset);
-            AssetDatabase.SaveAssets();
-        }*/
 
         serializedObject.ApplyModifiedProperties();
     }

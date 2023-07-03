@@ -15,15 +15,16 @@ public class AddCreepToCorralEffect : ScriptableObject, IPlayEffects
     private CreepPreset _creepPreset;
 
     private ICreep _phantomCreep; // Creep to show on hover when this card is selected.
+    private ICell _cellToPutCreep;
     
     private CardWhereToSend _whereToSend;
     
     
-    public CardPlayResult Play(ICell cell)
+    public CardPlayResult Play()
     {
-        if (gameEngine.board.IsCellInImmediateSend(cell) || gameEngine.board.IsCellInCorral(cell))
+        if (gameEngine.board.IsCellInImmediateSend(_cellToPutCreep) || gameEngine.board.IsCellInCorral(_cellToPutCreep))
         {
-            if (gameEngine.board.IsCellInImmediateSend(cell))
+            if (gameEngine.board.IsCellInImmediateSend(_cellToPutCreep))
             {
                 gameEngine.SendCreepToEnemyImmediateSend(_creepPreset);
                 _whereToSend = CardWhereToSend.DEFAULT;
@@ -40,6 +41,12 @@ public class AddCreepToCorralEffect : ScriptableObject, IPlayEffects
         return CardPlayResult.IGNORE_BUT_STOP_OTHER_EFFECTS; // If we couldn't put a creep, don't do anything, let the user try to click again.
     }
     
+    public void InjectPlayData(ICell cellToPutCreep, CreepPreset creepPreset)
+    {
+        _cellToPutCreep = cellToPutCreep;
+        _creepPreset = creepPreset;
+    }
+
     public CardWhereToSend GetWhereToSendThisCard()
     {
         return _whereToSend;
@@ -48,7 +55,8 @@ public class AddCreepToCorralEffect : ScriptableObject, IPlayEffects
     // Play this card when we selected a cell!
     public CardPlayResult UI_OnCellClicked(ICell cell)
     {
-        return Play(cell);
+        _cellToPutCreep = cell;
+        return Play();
     }
 
     // If the cell can take a creep, lets show a phantom creep on hover.

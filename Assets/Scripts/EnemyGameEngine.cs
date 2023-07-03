@@ -30,6 +30,21 @@ public class EnemyGameEngine : MonoBehaviour, IGameEngine
     public void OnWaveEnd_StartCardTurn()
     {
         currentTurnNumber += 1;
+        PlayNextTurnEffects();
+    }
+
+    public void PlayNextTurnEffects()
+    {
+        if(currentTurnNumber > config.turnEffectsToPlayOnATurn.Count)
+            return;
+
+        List<IPlayEffects> effectsToPlay = config.turnEffectsToPlayOnATurn[currentTurnNumber-1].GetPlayEffects();
+        
+        foreach (IPlayEffects playEffect in effectsToPlay)
+        {
+            playEffect.gameEngine = this;
+            playEffect.Play(); // This doesn't trigger events currently.
+        }
     }
 
 

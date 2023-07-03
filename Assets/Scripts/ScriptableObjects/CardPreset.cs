@@ -8,6 +8,17 @@ public class CardPreset : ScriptableObject
     public GameObject cardPrefab;
     public List<ScriptableObject> playEffectsList; // TODO change to List<IPlayEffects>. IPlayEffects should be an abstract class that extends ScriptableObjects.
 
+    public List<IPlayEffects> GetPlayEffects()
+    {
+        List<IPlayEffects> playEffectsList = new List<IPlayEffects>();
+        foreach (ScriptableObject playEffect in this.playEffectsList)
+        {
+            playEffectsList.Add((IPlayEffects)playEffect);
+        }
+
+        return playEffectsList;
+    }
+
     public ICard makeCard()
     {
         // Map playEffectsList to List<IPlayEffects>

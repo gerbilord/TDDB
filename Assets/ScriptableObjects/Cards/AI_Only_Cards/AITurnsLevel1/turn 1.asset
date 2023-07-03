@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7105922903545927156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b99f561d8dbbea74d93c561405545a4f, type: 3}
+  m_Name: BuildTowerAtEffect
+  m_EditorClassIdentifier: 
+  x: 11
+  y: 11
+  towerPreset: {fileID: 11400000, guid: 11eea840178042a45a162fb123f9bf6e, type: 2}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df1e11d25104c4dad33669370e05023, type: 3}
+  m_Name: turn 1
+  m_EditorClassIdentifier: 
+  cardPrefab: {fileID: 8534492540457840364, guid: f72607745f3bdfa469b8d4614d99b5ce, type: 3}
+  playEffectsList:
+  - {fileID: -7105922903545927156}
+--- !u!114 &9135880212107946946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d6ab088b5ce4404f926ba1a706a0c64, type: 3}
+  m_Name: AddCreepToCorralEffect
+  m_EditorClassIdentifier: 
+  _creepPreset: {fileID: 11400000, guid: 42adaa639525f414d8db9762e1dd0c32, type: 2}

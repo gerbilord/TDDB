@@ -37,13 +37,13 @@ public class CardBehavior : MonoBehaviour, IPointerClickHandler, ICard
         return this.gameObject;
     }
     
-    public CardPlayResult Play(ICell cell)
+    public CardPlayResult Play()
     {
         List<CardPlayResult> results = new List<CardPlayResult>();
         
         foreach (IPlayEffects playEffect in playEffects)
         {
-            CardPlayResult result = playEffect.Play(cell);
+            CardPlayResult result = playEffect.Play();
             results.Add(result);
             if (result == CardPlayResult.IGNORE_BUT_STOP_OTHER_EFFECTS)
             {

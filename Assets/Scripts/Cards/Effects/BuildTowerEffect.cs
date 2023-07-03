@@ -16,12 +16,13 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
 
     private ITower _phantomTower; // Tower to show on hover when this card is selected.
     
+    private ICell _cellToPutTower;
     
-    public CardPlayResult Play(ICell cell)
+    public CardPlayResult Play()
     {
-        if (cell.IsBuildable() && gameEngine.board.IsCellInMainBoard(cell))
+        if (_cellToPutTower.IsBuildable() && gameEngine.board.IsCellInMainBoard(_cellToPutTower))
         {
-            gameEngine.board.PlaceTowerOn(cell, _towerPreset.makeTower(gameEngine));
+            gameEngine.board.PlaceTowerOn(_cellToPutTower, _towerPreset.makeTower(gameEngine));
             UI_OnCardDeselected(); // Clean up our UI mess as well.
             return CardPlayResult.SUCCESS;
         }
@@ -32,7 +33,8 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
     // Play this card when we selected a cell!
     public CardPlayResult UI_OnCellClicked(ICell cell)
     {
-        return Play(cell);
+        _cellToPutTower = cell;
+        return Play();
     }
 
     // If the cell is buildable, lets show a phantom tower on hover.
@@ -98,5 +100,11 @@ public class BuildTowerEffect : ScriptableObject, IPlayEffects
         UI_OnCellExited(null); // Clean up our phantom tower as well.
 
         return CardPlayResult.IGNORE;
+    }
+
+    public void InjectPlayData(ICell cellToPutTower, TowerPreset whatTowerToPlace)
+    {
+        _cellToPutTower = cellToPutTower;
+        _towerPreset = whatTowerToPlace;
     }
 }

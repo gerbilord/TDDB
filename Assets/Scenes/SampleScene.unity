@@ -446,6 +446,7 @@ MonoBehaviour:
   startingIncome: 1
   startingMoney: 0
   startingHealth: 50
+  turnEffectsToPlayOnATurn: []
 --- !u!4 &956709476
 Transform:
   m_ObjectHideFlags: 0
@@ -765,6 +766,12 @@ MonoBehaviour:
   startingIncome: 1
   startingMoney: 0
   startingHealth: 50
+  turnEffectsToPlayOnATurn:
+  - {fileID: 11400000, guid: 97e8b57df626f5040b779de5c3273980, type: 2}
+  - {fileID: 11400000, guid: c3c3be147223162448521b6ecd59881c, type: 2}
+  - {fileID: 11400000, guid: 4b247948fad11ab41a5b463aa9303038, type: 2}
+  - {fileID: 11400000, guid: 42ace0145dd6c7e43bf3561e2aedbb60, type: 2}
+  - {fileID: 11400000, guid: ca249f2dba03ca04098f8f477ce1cc1a, type: 2}
 --- !u!4 &1289299485
 Transform:
   m_ObjectHideFlags: 0

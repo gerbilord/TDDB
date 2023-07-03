@@ -70,8 +70,12 @@ public class PlayerGameEngine : MonoBehaviour, IGameEngine
         waveManager = waveManagerObject.AddComponent<WaveManager>();
         waveManager.Setup(this);
         
-        this.GetComponent<EnemyGameEngine>().Setup();
+        EnemyGameEngine enemyGameEngine = this.GetComponent<EnemyGameEngine>();
+        enemyGameEngine.Setup();
         
         GlobalVariables.uiManager.Setup();
+        
+        // Play our first turn effects
+        enemyGameEngine.PlayNextTurnEffects();
     }
 }
