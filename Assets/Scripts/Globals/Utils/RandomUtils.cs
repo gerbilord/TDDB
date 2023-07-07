@@ -14,6 +14,35 @@ public static class RandomUtils
         return list[randomIndex];
     }
     
+    // Get a random index based on the weights of the items in the list
+    public static int GetRandomIndexBasedOnWeights(List<float> weights)
+    {
+        // Get the total weight
+        float totalWeight = 0;
+        foreach (float weight in weights)
+        {
+            totalWeight += weight;
+        }
+        
+        // Get a random number between 0 and the total weight
+        float random = UnityEngine.Random.Range(0, totalWeight);
+        
+        // Loop through the list
+        for (int i = 0; i < weights.Count; i++)
+        {
+            // Subtract the weight from the random number
+            random -= weights[i];
+            
+            // If the random number is less than 0, return the index
+            if (random < 0)
+            {
+                return i;
+            }
+        }
+        
+        throw new System.Exception("No index was found");
+    }
+
     // Get a random item from a Dictionary<>
     public static T GetRateRandomItem<T>(Dictionary<T, float> dictionary)
     {

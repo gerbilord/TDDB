@@ -1,7 +1,6 @@
 using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Config : MonoBehaviour
 {
@@ -31,13 +30,15 @@ public class Config : MonoBehaviour
 
     public DeckPreset DeckPreset;
     public int startingCardAmount;
-    
-    [SerializedDictionary("prefab", "spawnRate")]
-    public SerializedDictionary<CardPreset, float> shopCardPrefabs_1;
+
+    public List<DeckPreset> shopLevelCardPresets;
+    public List<FloatList> shopLevelCardSpawnRates;
 
     public int shopSize;
     public int rollShopCost;
-    
+    public List<int> shopCostToLevelUpAtLevel;
+    public int amountToDecreaseShopLevelUpCostPerTurn;
+
     public int startingIncome;
     public int startingMoney;
     public int startingHealth;

@@ -15,6 +15,10 @@ public class CardManager : IHasIGameEngine
     
     
     public List<ICard> cardsInShop = new List<ICard>();
+
+    public int currentCostToLevelUpShop;
+    public int currentShopLevel;
+
     
     GameObject discardGameObjectParent; // Gameobjects are set to children of these to appear nicely organized in the unity hierarchy editor
     GameObject corralGameObjectParent; 
@@ -41,6 +45,22 @@ public class CardManager : IHasIGameEngine
         GlobalVariables.eventManager.cardEventManager.OnCardPlay -= OnCardPlayed;
     }
 
+    public void LevelUpShop()
+    {
+        currentShopLevel++;
+        currentCostToLevelUpShop = gameEngine.config.shopCostToLevelUpAtLevel[currentShopLevel];
+        GlobalVariables.uiManager.UpdateShopButtonTextUI();
+    }
+    
+    public void DecreaseShopCostBy(int amount)
+    {
+        currentCostToLevelUpShop -= amount;
+        if (currentCostToLevelUpShop <= 0)
+        {
+            currentShopLevel = 0;
+        }
+        GlobalVariables.uiManager.UpdateShopButtonTextUI();
+    }
     public void DiscardHand()
     {
         foreach (var card in cardsInHand)
@@ -81,8 +101,11 @@ public class CardManager : IHasIGameEngine
         // iterate as many times as the shop size
         for (int i = 0; i < gameEngine.config.shopSize; i++)
         {
-            // Get a random card from the lvl 1 cards
-            ICard newShopCard = RandomUtils.GetRateRandomItem(gameEngine.config.shopCardPrefabs_1).makeCard(); 
+            // Get a random card level
+            int cardLevel = RandomUtils.GetRandomIndexBasedOnWeights(gameEngine.config.shopLevelCardSpawnRates[currentShopLevel].floats);
+            
+            // Get a random card from that card level
+            ICard newShopCard = RandomUtils.GetRandomItem(gameEngine.config.shopLevelCardPresets[cardLevel].cards).makeCard(); 
 
             // Add it to the shop
             cardsInShop.Add(newShopCard);

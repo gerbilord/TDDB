@@ -72,6 +72,7 @@ public class UIManager
         ResetCardsInShopPosition();
         LoadShopStaticUI();
         UpdateCreepSendAmountUI();
+        UpdateShopButtonTextUI();
     }
 
     private void LoadLevelIndicatorUI()
@@ -355,7 +356,11 @@ public class UIManager
         
     }
 
-
+    public void UpdateShopButtonTextUI()
+    {
+        _levelUpButton.GetComponentInChildren<TextMeshProUGUI>().text = GlobalVariables.playerGameEngine.cardManager.currentCostToLevelUpShop.ToString();
+        _rerollButton.GetComponentInChildren<TextMeshProUGUI>().text = GlobalVariables.playerGameEngine.config.rollShopCost.ToString();
+    }
     private void ResetCardsInHandPosition()
     {
         // Get bottom center of the UI canvas

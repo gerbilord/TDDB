@@ -35,6 +35,8 @@ public class PlayerGameEngine : MonoBehaviour, IGameEngine
         cardManager.MoveUsedCardsToDiscard();
         cardManager.DiscardHand();
         cardManager.DrawCards(config.startingCardAmount);
+        cardManager.RerollShop();
+        cardManager.DecreaseShopCostBy(config.amountToDecreaseShopLevelUpCostPerTurn);
     }
 
 
